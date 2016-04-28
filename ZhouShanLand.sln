@@ -3,11 +3,16 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
 VisualStudioVersion = 14.0.23107.0
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LowooTech.Land.Zhoushan.Web", "LowooTech.Land.Zhoushan.Web\LowooTech.Land.Zhoushan.Web.csproj", "{0E457AF1-813F-4D05-89D1-F2C8F3944DBE}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LoowooTech.Land.Zhoushan", "LoowooTech.Land.Zhoushan\LoowooTech.Land.Zhoushan.csproj", "{8134C038-0A92-4CDE-B3F0-109BF84489D8}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LoowooTech.Land.Zhoushan.DataService", "LoowooTech.Land.Zhoushan.DataService\LoowooTech.Land.Zhoushan.DataService.csproj", "{61AE22E0-EF61-4A0B-9327-02F01DC640C3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LoowooTech.Land.Zhoushan.Web", "LoowooTech.Land.Zhoushan.Web\LoowooTech.Land.Zhoushan.Web.csproj", "{0E457AF1-813F-4D05-89D1-F2C8F3944DBE}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "docs", "docs", "{41136D72-6CF1-4E39-881B-916845111496}"
+	ProjectSection(SolutionItems) = preProject
+		docs\舟山系统UI.xlsx = docs\舟山系统UI.xlsx
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,10 +20,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{0E457AF1-813F-4D05-89D1-F2C8F3944DBE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{0E457AF1-813F-4D05-89D1-F2C8F3944DBE}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{0E457AF1-813F-4D05-89D1-F2C8F3944DBE}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{0E457AF1-813F-4D05-89D1-F2C8F3944DBE}.Release|Any CPU.Build.0 = Release|Any CPU
 		{8134C038-0A92-4CDE-B3F0-109BF84489D8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{8134C038-0A92-4CDE-B3F0-109BF84489D8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8134C038-0A92-4CDE-B3F0-109BF84489D8}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -27,6 +28,10 @@ Global
 		{61AE22E0-EF61-4A0B-9327-02F01DC640C3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{61AE22E0-EF61-4A0B-9327-02F01DC640C3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{61AE22E0-EF61-4A0B-9327-02F01DC640C3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0E457AF1-813F-4D05-89D1-F2C8F3944DBE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0E457AF1-813F-4D05-89D1-F2C8F3944DBE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0E457AF1-813F-4D05-89D1-F2C8F3944DBE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0E457AF1-813F-4D05-89D1-F2C8F3944DBE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

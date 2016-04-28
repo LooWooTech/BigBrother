@@ -11,6 +11,7 @@ namespace LowooTech.Land.Zhoushan.Web
     {
         protected void Application_Start()
         {
+            Environment.CurrentDirectory = AppDomain.CurrentDomain.BaseDirectory;
             AreaRegistration.RegisterAllAreas();
             RouteConfig.RegisterRoutes(RouteTable.Routes);
         }

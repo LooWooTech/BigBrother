@@ -22,10 +22,5 @@ namespace LoowooTech.Land.Zhoushan.Managers
         {
             return new DataContext();
         }
-
-        public DataContext GetDbContext(string connectionString)
-        {
-            return new DataContext(connectionString);
-        }
     }
 }

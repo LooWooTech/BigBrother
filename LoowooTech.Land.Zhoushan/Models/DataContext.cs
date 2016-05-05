@@ -10,10 +10,16 @@ namespace LoowooTech.Land.Zhoushan.Models
 {
     public class DataContext : DbContext
     {
-        private static string DbConnectionString = AppSettings.Get("DbConnectionString");
+        public DataContext() : base("name=DbConnectionString") { }
 
-        public DataContext() : this(DbConnectionString) { }
+        public DbSet<User> Users { get; set; }
 
-        public DataContext(string nameOrConnectionString) : base(nameOrConnectionString) { }
+        public DbSet<Form> Forms { get; set; }
+
+        public DbSet<NodeValue> NodeValues { get; set; }
+
+        public DbSet<Area> Areas { get; set; }
+
+        public DbSet<NodeValueType> NodeValueTypes { get; set; }
     }
 }

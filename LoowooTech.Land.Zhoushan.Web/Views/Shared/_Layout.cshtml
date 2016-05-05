@@ -10,6 +10,7 @@
     <link rel="stylesheet" href="~/Content/site.css" />
     <script src="~/Scripts/jquery-1.9.1.min.js"></script>
     <script src="~/Scripts/bootstrap.js"></script>
+    <script  src="~/Scripts/common.js"></script>
     <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!--[if lt IE 9]>
         <script src="~/Scripts/html5shiv.min.js"></script>
@@ -27,15 +28,6 @@
             </button>
         </div>
         <div class="navbar-collapse collapse" id="navbar-main">
-            @*<ul class="nav navbar-nav">
-                    <li class="active">
-                        <a href="/">系统管理</a>
-                    </li>
-                    <li>
-                        <a href="/App">应用中心</a>
-                    </li>
-                </ul>*@
-
             <ul class="nav navbar-nav navbar-right">
                 <li class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Administrator <span class="caret"></span></a>
@@ -80,10 +72,22 @@
         @RenderBody()
     </div>
     @RenderSection("scripts", required: false)
+    <div id="modal" class="modal fade" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+            </div>
+        </div>
+    </div>
 </body>
 </html>
 <script>
     $(function () {
+        //弹窗
+        $('#modal').on('hidden.bs.modal', function () {
+            $(this).removeData('bs.modal');
+        });
+
+        //菜单折叠
         $("#sidebar a").click(function () {
             $("#sidebar li").removeClass("active");
             var parent = $(this).parent();

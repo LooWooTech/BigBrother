@@ -67,7 +67,13 @@
     <Compile Include="Managers\ManagerBase.cs" />
     <Compile Include="Managers\ManagerCore.cs" />
     <Compile Include="Managers\UserManager.cs" />
+    <Compile Include="Models\Area.cs" />
     <Compile Include="Models\DataContext.cs" />
+    <Compile Include="Models\Form.cs" />
+    <Compile Include="Models\Node.cs" />
+    <Compile Include="Models\NodeValue.cs" />
+    <Compile Include="Models\NodeValueTime.cs" />
+    <Compile Include="Models\NodeValueType.cs" />
     <Compile Include="Models\User.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace LowooTech.Land.Zhoushan.Web.Security
+namespace LoowooTech.Land.Zhoushan.Web.Security
 {
     public class UserIdentity : System.Security.Principal.IIdentity
     {

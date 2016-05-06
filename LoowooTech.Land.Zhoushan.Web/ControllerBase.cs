@@ -1,6 +1,6 @@
 ﻿using LoowooTech.Land.Zhoushan.Common;
 using LoowooTech.Land.Zhoushan.Managers;
-using LowooTech.Land.Zhoushan.Web.Security;
+using LoowooTech.Land.Zhoushan.Web.Security;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,7 +8,7 @@ using System.Threading;
 using System.Web;
 using System.Web.Mvc;
 
-namespace LowooTech.Land.Zhoushan.Web
+namespace LoowooTech.Land.Zhoushan.Web
 {
     public class ControllerBase : AsyncController
     {

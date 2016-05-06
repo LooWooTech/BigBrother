@@ -5,7 +5,7 @@ using System.Security.Principal;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace LowooTech.Land.Zhoushan.Web.Security
+namespace LoowooTech.Land.Zhoushan.Web.Security
 {
     public class UserPrincipal : IPrincipal
     {

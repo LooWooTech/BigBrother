@@ -5,7 +5,7 @@ using System.Web;
 using System.Web.Mvc;
 using System.Web.Routing;
 
-namespace LowooTech.Land.Zhoushan.Web
+namespace LoowooTech.Land.Zhoushan.Web
 {
     public class RouteConfig
     {

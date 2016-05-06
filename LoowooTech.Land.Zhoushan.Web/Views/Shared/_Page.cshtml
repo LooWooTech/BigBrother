@@ -1,0 +1,62 @@
+﻿@{
+    if (Model == null)
+    {
+        return;
+    }
+    var page = Model as PageParameter;
+    if (page.PageSize == 0)
+    {
+        page.PageSize = 10;
+    }
+
+    if (page.PageCount < 2)
+    {
+        return;
+    }
+
+    var listSize = 5;
+    var startIndex = page.PageIndex - page.PageIndex % listSize + 1;
+    var endIndex = startIndex + listSize - 1;
+    endIndex = endIndex >= page.PageCount ? page.PageCount : endIndex;
+}
+
+<ul class="pagination">
+    @if (page.PageIndex > 1)
+    {
+        <li><a href="@page.GetPageLink(page.PageIndex - 1,Request.QueryString)">&lt;&lt; 上一页</a></li>
+    }
+    @if (startIndex > 1)
+    {
+        <li><a href="@(page.GetPageLink(1,Request.QueryString))">1</a></li>
+    }
+
+    @if (startIndex / listSize > 1)
+    {
+        <li><a href="@page.GetPageLink(startIndex - listSize,Request.QueryString)">...</a></li>
+    }
+
+    @for (int i = startIndex; i <= endIndex; i++)
+    {
+        if (i == page.PageIndex)
+        {
+            <li class="disabled"><a>@(i)</a></li>
+        }
+        else
+        {
+            <li><a href="@page.GetPageLink(i,Request.QueryString)">@(i)</a></li>
+        }
+    }
+    @if (endIndex + 1 < page.PageCount)
+    {
+        <li><a href="@page.GetPageLink(endIndex+1,Request.QueryString)">...</a></li>
+    }
+    @if (page.PageIndex < page.PageCount - 1)
+    {
+        <li><a href="@page.GetPageLink(page.PageIndex + 1,Request.QueryString)">&gt;&gt; 下一页</a></li>
+    }
+    <li class="disabled">
+        <a>
+            @(page.PageIndex)/@(page.PageCount)
+        </a>
+    </li>
+</ul>

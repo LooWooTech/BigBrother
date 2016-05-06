@@ -23,6 +23,8 @@ namespace LoowooTech.Land.Zhoushan.Models
 
         public UserRole Role { get; set; }
 
+        public DateTime? LastLoginTime { get; set; }
+
     }
 
     [Flags]

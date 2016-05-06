@@ -1,11 +1,11 @@
-﻿using LowooTech.Land.Zhoushan.Web.Security;
+﻿using LoowooTech.Land.Zhoushan.Web.Security;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Security;
 
-namespace LowooTech.Land.Zhoushan.Web
+namespace LoowooTech.Land.Zhoushan.Web
 {
     public class AuthorizeHelper
     {

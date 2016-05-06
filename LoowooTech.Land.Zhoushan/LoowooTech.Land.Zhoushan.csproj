@@ -61,8 +61,10 @@
     <Compile Include="Common\AppSettings.cs" />
     <Compile Include="Common\Document.cs" />
     <Compile Include="Common\EncryptExtensions.cs" />
+    <Compile Include="Common\EnumExtensions.cs" />
     <Compile Include="Common\ExceptionExtension.cs" />
     <Compile Include="Common\JsonExtension.cs" />
+    <Compile Include="Common\QueryableExtensions.cs" />
     <Compile Include="Common\ServiceFactory.cs" />
     <Compile Include="Managers\ManagerBase.cs" />
     <Compile Include="Managers\ManagerCore.cs" />
@@ -74,7 +76,9 @@
     <Compile Include="Models\NodeValue.cs" />
     <Compile Include="Models\NodeValueTime.cs" />
     <Compile Include="Models\NodeValueType.cs" />
+    <Compile Include="Models\PageParameter.cs" />
     <Compile Include="Models\User.cs" />
+    <Compile Include="Models\UserParameter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup />

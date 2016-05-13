@@ -11,31 +11,23 @@ namespace LoowooTech.Land.Zhoushan.Models
     [Table("form")]
     public class Form
     {
+        public Form()
+        {
+            Nodes = new List<Node>();
+        }
+
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int ID { get; set; }
 
-        public string Name { get; set; }
-
-        private string _config;
-        public string Config
+        public Node GetNode(int id)
         {
-            get
-            {
-                if (Nodes != null)
-                {
-                    _config = Newtonsoft.Json.JsonConvert.SerializeObject(Nodes);
-                }
-                return _config;
-            }
-            set
-            {
-                _config = value;
-                Nodes = Newtonsoft.Json.JsonConvert.DeserializeObject<List<Node>>(_config);
-            }
+            return Nodes.FirstOrDefault(e => e.ID == id);
         }
 
+        public string Name { get; set; }
+        
         [NotMapped]
-        public List<Node> Nodes { get; private set; }
+        public List<Node> Nodes { get; set; }
     }
 }

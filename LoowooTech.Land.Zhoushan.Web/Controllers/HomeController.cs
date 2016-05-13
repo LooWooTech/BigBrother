@@ -8,7 +8,6 @@ namespace LoowooTech.Land.Zhoushan.Web.Controllers
 {
     public class HomeController : ControllerBase
     {
-        // GET: Home
         public ActionResult Index()
         {
             return View();

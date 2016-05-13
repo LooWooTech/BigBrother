@@ -1,0 +1,19 @@
+﻿@model Node
+@{
+    var model = Model ?? new Node();
+}
+<div class="row node-item">
+    <div class="col-lg-1 col-lg-offset-@(model.Level)">
+        @(model.Name)
+    </div>
+    <div class="col-lg-1 col-lg-offset-@(10 - model.Level)">
+        <a href="/node/edit?id=@(model.ID)" data-toggle="modal" data-target="#modal" class="btn btn-primary btn-xs"><i class="glyphicon glyphicon-pencil"></i></a>
+        <a href="/node/edit?parentId=@(model.ID)" class="btn btn-success btn-xs" data-toggle="modal" data-target="#modal" title="添加字段"><i class="glyphicon glyphicon-plus"></i></a>
+        <a href="/node/delete?id=@(model.ID)" class="btn btn-danger btn-xs btn-delete"><i class="glyphicon glyphicon-remove"></i></a>
+    </div>
+</div>
+@foreach (var child in model.Children)
+{
+    Html.RenderPartial("_NodeListItem", child);
+}
+

@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace LoowooTech.Land.Zhoushan.Models
 {
-    [Table("Area")]
+    [Table("area")]
     public class Area
     {
         [Key]

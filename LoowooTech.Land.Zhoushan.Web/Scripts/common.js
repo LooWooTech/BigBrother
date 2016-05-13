@@ -104,27 +104,31 @@
             }
         }
     };
-    $.fn.submitForm = function (options) {
-        switch (typeof (options)) {
-            case "string":
-                options = { url: arguments[0] };
-                break;
-            case "function":
-                options = { success: arguments[0] };
-                break;
-            default:
-                options = options || {};
-                break;
-        }
 
-        if (options.validate && !options.validate()) {
+    $.fn.registerSubmit = function (options) {
+        $(this).submit(function () {
+            switch (typeof (options)) {
+                case "string":
+                    options = { url: options };
+                    break;
+                case "function":
+                    options = { success: options };
+                    break;
+                default:
+                    options = options || {};
+                    break;
+            }
+
+            if (options.validate && !options.validate()) {
+                return false;
+            }
+
+            options.url = options.url || $(this).attr("action");
+            options.data = options.data || $(this).serializeObject();
+            console.log(options);
+            $.request(options);
             return false;
-        }
-
-        options.url = options.url || $(this).attr("action");
-        options.data = options.data || $(this).serializeObject();
-
-        $.request(options);
+        });
     };
 
     $.request = function (url, data, success, error, global) {

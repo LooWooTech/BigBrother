@@ -1,0 +1,47 @@
+﻿@{
+    ViewBag.Title = "报表管理";
+    List<Form> list = ViewBag.Forms;
+}
+
+<h2 class="page-header">
+    @(ViewBag.Title)
+    <a class="btn btn-success" href="/form/edit" data-toggle="modal" data-target="#modal">
+        <i class="glyphicon glyphicon-plus"></i>添加表单
+    </a>
+</h2>
+
+<table class="table table-bordered table-responsive">
+    <tr>
+        <th>报表名称</th>
+        <th>操作</th>
+    </tr>
+
+    @foreach (var item in list)
+    {
+        <tr>
+            <td><b>@(item.Name)</b></td>
+            <td style="width:120px;">
+                <a href="/form/edit?id=@(item.ID)" class="btn btn-primary btn-xs" data-toggle="modal" data-target="#modal" title="编辑"><i class="fa fa-edit"></i></a>
+                <a href="/node/edit?formId=@(item.ID)" class="btn btn-success btn-xs" data-toggle="modal" data-target="#modal" title="添加字段"><i class="fa fa-plus"></i></a>
+                <a href="/form/delete?id=@(item.ID)" class="btn btn-danger btn-xs btn-delete" title="删除"><i class="fa fa-trash-o"></i></a>
+            </td>
+        </tr>
+        if (item.Nodes.Count > 0)
+        {
+            <tr>
+                <td colspan="2">
+                    @foreach (var node in item.Nodes)
+                    {
+                        Html.RenderPartial("_NodeListItem", node);
+                    }
+                </td>
+            </tr>
+        }
+    }
+</table>
+
+<script>
+    $(function () {
+        $.registerDeleteButton();
+    });
+</script>

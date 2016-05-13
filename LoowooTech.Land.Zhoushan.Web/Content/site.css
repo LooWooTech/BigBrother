@@ -1,4 +1,4 @@
-﻿body { margin: 0; line-height: 1.5; color: #373a3c; background-color: #f9f9f9; }
+﻿body { margin: 0; line-height: 1.5; color: #373a3c; background-color: #f9f9f9; font-family: "Microsoft YaHei"; }
 #main-container { position: absolute; left: 250px; top: 50px; right: 0; bottom: 0; overflow: auto; overflow-x: hidden; padding: 10px; background: #fff; }
 .sidebar { position: absolute; top: 50px; bottom: 0; left: 0; z-index: 999; font-size: 13px; width: 250px; }
     .sidebar:not(.simplebar) { overflow: auto; -webkit-overflow-scrolling: touch; }
@@ -28,19 +28,8 @@
 
 
 .dropdown-menu > li > a:hover, .dropdown-menu > li > a:focus { background: #eee; }
-.page-header {
-border-bottom: 1px solid #eee;
-line-height: 50px;
-margin: 0;
-display: block;
-position: relative;
-top: -10px;
-left: -20px;
-right: -10px;
-width: 110%;
-background-color: #e4e8f5;
-font-size: 1.5em;
-padding-left: 30px;
-height: 50px;
-
+.page-header { border-bottom: 1px solid #eee; line-height: 50px; margin: 0; display: block; position: relative; top: -10px; left: -20px; right: -10px; width: 110%; background-color: #e4e8f5; font-size: 1.5em; padding-left: 30px; height: 50px; }
+.node-item {
+    margin: 0px;
+    padding: 5px;
 }

@@ -1,0 +1,88 @@
+﻿@{
+    Form model = ViewBag.Form;
+    var isAdd = model.ID == 0;
+    ViewBag.Title = isAdd ? "添加表单" : "修改表单";
+
+}
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <h3 class="panel-title"><i class="glyphicon glyphicon-@(isAdd?"plus":"pencil")"></i>@(ViewBag.Title)</h3>
+    </div>
+    <div class="panel-body">
+        <form id="form-form" action="/form/edit?id=@(model.ID)" method="post" class="form-horizontal">
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="Type" class="control-label col-lg-3">表单名称</label>
+                    <div class="col-lg-8">
+                        <input type="text" name="Name" class="form-control" value="@(model.Name)" />
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <div class="col-lg-8 col-lg-offset-3">
+                    <button type="submit" class="btn btn-primary"><i class="glyphicon glyphicon-ok"></i> 确定</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<script>
+    $(function () {
+        $("#form-form").registerSubmit(function () {
+            $.closeWindow();
+            $.refreshMain();
+        });
+    });
+</script>
+
+@*<script>
+        $(function () {
+            var nodes = $.parseJSON($("#txt-config").val() || []);
+            var template = $("#template-node-list").html();
+            var nodePanel = $("#node-list");
+            $.each(nodes, function (i, node) {
+                nodePanel.append(getNodeHtml(0, node));
+            });
+
+            function getNodeHtml(deepth, node, parent) {
+                var html = template.replace("{id}", node.ID)
+                    .replace("{parentId}", ((parent || {}).ParentID || ""))
+                    .replace("{deepth}", deepth)
+                    .replace("{name}", node.Name);
+                if (node.Children.length > 0) {
+                    for (var child in node.Children) {
+                        html += getNodeHtml(deepth + 1, child, node);
+                    }
+                }
+                return html;
+            }
+
+            $(".btn-node-add").click(function () {
+                var parent = $(this).parent().parent();
+                var parentId = parent.attr("id");
+                var parentId = parentId ? parentId.replace("node-", "") : "";
+
+                var className = parent.attr("class");
+                var deepth = parseInt(className ? className.replace("deepth-", "") : 0);
+
+                var html = getNodeHtml(deepth, getNode(parentId));
+            });
+
+            function getNode(nodeId) {
+                $.each(nodes, function (i, node) {
+                    if (node.ID == nodeId) {
+                        return node;
+                    }
+                });
+                return null;
+            }
+
+            $("#form-User").submit(function () {
+                $(this).submitForm(function () {
+                    $.closeWindow();
+                    $.refreshMain();
+                });
+                return false;
+            });
+        });
+    </script>*@

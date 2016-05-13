@@ -16,6 +16,8 @@ namespace LoowooTech.Land.Zhoushan.Models
 
         public DbSet<Form> Forms { get; set; }
 
+        public DbSet<Node> Nodes { get; set; }
+
         public DbSet<NodeValue> NodeValues { get; set; }
 
         public DbSet<Area> Areas { get; set; }

@@ -27,5 +27,9 @@ namespace LoowooTech.Land.Zhoushan.Managers
         public static readonly ManagerCore Instance = new ManagerCore();
 
         public UserManager UserManager { get; private set; }
+
+        public FormManager FormManager { get; private set; }
+
+        public AreaManager AreaManager { get; private set; }
     }
 }

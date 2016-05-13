@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace LoowooTech.Land.Zhoushan.Models
 {
-    [Table("NodeValueType")]
+    [Table("value_type")]
     public class NodeValueType
     {
         [Key]

@@ -29,7 +29,14 @@
 
 .dropdown-menu > li > a:hover, .dropdown-menu > li > a:focus { background: #eee; }
 .page-header { border-bottom: 1px solid #eee; line-height: 50px; margin: 0; display: block; position: relative; top: -10px; left: -20px; right: -10px; width: 110%; background-color: #e4e8f5; font-size: 1.5em; padding-left: 30px; height: 50px; }
-.node-item {
-    margin: 0px;
-    padding: 5px;
-}
+
+.node-item { padding: 3px; }
+.node-level-1 { text-indent: 25px; }
+.node-level-2 { text-indent: 50px; }
+.node-level-3 { text-indent: 75px; }
+.node-level-4 { text-indent: 100px; }
+.node-level-5 { text-indent: 125px; }
+.node-level-1:before { content: "-"; }
+.node-level-2:before { content: "--"; }
+.node-level-3:before { content: "---"; }
+.node-level-4:before { content: "----"; }

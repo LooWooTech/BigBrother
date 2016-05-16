@@ -1,7 +1,28 @@
-﻿
-@{
-    ViewBag.Title = "Index";
+﻿@{
+    ViewBag.Title = "地区管理";
+    List<Area> list = ViewBag.List;
 }
+<h2 class="page-header">
+    @(ViewBag.Title)
+    <a class="btn btn-success" href="/area/edit" data-toggle="modal" data-target="#modal">
+        <i class="glyphicon glyphicon-plus"></i>添加地区
+    </a>
+</h2>
 
-<h2>Index</h2>
+<table class="table table-bordered">
+    <tr>
+        <th style="width:60px">ID</th>
+        <th>名称</th>
+        <th style="width:120px">操作</th>
+    </tr>
+    @foreach (var item in list)
+    {
+        Html.RenderPartial("_AreaListItem", item);
+    }
+</table>
 
+<script>
+    $(function () {
+        $.registerDeleteButton();
+    });
+</script>

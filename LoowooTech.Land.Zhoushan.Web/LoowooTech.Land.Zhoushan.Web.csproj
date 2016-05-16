@@ -181,6 +181,9 @@
     <Content Include="Views\ValueType\Edit.cshtml" />
     <Content Include="Views\Form\_NodeListItem.cshtml" />
     <Content Include="Views\Node\Edit.cshtml" />
+    <Content Include="Views\Shared\_AreaOption.cshtml" />
+    <Content Include="Views\Area\_AreaListItem.cshtml" />
+    <Content Include="Views\Area\Dropdown.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

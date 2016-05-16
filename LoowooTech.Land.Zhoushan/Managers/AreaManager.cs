@@ -18,12 +18,20 @@ namespace LoowooTech.Land.Zhoushan.Managers
             {
                 using (var db = GetDbContext())
                 {
-                    return db.Areas.ToList();
+                    var result = new List<Area>();
+                    var list =  db.Areas.ToList();
+                    foreach(var root in list.Where(e=>e.ParentID == 0))
+                    {
+                        root.GetChildren(list);
+                        result.Add(root);
+                    }
+
+                    return result;
                 }
             });
         }
 
-        private void ClearCache()
+        private void RemoveCache()
         {
             Cache.Remove(_cacheKey);
         }
@@ -40,14 +48,18 @@ namespace LoowooTech.Land.Zhoushan.Managers
                 if (model.ID > 0)
                 {
                     var entity = db.Areas.FirstOrDefault(e => e.ID == model.ID);
-                    db.Entry(entity).CurrentValues.SetValues(model);
+                    if(model.ParentID == entity.ID)
+                    {
+                        model.ParentID = 0;
+                    }
+                    entity.Name = model.Name;
                 }
                 else
                 {
                     db.Areas.Add(model);
                 }
                 db.SaveChanges();
-                ClearCache();
+                RemoveCache();
             }
         }
 
@@ -58,6 +70,7 @@ namespace LoowooTech.Land.Zhoushan.Managers
                 var entity = db.Areas.FirstOrDefault(e => e.ID == id);
                 db.Areas.Remove(entity);
                 db.SaveChanges();
+                RemoveCache();
             }
         }
     }

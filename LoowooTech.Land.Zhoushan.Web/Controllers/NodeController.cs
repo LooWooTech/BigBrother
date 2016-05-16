@@ -33,7 +33,7 @@ namespace LoowooTech.Land.Zhoushan.Web.Controllers
                 parent = Core.FormManager.GetNode(parentId);
                 node = new Node { FormID = parent.FormID, ParentID = parent.ID };
             }
-            ViewBag.Node = node ?? new Node { FormID = form.ID };
+            ViewBag.Model = node ?? new Node { FormID = form.ID };
             return View();
         }
 

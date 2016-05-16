@@ -18,6 +18,14 @@ namespace LoowooTech.Land.Zhoushan.Web.Controllers
         [HttpGet]
         public ActionResult Edit(int id = 0)
         {
+            ViewBag.List = Core.AreaManager.GetAreas();
+            ViewBag.Model = Core.AreaManager.GetArea(id) ?? new Area();
+            return View();
+        }
+
+        public ActionResult Dropdown(int id = 0, string controlName = "areaId")
+        {
+            ViewBag.List = Core.AreaManager.GetAreas();
             ViewBag.Model = Core.AreaManager.GetArea(id) ?? new Area();
             return View();
         }

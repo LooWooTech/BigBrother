@@ -18,6 +18,14 @@ namespace LoowooTech.Land.Zhoushan.Managers
 
         protected ICacheService Cache;
 
+        protected ManagerCore Core
+        {
+            get
+            {
+                return ManagerCore.Instance;
+            }
+        }
+
         public virtual DataContext GetDbContext()
         {
             return new DataContext();

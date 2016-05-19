@@ -11,6 +11,11 @@ namespace LoowooTech.Land.Zhoushan.Models
     [Table("node_value")]
     public class NodeValue
     {
+        public NodeValue()
+        {
+            UpdateTime = DateTime.Now;
+        }
+
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int ID { get; set; }
@@ -19,10 +24,24 @@ namespace LoowooTech.Land.Zhoushan.Models
 
         public double Value { get; set; }
 
+        /// <summary>
+        /// 值类型（面积、金额、件数）
+        /// </summary>
         public int TypeID { get; set; }
 
+        /// <summary>
+        /// 年度
+        /// </summary>
+        public int Year { get; set; }
+
+        /// <summary>
+        /// 季度
+        /// </summary>
         public NodeValueTime TimeID { get; set; }
 
+        /// <summary>
+        /// 地区
+        /// </summary>
         public int AreaID { get; set; }
 
         [NotMapped]
@@ -30,5 +49,7 @@ namespace LoowooTech.Land.Zhoushan.Models
 
         [NotMapped]
         public Area Area { get; set; }
+
+        public DateTime UpdateTime { get; set; }
     }
 }

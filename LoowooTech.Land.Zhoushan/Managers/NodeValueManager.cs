@@ -1,5 +1,4 @@
-﻿using LoowooTech.Land.Zhoushan.Caching;
-using LoowooTech.Land.Zhoushan.Models;
+﻿using LoowooTech.Land.Zhoushan.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,64 +9,76 @@ namespace LoowooTech.Land.Zhoushan.Managers
 {
     public partial class FormManager
     {
-        private string _typeKey = "nodeValueTypes";
-
-        public List<NodeValueType> GetNodeValueTypes()
-        {
-            return Cache.GetOrSet(_typeKey, () =>
-            {
-                using (var db = GetDbContext())
-                {
-                    return db.NodeValueTypes.ToList();
-                }
-            });
-        }
-
-        private void ClearValueTypeCache()
-        {
-            Cache.Remove(_typeKey);
-        }
-
-        public Node GetNode(int id)
+        public NodeValue GetNodeValue(int id)
         {
             if (id == 0) return null;
+
             using (var db = GetDbContext())
             {
-                return db.Nodes.FirstOrDefault(e => e.ID == id);
+                var model = db.NodeValues.FirstOrDefault(e => e.ID == id);
+                model.Area = Core.AreaManager.GetArea(model.AreaID);
+                model.Type = Core.FormManager.GetNodeValueType(model.TypeID);
+                return model;
             }
         }
 
-        public NodeValueType GetNodeValueType(int id)
-        {
-            return GetNodeValueTypes().FirstOrDefault(e => e.ID == id);
-        }
-
-        public void SaveNodeValueType(NodeValueType model)
+        public List<NodeValue> GetNodeValues(Node node)
         {
             using (var db = GetDbContext())
             {
-                if (model.ID > 0)
+                var list = db.NodeValues.Where(e => e.NodeID == node.ID).ToList();
+                foreach(var val in list)
                 {
-                    var entity = db.NodeValueTypes.FirstOrDefault(e => e.ID == model.ID);
-                    db.Entry(entity).CurrentValues.SetValues(model);
+                    val.Area = Core.AreaManager.GetArea(val.AreaID);
+                    val.Type = Core.FormManager.GetNodeValueType(val.TypeID);
+                }
+                return node.Values = list;
+            }
+        }
+
+        public void SaveNodeValue(NodeValue data)
+        {
+            using (var db = GetDbContext())
+            {
+                if (data.ID > 0)
+                {
+                    var entity = db.NodeValues.FirstOrDefault(e => e.ID == data.ID);
+                    if (entity != null)
+                    {
+                        db.Entry(entity).CurrentValues.SetValues(data);
+                    }
                 }
                 else
                 {
-                    db.NodeValueTypes.Add(model);
+                    var entity = db.NodeValues.FirstOrDefault(e => e.Year == data.Year
+                    && e.TimeID == data.TimeID
+                    && e.AreaID == data.AreaID
+                    && e.TypeID == data.TypeID
+                    && e.NodeID == data.NodeID
+                    );
+                    if (entity != null)
+                    {
+                        entity.Value = data.Value;
+                    }
+                    else
+                    {
+                        db.NodeValues.Add(data);
+                    }
                 }
                 db.SaveChanges();
-                ClearValueTypeCache();
             }
         }
 
-        public void DeleteNodeValueType(int id)
+        public void DeleteNodeValue(int id)
         {
             using (var db = GetDbContext())
             {
-                var entity = db.NodeValueTypes.FirstOrDefault(e => e.ID == id);
-                db.NodeValueTypes.Remove(entity);
+                var entity = db.NodeValues.FirstOrDefault(e => e.ID == id);
+
+                db.NodeValues.Remove(entity);
                 db.SaveChanges();
             }
         }
+
     }
 }

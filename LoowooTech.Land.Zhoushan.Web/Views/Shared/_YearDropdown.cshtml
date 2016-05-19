@@ -1,0 +1,11 @@
+﻿@model int?
+@{
+    var minValue = DateTime.Now.Year - 5;
+    var maxValue = DateTime.Now.Year;
+}
+<select name="Year" class="form-control">
+    @for (var year = maxValue; year >= minValue; year--)
+    {
+        <option @(Model == year ? "selected" : null)>@(year)</option>
+    }
+</select>

@@ -9,20 +9,16 @@
     </a>
 </h2>
 
-<table class="table table-bordered">
-    <tr>
-        <th style="width:60px">ID</th>
-        <th>名称</th>
-        <th style="width:120px">操作</th>
-    </tr>
+<table class="table table-hover">
+    <thead>
+        <tr>
+            <th style="width:60px">ID</th>
+            <th>名称</th>
+            <th style="width:120px">操作</th>
+        </tr>
+    </thead>
     @foreach (var item in list)
     {
         Html.RenderPartial("_AreaListItem", item);
     }
 </table>
-
-<script>
-    $(function () {
-        $.registerDeleteButton();
-    });
-</script>

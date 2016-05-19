@@ -9,15 +9,16 @@
     </a>
 </h2>
 
-<table class="table table-bordered">
-    <tr>
-        <th>用户名</th>
-        <th>姓名</th>
-        <th>角色</th>
-        <th>最后登录</th>
-        <th>操作</th>
-    </tr>
-
+<table class="table table-hover">
+    <thead>
+        <tr>
+            <th>用户名</th>
+            <th>姓名</th>
+            <th>角色</th>
+            <th>最后登录</th>
+            <th>操作</th>
+        </tr>
+    </thead>
     @foreach (var item in list)
     {
         <tr>
@@ -27,15 +28,9 @@
             <td>@(item.LastLoginTime.HasValue ? item.LastLoginTime.Value.ToString() : null)</td>
             <td style="width:80px;">
                 <a href="/User/edit?id=@(item.ID)" class="btn btn-primary btn-xs" data-toggle="modal" data-target="#modal" title="编辑"><i class="fa fa-edit"></i></a>
-                <a href="/User/delete?id=@(item.ID)" class="btn btn-danger btn-xs btn-delete" title="删除"><i class="fa fa-trash-o"></i></a>
+                <a href="/User/delete?id=@(item.ID)" class="btn btn-danger btn-xs" title="删除" data-target="#delete"><i class="fa fa-trash-o"></i></a>
             </td>
         </tr>
     }
 </table>
 @Html.Partial("_Page", ViewBag.Page as object)
-
-<script>
-    $(function () {
-        $.registerDeleteButton();
-    });
-</script>

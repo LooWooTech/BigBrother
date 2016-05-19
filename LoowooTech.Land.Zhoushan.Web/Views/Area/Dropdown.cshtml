@@ -1,13 +1,12 @@
 ﻿@{
     List<Area> list = ViewBag.List;
-    Area model = ViewBag.Model;
-
+    int areaId = ViewBag.AreaID == null ? 0 : ViewBag.AreaID;
+    string controlName = ViewBag.ControlName ?? "AreaId";
 }
-<select name="@(Request.QueryString["controlName"]??"AreaId")" class="form-control">
-    <option value="0" @(model.ParentID == 0 ? "checked" : null)>选择地区</option>
+<select name="@(controlName)" class="form-control">
+    <option value="0" @(areaId == 0 ? "checked" : null)>选择地区</option>
     @foreach (var item in list)
     {
-        item.Checked = model.ParentID == item.ID;
-        @Html.Partial("_AreaOption", item)
+        Html.RenderPartial("_AreaOption", item);
     }
 </select>

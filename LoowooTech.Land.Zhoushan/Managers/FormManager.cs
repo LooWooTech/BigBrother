@@ -69,24 +69,6 @@ namespace LoowooTech.Land.Zhoushan.Managers
             }
         }
 
-        public void SaveNode(Node model)
-        {
-            using (var db = GetDbContext())
-            {
-                if (model.ID == 0)
-                {
-                    db.Nodes.Add(model);
-                }
-                else
-                {
-                    var entity = db.Nodes.FirstOrDefault(e => e.ID == model.ID);
-                    db.Entry(entity).CurrentValues.SetValues(model);
-                }
-                db.SaveChanges();
-            }
-            ClearFormCache();
-        }
-
         public void DeleteForm(int formId)
         {
             using (var db = GetDbContext())
@@ -102,20 +84,5 @@ namespace LoowooTech.Land.Zhoushan.Managers
             ClearFormCache();
         }
 
-        public void DeleteNode(int nodeId)
-        {
-            using (var db = GetDbContext())
-            {
-                var hasChild = db.Nodes.Any(e => e.ParentID == nodeId);
-                if (hasChild)
-                {
-                    throw new Exception("该字段包含子字段，无法删除");
-                }
-                var entity = db.Nodes.FirstOrDefault(e => e.ID == nodeId);
-                db.Nodes.Remove(entity);
-                db.SaveChanges();
-            }
-            ClearFormCache();
-        }
     }
 }

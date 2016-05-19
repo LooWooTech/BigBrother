@@ -1,5 +1,9 @@
 ﻿@model Area
-<option value="@(Model.ID)" @(Model.Checked ? "checked" : null)>
+@{
+    int areaId = ViewBag.AreaID == null ? 0 : ViewBag.AreaID;
+    Model.Selected = Model.ID == areaId;
+}
+<option value="@(Model.ID)" @(Model.Selected ? " selected" : null)>
     @(new string('-', Model.Level))
     @(Model.Name)
 </option>

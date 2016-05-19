@@ -23,10 +23,11 @@ namespace LoowooTech.Land.Zhoushan.Web.Controllers
             return View();
         }
 
-        public ActionResult Dropdown(int id = 0, string controlName = "areaId")
+        public ActionResult Dropdown(int areaId = 0, string controlName = "areaId")
         {
             ViewBag.List = Core.AreaManager.GetAreas();
-            ViewBag.Model = Core.AreaManager.GetArea(id) ?? new Area();
+            ViewBag.ControlName = controlName;
+            ViewBag.AreaID = areaId;
             return View();
         }
 

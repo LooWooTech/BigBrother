@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
-VisualStudioVersion = 14.0.23107.0
+VisualStudioVersion = 14.0.25123.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LoowooTech.Land.Zhoushan", "LoowooTech.Land.Zhoushan\LoowooTech.Land.Zhoushan.csproj", "{8134C038-0A92-4CDE-B3F0-109BF84489D8}"
 EndProject
@@ -9,6 +9,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LoowooTech.Land.Zhoushan.We
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "docs", "docs", "{41136D72-6CF1-4E39-881B-916845111496}"
 	ProjectSection(SolutionItems) = preProject
+		docs\db.sql = docs\db.sql
 		docs\舟山系统UI.xlsx = docs\舟山系统UI.xlsx
 	EndProjectSection
 EndProject

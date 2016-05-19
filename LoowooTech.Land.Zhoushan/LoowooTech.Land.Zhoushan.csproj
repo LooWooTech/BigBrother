@@ -78,7 +78,9 @@
     <Compile Include="Managers\FormManager.cs" />
     <Compile Include="Managers\ManagerBase.cs" />
     <Compile Include="Managers\ManagerCore.cs" />
+    <Compile Include="Managers\NodeManager.cs" />
     <Compile Include="Managers\NodeValueManager.cs" />
+    <Compile Include="Managers\NodeValueTypeManager.cs" />
     <Compile Include="Managers\UserManager.cs" />
     <Compile Include="Models\Area.cs" />
     <Compile Include="Models\DataContext.cs" />

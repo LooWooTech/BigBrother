@@ -1,0 +1,28 @@
+﻿
+@{
+    Form form = ViewBag.Form;
+    var list = form.Nodes;
+
+    ViewBag.Title = "分类管理 - " + form.Name;
+}
+<h2 class="page-header">
+    @(ViewBag.Title)
+    <a class="btn btn-success" href="/node/edit?formId=@(form.ID)" data-toggle="modal" data-target="#modal">
+        <i class="glyphicon glyphicon-plus"></i>添加分类
+    </a>
+    <a class="btn btn-default" href="/form" data-target="#main">
+        <i class="fa fa-chevron-left"></i> 返回
+    </a>
+</h2>
+<table class="table table-hover">
+    <thead>
+        <tr>
+            <th>分类名称</th>
+            <th style="width:240px;">操作</th>
+        </tr>
+    </thead>
+    @foreach (var node in form.Nodes)
+    {
+        Html.RenderPartial("_NodeListItem", node);
+    }
+</table>

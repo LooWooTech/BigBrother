@@ -1,5 +1,5 @@
 ﻿body { margin: 0; line-height: 1.5; color: #373a3c; background-color: #f9f9f9; font-family: "Microsoft YaHei"; }
-#main-container { position: absolute; left: 250px; top: 50px; right: 0; bottom: 0; overflow: auto; overflow-x: hidden; padding: 10px; background: #fff; }
+#main { position: absolute; left: 250px; top: 50px; right: 0; bottom: 0; overflow: auto; overflow-x: hidden; padding: 10px; background: #fff; }
 .sidebar { position: absolute; top: 50px; bottom: 0; left: 0; z-index: 999; font-size: 13px; width: 250px; }
     .sidebar:not(.simplebar) { overflow: auto; -webkit-overflow-scrolling: touch; }
 

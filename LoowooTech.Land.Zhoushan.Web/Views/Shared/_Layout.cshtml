@@ -44,41 +44,41 @@
         <div class="sidebar-heading"><i class="glyphicon glyphicon-cog"></i> 系统管理</div>
         <ul class="sidebar-menu">
             <li>
-                <a href="/user/">
+                <a href="/user/" data-target="#main">
                     <i class="glyphicon glyphicon-user"></i> 用户管理
                 </a>
             </li>
             <li>
-                <a href="/form/">
+                <a href="/form/" data-target="#main">
                     <i class="glyphicon glyphicon-list-alt"></i> 表单管理
                 </a>
             </li>
             <li>
-                <a href="/area/">
+                <a href="/area/" data-target="#main">
                     <i class="glyphicon glyphicon-map-marker"></i> 地区管理
                 </a>
             </li>
             <li>
-                <a href="/valuetype/">
-                    <i class="glyphicon glyphicon-book"></i> 字段类型管理
+                <a href="/valuetype/" data-target="#main">
+                    <i class="glyphicon glyphicon-book"></i> 数值类型管理
                 </a>
             </li>
         </ul>
         <div class="sidebar-heading"><i class="glyphicon glyphicon-stats"></i> 报表管理</div>
         <ul class="sidebar-menu">
             <li>
-                <a href="/chat/">
+                <a href="/chat/" data-target="#main">
                     <i class="glyphicon glyphicon-search"></i> 查询统计
                 </a>
             </li>
             <li>
-                <a href="/">
+                <a href="/" data-target="#main">
                     <i class="glyphicon glyphicon-edit"></i> 填报数据
                 </a>
             </li>
         </ul>
     </div>
-    <div id="main-container">
+    <div id="main">
         @RenderBody()
     </div>
     @RenderSection("scripts", required: false)
@@ -91,7 +91,7 @@
 </body>
 </html>
 <script>
-    $(function () {
+    $(document).ready(function () {
         //弹窗
         $('#modal').on('hidden.bs.modal', function () {
             $(this).removeData('bs.modal');
@@ -102,11 +102,33 @@
             $("#sidebar li").removeClass("active");
             var parent = $(this).parent();
             parent.addClass("active");
+        });
+
+        $(document).on("click", "a", function () {
+            var targetId = $(this).attr("data-target");
             var href = $(this).attr("href");
-            if (href) {
-                $("#main-container").attr("href", href).load(href);
+            if (targetId == "#modal") {
+                return;
+            }
+
+            if (targetId == "#delete") {
+                if (confirm("你确定要删除该记录吗？")) {
+                    $.request(href);
+                }
                 return false;
             }
+            
+            if (targetId) {
+                var target = $(targetId);
+                target.attr("href", href).html("load...");
+                target.load(href, function (response, status, xhr) {
+                    if (status == "error") {
+                        target.html("程序出错了");
+                    }
+                });
+                return false;
+            }
+
         });
     });
 </script>

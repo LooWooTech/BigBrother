@@ -11,34 +11,29 @@ namespace LoowooTech.Land.Zhoushan.Managers
     public class AreaManager : ManagerBase
     {
 
-        private string _cacheKey = "areas";
         public List<Area> GetAreas()
         {
-            return Cache.GetOrSet(_cacheKey, () =>
+            using (var db = GetDbContext())
             {
-                using (var db = GetDbContext())
+                var result = new List<Area>();
+                var list = db.Areas.ToList();
+                foreach (var root in list.Where(e => e.ParentID == 0))
                 {
-                    var result = new List<Area>();
-                    var list =  db.Areas.ToList();
-                    foreach(var root in list.Where(e=>e.ParentID == 0))
-                    {
-                        root.GetChildren(list);
-                        result.Add(root);
-                    }
-
-                    return result;
+                    root.GetChildren(list);
+                    result.Add(root);
                 }
-            });
-        }
 
-        private void RemoveCache()
-        {
-            Cache.Remove(_cacheKey);
+                return result;
+            }
         }
 
         public Area GetArea(int id)
         {
-            return GetAreas().FirstOrDefault(e => e.ID == id);
+            if (id == 0) return null;
+            using (var db = GetDbContext())
+            {
+                return db.Areas.FirstOrDefault(e => e.ID == id);
+            }
         }
 
         public void Save(Area model)
@@ -59,7 +54,6 @@ namespace LoowooTech.Land.Zhoushan.Managers
                     db.Areas.Add(model);
                 }
                 db.SaveChanges();
-                RemoveCache();
             }
         }
 
@@ -70,7 +64,6 @@ namespace LoowooTech.Land.Zhoushan.Managers
                 var entity = db.Areas.FirstOrDefault(e => e.ID == id);
                 db.Areas.Remove(entity);
                 db.SaveChanges();
-                RemoveCache();
             }
         }
     }

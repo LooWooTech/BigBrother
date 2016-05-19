@@ -9,14 +9,15 @@
     </a>
 </h2>
 
-<table class="table table-bordered">
-    <tr>
-        <th style="width:60px;">ID</th>
-        <th>名称</th>
-        <th>单位</th>
-        <th style="width:90px;">操作</th>
-    </tr>
-
+<table class="table table-hover">
+    <thead>
+        <tr>
+            <th style="width:60px;">ID</th>
+            <th>名称</th>
+            <th>单位</th>
+            <th style="width:90px;">操作</th>
+        </tr>
+    </thead>
     @foreach (var item in list)
     {
         <tr>
@@ -25,13 +26,8 @@
             <td>@(item.Unit)</td>
             <td style="width:80px;">
                 <a href="/valuetype/edit?id=@(item.ID)" class="btn btn-primary btn-xs" data-toggle="modal" data-target="#modal" title="编辑"><i class="fa fa-edit"></i></a>
-                <a href="/valuetype/delete?id=@(item.ID)" class="btn btn-danger btn-xs btn-delete" title="删除"><i class="fa fa-trash-o"></i></a>
+                <a href="/valuetype/delete?id=@(item.ID)" class="btn btn-danger btn-xs" title="删除" data-target="#delete"><i class="fa fa-trash-o"></i></a>
             </td>
         </tr>
     }
 </table>
-<script>
-    $(function () {
-        $.registerDeleteButton();
-    });
-</script>

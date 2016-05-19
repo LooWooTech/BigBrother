@@ -20,7 +20,7 @@ namespace LoowooTech.Land.Zhoushan.Models
         public int ParentID { get; set; }
 
         [NotMapped]
-        public bool Checked { get; set; }
+        public bool Selected { get; set; }
 
         [NotMapped]
         public int Level { get; set; }

@@ -1,0 +1,11 @@
+﻿@{
+    List<NodeValueType> list = ViewBag.List;
+    int typeId = ViewBag.TypeID;
+}
+<select class="form-control" name="TypeId">
+    @foreach (var item in list)
+    {
+        var selected = item.ID == typeId;
+        <option value="@(item.ID)" @(selected ? "selected" : null)>@(item.Name)(@(item.Unit))</option>
+    }
+</select>

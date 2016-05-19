@@ -125,7 +125,6 @@
 
             options.url = options.url || $(this).attr("action");
             options.data = options.data || $(this).serializeObject();
-            console.log(options);
             $.request(options);
             return false;
         });
@@ -196,21 +195,11 @@
         $("#modal").modal("hide");
     };
 
-    $.refreshMain = function () {
-        var container = $("#main-container");
-        var href = container.attr("href");
-        container.html("加载中...");
-        container.load(href);
-    };
-
-    $.registerDeleteButton = function () {
-        $(".btn-delete").click(function () {
-            if (confirm("你确定要删除该记录吗？")) {
-                var href = $(this).attr("href");
-                $.request(href);
-            }
-            return false;
-        });
+    $.refreshMain = function (href) {
+        var main = $("#main");
+        href = href || main.attr("href");
+        main.html("加载中...");
+        main.load(href);
     };
 })();
 

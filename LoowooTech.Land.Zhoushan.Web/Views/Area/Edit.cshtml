@@ -21,7 +21,7 @@
                 <div class="form-group">
                     <label for="Type" class="control-label col-lg-3">所属地区</label>
                     <div class="col-lg-8">
-                        @Html.Action("Dropdown", "Area", new { ControlName = "ParentID", Id = model.ID })
+                        @Html.Action("Dropdown", "Area", new { ControlName = "ParentID", AreaId = model.ParentID })
                     </div>
                 </div>
             </div>

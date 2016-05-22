@@ -22,17 +22,54 @@ namespace LoowooTech.Land.Zhoushan.Managers
             }
         }
 
-        public List<NodeValue> GetNodeValues(Node node)
+        public List<NodeValue> GetNodeValues(NodeValueParameter parameter)
         {
             using (var db = GetDbContext())
             {
-                var list = db.NodeValues.Where(e => e.NodeID == node.ID).ToList();
-                foreach(var val in list)
+                var query = db.NodeValues.Where(e =>
+                e.NodeID == parameter.NodeID
+                && e.Year == parameter.Year
+                && e.TimeID == parameter.TimeID
+                && e.TypeID == parameter.TypeID
+                );
+                if (parameter.AreaID.HasValue)
                 {
-                    val.Area = Core.AreaManager.GetArea(val.AreaID);
-                    val.Type = Core.FormManager.GetNodeValueType(val.TypeID);
+                    query = query.Where(e => e.AreaID == parameter.AreaID);
                 }
-                return node.Values = list;
+
+                var list = query.ToList();
+                foreach (var item in list)
+                {
+                    if (parameter.GetArea)
+                    {
+                        item.Area = Core.AreaManager.GetArea(item.AreaID);
+                    }
+                    if (parameter.GetValueType)
+                    {
+                        item.Type = Core.FormManager.GetNodeValueType(item.TypeID);
+                    }
+                }
+
+                if (parameter.RateType.HasValue)
+                {
+                    var compareParameter = (NodeValueParameter)parameter.Clone();
+                    var compareList = GetNodeValues(compareParameter);
+                    foreach (var item in list)
+                    {
+                        var compareItem = compareList.FirstOrDefault(e =>
+                            e.NodeID == item.NodeID
+                            && e.Year == item.Year
+                            && e.TimeID == item.TimeID
+                            && e.TypeID == item.TypeID
+                            && e.AreaID == item.AreaID
+                        );
+                        if (compareItem != null)
+                        {
+                            item.CompareValue = compareItem.Value;
+                        }
+                    }
+                }
+                return list;
             }
         }
 

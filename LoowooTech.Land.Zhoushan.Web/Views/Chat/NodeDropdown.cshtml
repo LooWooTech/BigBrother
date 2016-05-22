@@ -1,0 +1,10 @@
+﻿@{
+    List<Node> list = ViewBag.Nodes;
+    <select name="NodeId" class="form-control">
+        @foreach (var node in list)
+        {
+            Html.RenderPartial("_NodeOption", node);
+        }
+    </select>
+}
+

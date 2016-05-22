@@ -1,10 +1,7 @@
 ﻿@{
     Node node = ViewBag.Model;
     ViewBag.Title = "分类数值 - " + node.Name;
-    int? year = ViewBag.Year;
-    int? areaId = ViewBag.AreaID;
-    int? typeId = ViewBag.TypeID;
-    NodeValueTime? timeId = ViewBag.TimeID;
+    NodeValueParameter parameter = ViewBag.Parameter;
 }
 <h2 class="page-header">
     @(ViewBag.Title)
@@ -12,14 +9,14 @@
 <form id="form-filter" action="/node/values?nodeId=@(node.ID)" method="get" class="form-inline">
     <div class="input-group">
         <div class="input-group-btn">
-            @Html.Partial("_YearDropdown", year)
-            @Html.Partial("_SeasonDropdown", timeId)
-            @Html.Action("Dropdown", "Area", new { AreaID = areaId })
+            @Html.Partial("_YearDropdown", parameter.Year)
+            @Html.Partial("_SeasonDropdown", parameter.TimeID)
+            @Html.Action("Dropdown", "Area", new { AreaID = parameter.AreaID })
             <button type="submit" class="btn btn-primary"><i class="glyphicon glyphicon-filter"></i> 过滤</button>
             <a class="btn btn-success" href="/node/editvalue?nodeId=@(node.ID)" data-toggle="modal" data-target="#modal">
                 <i class="glyphicon glyphicon-plus"></i>添加数值
             </a>
-            <a class="btn btn-default" href="/node/?formId=@(node.FormID)" data-target="#main">
+            <a class="btn btn-default" href="#/node/?formId=@(node.FormID)">
                 <i class="fa fa-chevron-left"></i> 返回
             </a>
         </div>
@@ -60,7 +57,7 @@
             if (action.indexOf('?') == -1) {
                 action = action + "?";
             }
-            $.refreshMain(action + "&" + data);
+            $.loadMain(action + "&" + data);
             return false;
         });
     });

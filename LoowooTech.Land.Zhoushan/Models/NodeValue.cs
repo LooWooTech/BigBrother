@@ -51,5 +51,11 @@ namespace LoowooTech.Land.Zhoushan.Models
         public Area Area { get; set; }
 
         public DateTime UpdateTime { get; set; }
+
+        [NotMapped]
+        public double RateValue { get; internal set; }
+
+        [NotMapped]
+        public double CompareValue { get; set; }
     }
 }

@@ -195,11 +195,22 @@
         $("#modal").modal("hide");
     };
 
-    $.refreshMain = function (href) {
+    $.loadMain = function (hash) {
         var main = $("#main");
-        href = href || main.attr("href");
-        main.html("加载中...");
-        main.load(href);
+        hash = hash || main.attr("href");
+        if (!hash) return;
+        if (hash[0] != "#") {
+            hash = "#" + hash;
+        }
+        href = hash.substring(1);
+        main.attr("href", href);
+        if (window.location.hash != hash) {
+            window.location.hash = hash;
+        }
+        else {
+            main.html("加载中...");
+            main.load(href);
+        }
     };
 })();
 

@@ -11,23 +11,11 @@ namespace LoowooTech.Land.Zhoushan.Models
     [Table("form")]
     public class Form
     {
-        public Form()
-        {
-            Nodes = new List<Node>();
-        }
-
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int ID { get; set; }
 
-        public Node GetNode(int id)
-        {
-            return Nodes.FirstOrDefault(e => e.ID == id);
-        }
-
         public string Name { get; set; }
         
-        [NotMapped]
-        public List<Node> Nodes { get; set; }
     }
 }

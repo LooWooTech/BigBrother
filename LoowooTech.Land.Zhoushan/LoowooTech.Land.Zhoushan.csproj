@@ -87,6 +87,7 @@
     <Compile Include="Models\Form.cs" />
     <Compile Include="Models\Node.cs" />
     <Compile Include="Models\NodeValue.cs" />
+    <Compile Include="Models\NodeValueParameter.cs" />
     <Compile Include="Models\NodeValueTime.cs" />
     <Compile Include="Models\NodeValueType.cs" />
     <Compile Include="Models\PageParameter.cs" />

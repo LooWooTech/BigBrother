@@ -11,9 +11,8 @@ namespace LoowooTech.Land.Zhoushan.Web.Controllers
     {
         public ActionResult Index(int formId)
         {
-            var form = Core.FormManager.GetForm(formId);
-            ViewBag.Form = form;
-            ViewBag.Nodes = form.Nodes;
+            ViewBag.Form = Core.FormManager.GetForm(formId);
+            ViewBag.Nodes = Core.FormManager.GetNodes(formId);
 
             return View();
         }
@@ -66,19 +65,16 @@ namespace LoowooTech.Land.Zhoushan.Web.Controllers
             return View();
         }
 
-        public ActionResult Values(int nodeId, int? year, NodeValueTime? timeId, int? areaId, int? typeId)
+        public ActionResult Values(NodeValueParameter parameter)
         {
-            var node = Core.FormManager.GetNode(nodeId);
+            var node = Core.FormManager.GetNode(parameter.NodeID);
             if (node == null)
             {
                 throw new ArgumentException("参数错误，没有找到该分类");
             }
-            Core.FormManager.GetNodeValues(node);
+            node.Values = Core.FormManager.GetNodeValues(parameter);
             ViewBag.Model = node;
-            ViewBag.Year = year;
-            ViewBag.TimeID = timeId;
-            ViewBag.AreaID = areaId;
-            ViewBag.TypeID = typeId;
+            ViewBag.Parameter = parameter;
             return View();
         }
 

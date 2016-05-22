@@ -1,7 +1,7 @@
 ﻿
 @{
     Form form = ViewBag.Form;
-    var list = form.Nodes;
+    List<Node> list = ViewBag.Nodes;
 
     ViewBag.Title = "分类管理 - " + form.Name;
 }
@@ -10,7 +10,7 @@
     <a class="btn btn-success" href="/node/edit?formId=@(form.ID)" data-toggle="modal" data-target="#modal">
         <i class="glyphicon glyphicon-plus"></i>添加分类
     </a>
-    <a class="btn btn-default" href="/form" data-target="#main">
+    <a class="btn btn-default" href="#/form">
         <i class="fa fa-chevron-left"></i> 返回
     </a>
 </h2>
@@ -18,10 +18,10 @@
     <thead>
         <tr>
             <th>分类名称</th>
-            <th style="width:240px;">操作</th>
+            <th style="width:300px;">操作</th>
         </tr>
     </thead>
-    @foreach (var node in form.Nodes)
+    @foreach (var node in list)
     {
         Html.RenderPartial("_NodeListItem", node);
     }

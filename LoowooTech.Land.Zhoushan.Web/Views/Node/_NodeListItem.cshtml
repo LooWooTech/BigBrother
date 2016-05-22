@@ -4,11 +4,12 @@
 }
 <tr class="node-item">
     <td class="node-level-@(model.Level)">
-        <a href="/node/values?nodeId=@(model.ID)" data-target="#main">@(model.Name)</a>
+        <a href="#/node/values?nodeId=@(model.ID)">@(model.Name)</a>
     </td>
     <td>
         <a href="/node/edit?id=@(model.ID)" class="btn btn-default btn-xs" data-toggle="modal" data-target="#modal"><i class="fa fa-edit"></i> 编辑</a>
         <a href="/node/edit?parentId=@(model.ID)" class="btn btn-default btn-xs" data-toggle="modal" data-target="#modal" title=""><i class="glyphicon glyphicon-plus"></i> 添加子项</a>
+        <a href="/node/editvalue?nodeId=@(model.ID)" class="btn btn-primary btn-xs" data-toggle="modal" data-target="#modal"><i class="fa fa-plus"></i> 添加数值</a>
         <a href="/node/delete?id=@(model.ID)" class="btn btn-danger btn-xs" data-target="#delete"><i class="glyphicon glyphicon-remove"></i> 删除</a>
     </td>
 </tr>

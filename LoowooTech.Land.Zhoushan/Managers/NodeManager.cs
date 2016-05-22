@@ -18,6 +18,21 @@ namespace LoowooTech.Land.Zhoushan.Managers
             }
         }
 
+        public List<Node> GetNodes(int formId)
+        {
+            using (var db = GetDbContext())
+            {
+                var list = db.Nodes.Where(e => e.FormID == formId);
+                var result = new List<Node>();
+                foreach (var root in list.Where(e => e.ParentID == 0))
+                {
+                    root.GetChildren(list);
+                    result.Add(root);
+                }
+                return result;
+            }
+        }
+
         public void SaveNode(Node model)
         {
             using (var db = GetDbContext())
@@ -33,7 +48,6 @@ namespace LoowooTech.Land.Zhoushan.Managers
                 }
                 db.SaveChanges();
             }
-            ClearFormCache();
         }
 
         public void DeleteNode(int nodeId)
@@ -49,7 +63,6 @@ namespace LoowooTech.Land.Zhoushan.Managers
                 db.Nodes.Remove(entity);
                 db.SaveChanges();
             }
-            ClearFormCache();
         }
     }
 }

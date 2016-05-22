@@ -30,7 +30,7 @@
     $(function () {
         $("#form-form").registerSubmit(function () {
             $.closeWindow();
-            $.refreshMain();
+            $.loadMain();
         });
     });
 </script>
@@ -80,7 +80,7 @@
             $("#form-User").submit(function () {
                 $(this).submitForm(function () {
                     $.closeWindow();
-                    $.refreshMain();
+                    $.loadMain();
                 });
                 return false;
             });

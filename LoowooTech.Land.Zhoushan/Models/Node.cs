@@ -32,6 +32,9 @@ namespace LoowooTech.Land.Zhoushan.Models
         public int Level { get; set; }
 
         [NotMapped]
+        public bool Selected { get; set; }
+
+        [NotMapped]
         public List<Node> Children { get; set; }
 
         [JsonIgnore]

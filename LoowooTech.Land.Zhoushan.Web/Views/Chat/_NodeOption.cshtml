@@ -1,0 +1,13 @@
+﻿@model Node
+@{
+    int nodeId = ViewBag.NodeID == null ? 0 : ViewBag.NodeID;
+    Model.Selected = Model.ID == nodeId;
+}
+<option value="@(Model.ID)" @(Model.Selected ? " selected" : null)>
+    @(new string('-', Model.Level))
+    @(Model.Name)
+</option>
+@foreach (var child in Model.Children)
+{
+    Html.RenderPartial("_NodeOption", child);
+}

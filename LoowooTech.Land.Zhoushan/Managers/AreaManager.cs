@@ -11,7 +11,7 @@ namespace LoowooTech.Land.Zhoushan.Managers
     public class AreaManager : ManagerBase
     {
 
-        public List<Area> GetAreas()
+        public List<Area> GetAreaTree()
         {
             using (var db = GetDbContext())
             {
@@ -36,6 +36,19 @@ namespace LoowooTech.Land.Zhoushan.Managers
             }
         }
 
+        public List<Area> GetAreas(int? parentId = null)
+        {
+            using (var db = GetDbContext())
+            {
+                var query = db.Areas.AsQueryable();
+                if(parentId.HasValue)
+                {
+                    query = query.Where(e => e.ParentID == parentId.Value);
+                }
+                return query.ToList();
+            }
+        }
+
         public void Save(Area model)
         {
             using (var db = GetDbContext())
@@ -43,7 +56,7 @@ namespace LoowooTech.Land.Zhoushan.Managers
                 if (model.ID > 0)
                 {
                     var entity = db.Areas.FirstOrDefault(e => e.ID == model.ID);
-                    if(model.ParentID == entity.ID)
+                    if (model.ParentID == entity.ID)
                     {
                         model.ParentID = 0;
                     }

@@ -9,45 +9,70 @@ namespace LoowooTech.Land.Zhoushan.Models
 {
     public class NodeValueParameter : ICloneable
     {
+        public NodeValueParameter()
+        {
+            GetArea = true;
+            GetValueType = true;
+        }
+
         public int NodeID { get; set; }
 
         public int Year { get; set; }
 
-        public NodeValueTime TimeID { get; set; }
+        public Quarter Quarter { get; set; }
 
-        public int? AreaID { get; set; }
+        public int AreaID { get; set; }
 
         public RateType? RateType { get; set; }
 
         public int TypeID { get; set; }
 
+
+
+        public int[] NodeIds { get; set; }
+
+        public int[] Years { get; set; }
+
+        public Quarter[] Quarters { get; set; }
+
+        public int[] AreaIds { get; set; }
+
+        public int[] TypeIds { get; set; }
+
+
+        public bool GetNode { get; set; }
+
         public bool GetArea { get; set; }
 
         public bool GetValueType { get; set; }
 
-        public object Clone()
+
+        public void UpdateTimeByRateType()
         {
-            var obj = (NodeValueParameter)MemberwiseClone();
-            switch (obj.RateType)
+            switch (RateType)
             {
                 case Models.RateType.Chain:
-                    var val = (int)TimeID - 1;
+                    var val = (int)Quarter - 1;
                     if (val == 0)
                     {
                         Year = Year - 1;
-                        TimeID = NodeValueTime.Session4;
+                        Quarter = Quarter.Fourth;
                     }
                     else
                     {
-                        TimeID = (NodeValueTime)val;
+                        Quarter = (Quarter)val;
                     }
                     break;
                 case Models.RateType.YearOnYear:
                     Year = Year - 1;
                     break;
             }
-            obj.RateType = null;
-            return obj;
+            RateType = null;
+        }
+
+        public object Clone()
+        {
+            return MemberwiseClone();
         }
     }
 

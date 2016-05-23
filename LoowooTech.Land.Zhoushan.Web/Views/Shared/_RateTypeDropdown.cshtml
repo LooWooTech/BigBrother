@@ -1,0 +1,12 @@
+﻿@model RateType?
+@{
+    var names = Enum.GetNames(typeof(RateType));
+}
+<select name="RateType" class="form-control">
+    @foreach (var name in names)
+    {
+        var val = (RateType)Enum.Parse(typeof(RateType), name);
+        var selected = Model == val;
+        <option value="@(val)" @(selected ? " selected" : "")>@(val.GetDescription())</option>
+    }
+</select>

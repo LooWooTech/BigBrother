@@ -22,44 +22,130 @@ namespace LoowooTech.Land.Zhoushan.Managers
             }
         }
 
+        public List<NodeValue> GetChildNodeValues(NodeValueParameter parameter)
+        {
+            using (var db = GetDbContext())
+            {
+                var nodes = Core.FormManager.GetNodeChildren(parameter.NodeID);
+                var childIds = nodes.Select(e => e.ID).ToArray();
+                var p = (NodeValueParameter)parameter.Clone();
+                p.NodeID = 0;
+                p.NodeIds = childIds;
+                p.GetNode = false;
+                var list = Core.FormManager.GetNodeValues(p);
+                foreach (var item in list)
+                {
+                    item.Node = nodes.FirstOrDefault(e => e.ID == item.NodeID);
+                }
+                return list;
+            }
+        }
+
+        public List<NodeValue> GetQuarterNodeValues(NodeValueParameter parameter)
+        {
+            var p = (NodeValueParameter)parameter.Clone();
+            p.Years = new int[] { parameter.Year, parameter.Year - 1 };
+            p.Quarters = new Quarter[] { Quarter.First, Quarter.Second, Quarter.Third, Quarter.Fourth };
+            return Core.FormManager.GetNodeValues(p);
+        }
+
+        public List<NodeValue> GetAreaNodeValues(NodeValueParameter parameter)
+        {
+            var areas = Core.AreaManager.GetAreas(parameter.AreaID);
+            var areaIds = areas.Select(e => e.ID).ToArray();
+            var p = (NodeValueParameter)parameter.Clone();
+            p.AreaIds = areaIds;
+            p.GetArea = false;
+
+            var list = GetNodeValues(p);
+            foreach (var item in list)
+            {
+                item.Area = areas.FirstOrDefault(e => e.ID == item.AreaID);
+            }
+            return list;
+        }
+
         public List<NodeValue> GetNodeValues(NodeValueParameter parameter)
         {
             using (var db = GetDbContext())
             {
-                var query = db.NodeValues.Where(e =>
-                e.NodeID == parameter.NodeID
-                && e.Year == parameter.Year
-                && e.TimeID == parameter.TimeID
-                && e.TypeID == parameter.TypeID
-                );
-                if (parameter.AreaID.HasValue)
+                var query = db.NodeValues.AsQueryable();
+
+                if (parameter.NodeIds != null)
+                {
+                    query = query.Where(e => parameter.NodeIds.Contains(e.NodeID));
+                }
+                else if (parameter.NodeID > 0)
+                {
+                    query = query.Where(e => e.NodeID == parameter.NodeID);
+                }
+                else
+                {
+                    throw new ArgumentException("参数不正确");
+                }
+
+                if (parameter.Years != null)
+                {
+                    query = query.Where(e => parameter.Years.Contains(e.Year));
+                }
+                else if (parameter.Year > 0)
+                {
+                    query = query.Where(e => e.Year == parameter.Year);
+                }
+
+                if (parameter.TypeIds != null)
+                {
+                    query = query.Where(e => parameter.TypeIds.Contains(e.TypeID));
+                }
+                else if (parameter.TypeID > 0)
+                {
+                    query = query.Where(e => e.TypeID == parameter.TypeID);
+                }
+
+                if (parameter.Quarters != null)
+                {
+                    query = query.Where(e => parameter.Quarters.Contains(e.Quarter));
+                }
+                else if (parameter.Quarter > 0)
+                {
+                    query = query.Where(e => e.Quarter == parameter.Quarter);
+                }
+
+                if (parameter.AreaIds != null)
+                {
+                    query = query.Where(e => parameter.AreaIds.Contains(e.AreaID));
+                }
+                else if (parameter.AreaID > 0)
                 {
                     query = query.Where(e => e.AreaID == parameter.AreaID);
                 }
 
                 var list = query.ToList();
+                List<Area> areas = parameter.GetArea ? Core.AreaManager.GetAreas() : null;
+                List<NodeValueType> types = parameter.GetValueType ? Core.FormManager.GetNodeValueTypes() : null;
                 foreach (var item in list)
                 {
                     if (parameter.GetArea)
                     {
-                        item.Area = Core.AreaManager.GetArea(item.AreaID);
+                        item.Area = areas.FirstOrDefault(e => e.ID == item.AreaID);
                     }
                     if (parameter.GetValueType)
                     {
-                        item.Type = Core.FormManager.GetNodeValueType(item.TypeID);
+                        item.Type = types.FirstOrDefault(e => e.ID == item.TypeID);
                     }
                 }
 
                 if (parameter.RateType.HasValue)
                 {
                     var compareParameter = (NodeValueParameter)parameter.Clone();
+                    compareParameter.UpdateTimeByRateType();
                     var compareList = GetNodeValues(compareParameter);
                     foreach (var item in list)
                     {
                         var compareItem = compareList.FirstOrDefault(e =>
                             e.NodeID == item.NodeID
                             && e.Year == item.Year
-                            && e.TimeID == item.TimeID
+                            && e.Quarter == item.Quarter
                             && e.TypeID == item.TypeID
                             && e.AreaID == item.AreaID
                         );
@@ -88,7 +174,7 @@ namespace LoowooTech.Land.Zhoushan.Managers
                 else
                 {
                     var entity = db.NodeValues.FirstOrDefault(e => e.Year == data.Year
-                    && e.TimeID == data.TimeID
+                    && e.Quarter == data.Quarter
                     && e.AreaID == data.AreaID
                     && e.TypeID == data.TypeID
                     && e.NodeID == data.NodeID

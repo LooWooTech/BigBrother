@@ -11,21 +11,21 @@ namespace LoowooTech.Land.Zhoushan.Web.Controllers
     {
         public ActionResult Index()
         {
-            ViewBag.List = Core.AreaManager.GetAreas();
+            ViewBag.List = Core.AreaManager.GetAreaTree();
             return View();
         }
 
         [HttpGet]
         public ActionResult Edit(int id = 0)
         {
-            ViewBag.List = Core.AreaManager.GetAreas();
+            ViewBag.List = Core.AreaManager.GetAreaTree();
             ViewBag.Model = Core.AreaManager.GetArea(id) ?? new Area();
             return View();
         }
 
         public ActionResult Dropdown(int areaId = 0, string controlName = "areaId")
         {
-            ViewBag.List = Core.AreaManager.GetAreas();
+            ViewBag.List = Core.AreaManager.GetAreaTree();
             ViewBag.ControlName = controlName;
             ViewBag.AreaID = areaId;
             return View();

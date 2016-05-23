@@ -129,6 +129,8 @@
     <None Include="Scripts\jquery-1.9.1.intellisense.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
+    <Content Include="Scripts\Chart.js" />
+    <Content Include="Scripts\Chart.min.js" />
     <Content Include="Scripts\common.js" />
     <Content Include="Scripts\html5shiv-printshiv.js" />
     <Content Include="Scripts\html5shiv-printshiv.min.js" />
@@ -148,7 +150,7 @@
     <Compile Include="AuthorizeHelper.cs" />
     <Compile Include="ControllerBase.cs" />
     <Compile Include="Controllers\AreaController.cs" />
-    <Compile Include="Controllers\ChatController.cs" />
+    <Compile Include="Controllers\ChartController.cs" />
     <Compile Include="Controllers\FormController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\NodeController.cs" />
@@ -184,14 +186,15 @@
     <Content Include="Views\Area\_AreaListItem.cshtml" />
     <Content Include="Views\Area\Dropdown.cshtml" />
     <Content Include="Views\Node\EditValue.cshtml" />
-    <Content Include="Views\Shared\_SeasonDropdown.cshtml" />
+    <Content Include="Views\Shared\_QuarterDropdown.cshtml" />
     <Content Include="Views\Node\ValueTypeDropdown.cshtml" />
     <Content Include="Views\Shared\_YearDropdown.cshtml" />
     <Content Include="Views\Node\Values.cshtml" />
     <Content Include="Views\Node\Index.cshtml" />
-    <Content Include="Views\Chat\Index.cshtml" />
-    <Content Include="Views\Chat\NodeDropdown.cshtml" />
-    <Content Include="Views\Chat\_NodeOption.cshtml" />
+    <Content Include="Views\Chart\Index.cshtml" />
+    <Content Include="Views\Chart\NodeDropdown.cshtml" />
+    <Content Include="Views\Chart\_NodeOption.cshtml" />
+    <Content Include="Views\Shared\_RateTypeDropdown.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

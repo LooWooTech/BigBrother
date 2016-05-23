@@ -1,0 +1,14 @@
+﻿@model Quarter?
+@{
+    var names = Enum.GetNames(typeof(Quarter));
+}
+<select name="Quarter" class="form-control">
+    @foreach (var name in names)
+    {
+        var val = (Quarter)Enum.Parse(typeof(Quarter), name);
+        var selected = Model == val;
+        <option value="@(val)" @(selected?" selected":"")>@(val.GetDescription())</option>
+    }
+</select>
+
+

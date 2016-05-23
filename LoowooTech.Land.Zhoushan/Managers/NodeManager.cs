@@ -18,6 +18,14 @@ namespace LoowooTech.Land.Zhoushan.Managers
             }
         }
 
+        public List<Node> GetNodeChildren(int parentId)
+        {
+            using (var db = GetDbContext())
+            {
+                return db.Nodes.Where(e => e.ParentID == parentId).ToList();
+            }
+        }
+
         public List<Node> GetNodes(int formId)
         {
             using (var db = GetDbContext())

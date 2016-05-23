@@ -10,7 +10,7 @@
     <div class="input-group">
         <div class="input-group-btn">
             @Html.Partial("_YearDropdown", parameter.Year)
-            @Html.Partial("_SeasonDropdown", parameter.TimeID)
+            @Html.Partial("_QuarterDropdown", parameter.Quarter)
             @Html.Action("Dropdown", "Area", new { AreaID = parameter.AreaID })
             <button type="submit" class="btn btn-primary"><i class="glyphicon glyphicon-filter"></i> 过滤</button>
             <a class="btn btn-success" href="/node/editvalue?nodeId=@(node.ID)" data-toggle="modal" data-target="#modal">
@@ -37,7 +37,7 @@
     {
         <tr>
             <td>@(item.Year)</td>
-            <td>@(item.TimeID.GetDescription())</td>
+            <td>@(item.Quarter.GetDescription())</td>
             <td>@(item.Area == null ? "" : item.Area.Name)</td>
             <td>@(item.Type.Name)</td>
             <td>@(item.Value)</td>

@@ -7,15 +7,15 @@ using System.Threading.Tasks;
 
 namespace LoowooTech.Land.Zhoushan.Models
 {
-    public enum NodeValueTime
+    public enum Quarter
     {
         [Description("第一季度")]
-        Session1 = 1,
+        First = 1,
         [Description("第二季度")]
-        Session2,
+        Second,
         [Description("第三季度")]
-        Session3,
+        Third,
         [Description("第四季度")]
-        Session4
+        Fourth
     }
 }

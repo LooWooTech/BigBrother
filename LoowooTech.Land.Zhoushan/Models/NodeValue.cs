@@ -37,12 +37,15 @@ namespace LoowooTech.Land.Zhoushan.Models
         /// <summary>
         /// 季度
         /// </summary>
-        public NodeValueTime TimeID { get; set; }
+        public Quarter Quarter { get; set; }
 
         /// <summary>
         /// 地区
         /// </summary>
         public int AreaID { get; set; }
+
+        [NotMapped]
+        public Node Node { get; set; }
 
         [NotMapped]
         public NodeValueType Type { get; set; }

@@ -74,6 +74,7 @@
     <Compile Include="Common\JsonExtension.cs" />
     <Compile Include="Common\QueryableExtensions.cs" />
     <Compile Include="Common\ServiceFactory.cs" />
+    <Compile Include="Common\TimeExtensions.cs" />
     <Compile Include="Managers\AreaManager.cs" />
     <Compile Include="Managers\FormManager.cs" />
     <Compile Include="Managers\ManagerBase.cs" />
@@ -88,7 +89,7 @@
     <Compile Include="Models\Node.cs" />
     <Compile Include="Models\NodeValue.cs" />
     <Compile Include="Models\NodeValueParameter.cs" />
-    <Compile Include="Models\NodeValueTime.cs" />
+    <Compile Include="Models\Quarter.cs" />
     <Compile Include="Models\NodeValueType.cs" />
     <Compile Include="Models\PageParameter.cs" />
     <Compile Include="Models\User.cs" />

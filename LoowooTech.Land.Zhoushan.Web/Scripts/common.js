@@ -197,6 +197,9 @@
 
     $.fn.loadUrl = function (href) {
         href = (href || "").replace(/#/g, "");
+        if (!href) {
+            return false;
+        }
         var self = $(this);
         href = href || self.attr("href");
         if (!href) return;

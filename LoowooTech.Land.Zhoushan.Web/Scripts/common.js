@@ -195,22 +195,30 @@
         $("#modal").modal("hide");
     };
 
-    $.loadMain = function (hash) {
-        var main = $("#main");
-        hash = hash || main.attr("href");
-        if (!hash) return;
-        if (hash[0] != "#") {
-            hash = "#" + hash;
-        }
-        href = hash.substring(1);
-        main.attr("href", href);
+    $.fn.loadUrl = function (href) {
+        href = (href || "").replace(/#/g, "");
+        var self = $(this);
+        href = href || self.attr("href");
+        if (!href) return;
+        self.attr("href", href);
+
+        var hash = "#" + href;
         if (window.location.hash != hash) {
             window.location.hash = hash;
         }
         else {
-            main.html("加载中...");
-            main.load(href);
+            self.html("加载中...");
+            self.load(href, function (response, status, xhr) {
+                window.location.hash = "#" + href;
+                if (status == "error") {
+                    self.html("程序出错了");
+                }
+            });
         }
+    };
+
+    $.loadMain = function (href) {
+        $("#main").loadUrl(href);
     };
 })();
 

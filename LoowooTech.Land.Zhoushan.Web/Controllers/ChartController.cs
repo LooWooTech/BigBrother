@@ -10,32 +10,76 @@ namespace LoowooTech.Land.Zhoushan.Web.Controllers
 {
     public class ChartController : ControllerBase
     {
-        public ActionResult Index(int formId, NodeValueParameter parameter = null)
+        public ActionResult Index(int formId, NodeValueParameter parameter)
         {
             ViewBag.Form = Core.FormManager.GetForm(formId);
-            if (parameter.NodeID == 0)
-            {
-                var nodes = Core.FormManager.GetNodes(formId);
-                var firstNode = nodes.Where(e => e.ParentID == 0).FirstOrDefault();
-                parameter = new NodeValueParameter
-                {
-                    NodeID = firstNode.ID,
-                    Year = DateTime.Now.Year,
-                    RateType = RateType.YearOnYear,
-                    Quarter = (Quarter)DateTime.Now.GetQuarter()
-                };
-            }
             ViewBag.Parameter = parameter;
-
-            ViewBag.ChildValues = Core.FormManager.GetChildNodeValues(parameter);
-
-            ViewBag.QuarterValues = Core.FormManager.GetQuarterNodeValues(parameter);
-
-            ViewBag.AreaValues = Core.FormManager.GetAreaNodeValues(parameter);
-
-            ViewBag.NodeValues = Core.FormManager.GetNodeValues(parameter);
-
             return View();
+        }
+
+        public ActionResult NodeChart(NodeValueParameter parameter)
+        {
+            ViewBag.Node = Core.FormManager.GetNode(parameter.NodeID);
+            ViewBag.NodeValues = Core.FormManager.GetNodeValues(parameter);
+            ViewBag.ValueType = Core.FormManager.GetNodeValueType(parameter.TypeID) ?? new NodeValueType { ID = 0, Name = "-/-", Unit = "/" };
+            ViewBag.ChildNodes = Core.FormManager.GetNodeChildren(parameter.NodeID);
+
+
+            var nodes = Core.FormManager.GetNodeChildren(parameter.NodeID);
+
+            var childIds = nodes.Select(e => e.ID).ToArray();
+            parameter.NodeIds = childIds;
+            parameter.GetNode = false;
+            var list = Core.FormManager.GetNodeValues(parameter);
+            foreach (var item in list)
+            {
+                item.Node = nodes.FirstOrDefault(e => e.ID == item.NodeID);
+            }
+            ViewBag.ChildValues = list;
+
+            ViewBag.Parameter = parameter;
+            return View();
+        }
+
+        public ActionResult QuarterChart(int yearLength, NodeValueParameter parameter)
+        {
+            var years = new List<int>();
+            for (var i = 0; i < yearLength; i++)
+            {
+                years.Add(DateTime.Now.Year - i);
+            }
+            parameter.Years = years.ToArray();
+            parameter.Quarters = new Quarter[] { Quarter.First, Quarter.Second, Quarter.Third, Quarter.Fourth };
+            ViewBag.Parameter = parameter;
+            ViewBag.Values = Core.FormManager.GetNodeValues(parameter);
+            ViewBag.Node = Core.FormManager.GetNode(parameter.NodeID);
+            ViewBag.ValueType = Core.FormManager.GetNodeValueType(parameter.TypeID) ?? new NodeValueType { ID = 0, Name = "-/-", Unit = "/" };
+            return View();
+        }
+
+        public ActionResult AreaChart(NodeValueParameter parameter)
+        {
+            var areas = Core.AreaManager.GetAreas(parameter.AreaID);
+            var areaIds = areas.Select(e => e.ID).ToArray();
+            parameter.AreaIds = areaIds;
+            parameter.GetArea = false;
+            parameter.AreaID = null;
+            ViewBag.Parameter = parameter;
+            var list = Core.FormManager.GetNodeValues(parameter);
+            foreach (var item in list)
+            {
+                item.Area = areas.FirstOrDefault(e => e.ID == item.AreaID);
+            }
+            ViewBag.Areas = areas;
+            ViewBag.Values = list;
+            ViewBag.Node = Core.FormManager.GetNode(parameter.NodeID);
+            ViewBag.ValueType = Core.FormManager.GetNodeValueType(parameter.TypeID) ?? new NodeValueType { ID = 0, Name = "-/-", Unit = "/" };
+            return View();
+        }
+
+        public ActionResult GetNodeValueTypes(int nodeId)
+        {
+            return JsonSuccessResult(Core.FormManager.GetNodeValueTypes(nodeId));
         }
 
         public ActionResult NodeDropdown(int formId, int nodeId = 0)

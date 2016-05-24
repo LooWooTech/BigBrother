@@ -18,8 +18,18 @@ namespace LoowooTech.Land.Zhoushan.Managers
             }
         }
 
+        public List<NodeValueType> GetNodeValueTypes(int nodeId)
+        {
+            using (var db = GetDbContext())
+            {
+                var typeIds = db.NodeValues.Where(e => e.NodeID == nodeId).Select(e => e.TypeID).ToArray();
+                return GetNodeValueTypes().Where(e => typeIds.Contains(e.ID)).ToList();
+            }
+        }
+
         public NodeValueType GetNodeValueType(int id)
         {
+            if (id == 0) return null;
             using (var db = GetDbContext())
             {
                 return db.NodeValueTypes.FirstOrDefault(e => e.ID == id);

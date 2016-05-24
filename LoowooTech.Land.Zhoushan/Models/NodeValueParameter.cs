@@ -1,4 +1,5 @@
-﻿using System;
+﻿using LoowooTech.Land.Zhoushan.Common;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
@@ -11,6 +12,8 @@ namespace LoowooTech.Land.Zhoushan.Models
     {
         public NodeValueParameter()
         {
+            Quarter = (Quarter)DateTime.Now.GetQuarter();
+            AreaID = 0;
             GetArea = true;
             GetValueType = true;
         }
@@ -21,7 +24,7 @@ namespace LoowooTech.Land.Zhoushan.Models
 
         public Quarter Quarter { get; set; }
 
-        public int AreaID { get; set; }
+        public int? AreaID { get; set; }
 
         public RateType? RateType { get; set; }
 
@@ -78,10 +81,10 @@ namespace LoowooTech.Land.Zhoushan.Models
 
     public enum RateType
     {
+        [Description("同比")]
+        YearOnYear,
         [Description("环比")]
         Chain,
-        [Description("同比")]
-        YearOnYear
 
     }
 }

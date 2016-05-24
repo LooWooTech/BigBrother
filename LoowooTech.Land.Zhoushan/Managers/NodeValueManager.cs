@@ -41,30 +41,6 @@ namespace LoowooTech.Land.Zhoushan.Managers
             }
         }
 
-        public List<NodeValue> GetQuarterNodeValues(NodeValueParameter parameter)
-        {
-            var p = (NodeValueParameter)parameter.Clone();
-            p.Years = new int[] { parameter.Year, parameter.Year - 1 };
-            p.Quarters = new Quarter[] { Quarter.First, Quarter.Second, Quarter.Third, Quarter.Fourth };
-            return Core.FormManager.GetNodeValues(p);
-        }
-
-        public List<NodeValue> GetAreaNodeValues(NodeValueParameter parameter)
-        {
-            var areas = Core.AreaManager.GetAreas(parameter.AreaID);
-            var areaIds = areas.Select(e => e.ID).ToArray();
-            var p = (NodeValueParameter)parameter.Clone();
-            p.AreaIds = areaIds;
-            p.GetArea = false;
-
-            var list = GetNodeValues(p);
-            foreach (var item in list)
-            {
-                item.Area = areas.FirstOrDefault(e => e.ID == item.AreaID);
-            }
-            return list;
-        }
-
         public List<NodeValue> GetNodeValues(NodeValueParameter parameter)
         {
             using (var db = GetDbContext())
@@ -115,9 +91,9 @@ namespace LoowooTech.Land.Zhoushan.Managers
                 {
                     query = query.Where(e => parameter.AreaIds.Contains(e.AreaID));
                 }
-                else if (parameter.AreaID > 0)
+                else if (parameter.AreaID.HasValue)
                 {
-                    query = query.Where(e => e.AreaID == parameter.AreaID);
+                    query = query.Where(e => e.AreaID == parameter.AreaID.Value);
                 }
 
                 var list = query.ToList();

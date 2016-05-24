@@ -1,0 +1,75 @@
+﻿@{
+    List<Node> childNodes = ViewBag.ChildNodes;
+    NodeValueType valueType = ViewBag.ValueType;
+    List<NodeValue> childValues = ViewBag.ChildValues;
+    List<NodeValue> nodeValues = ViewBag.NodeValues;
+    NodeValueParameter parameter = ViewBag.Parameter;
+    Node selectedNode = ViewBag.Node;
+}
+<div class="col-lg-12">
+    <hr />
+    <h4>@(selectedNode.Name)</h4>
+    <div class="col-lg-4">
+        <canvas id="chart-childnode"></canvas>
+    </div>
+    <div class="col-lg-5">
+        <table class="table">
+            <tr>
+                <th>分类</th>
+                <th>@(valueType.Name)(@(valueType.Unit))</th>
+                <th>@(parameter.RateType.Value.GetDescription())</th>
+            </tr>
+            @foreach (var val in nodeValues)
+            {
+                <tr>
+                    <td>@(selectedNode.Name)</td>
+                    <td>@(val.Value)</td>
+                    <td>@(val.RateValue)</td>
+                </tr>
+            }
+            @foreach (var node in childNodes)
+            {
+                var val = childValues.FirstOrDefault(e => e.NodeID == node.ID) ?? new NodeValue { };
+                <tr>
+                    <td>
+                        -- @(node.Name)
+                    </td>
+                    <td>@(val.Value)</td>
+                    <td>@(val.RateValue)</td>
+                </tr>
+            }
+        </table>
+    </div>
+</div>
+<script>
+    $(function () {
+        function getColors(len){
+            var colors = ["#FF6384",
+            "#4BC0C0",
+            "#FFCE56",
+            "#E7E9ED",
+            "#36A2EB"
+            ];
+
+            return colors.slice(0,len);
+        }
+
+        var labels = @Html.Raw(childNodes.OrderBy(e => e.ID).Select(e => e.Name).ToJson()) || [];
+        var data = @Html.Raw(childValues.OrderBy(e => e.NodeID).Select(e => e.Value).ToJson()) || [];
+        var len = labels.length - data.length;
+        for(var i=0;i<len;i++){
+            data.push(0);
+        }
+        var ctx = document.getElementById("chart-childnode");
+        var myChart = new Chart(ctx, {
+            type: 'doughnut',
+            data: {
+                labels: labels,
+                datasets:[{
+                    data:data,
+                    backgroundColor:getColors(data.length)
+                }]
+            }
+        });
+    });
+</script>

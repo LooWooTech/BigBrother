@@ -195,6 +195,9 @@
     <Content Include="Views\Chart\NodeDropdown.cshtml" />
     <Content Include="Views\Chart\_NodeOption.cshtml" />
     <Content Include="Views\Shared\_RateTypeDropdown.cshtml" />
+    <Content Include="Views\Chart\NodeChart.cshtml" />
+    <Content Include="Views\Chart\QuarterChart.cshtml" />
+    <Content Include="Views\Chart\AreaChart.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

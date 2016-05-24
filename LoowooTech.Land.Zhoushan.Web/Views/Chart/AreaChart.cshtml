@@ -1,0 +1,63 @@
+﻿@{
+
+    List<Area> areas = ViewBag.Areas;
+    List<NodeValue> values = ViewBag.Values;
+    NodeValueType valueType = ViewBag.ValueType;
+    Node node = ViewBag.Node;
+    NodeValueParameter parameter = ViewBag.Parameter;
+    var labels = new List<string>();
+    var data = new List<double>();
+    foreach (var area in areas)
+    {
+        labels.Add(area.Name);
+        var val = values.FirstOrDefault(e => e.AreaID == area.ID);
+        data.Add(val == null ? 0 : val.Value);
+    }
+}
+<div class="col-lg-12">
+    <hr />
+    <h4>各地区数据</h4>
+    <div class="col-lg-4">
+        <canvas id="chart-area"></canvas>
+    </div>
+    <div class="col-lg-5">
+        <table class="table">
+            <tr>
+                <th>地区名称</th>
+                <th>@(valueType.Name)(@(valueType.Unit))</th>
+                <th>@(parameter.RateType.Value.GetDescription())</th>
+            </tr>
+            @foreach (var area in areas)
+            {
+                var val = values.FirstOrDefault(e => e.AreaID == area.ID) ?? new NodeValue();
+                <tr>
+                    <td>@(area.Name)</td>
+                    <td>@(val.Value)</td>
+                    <td>@(val.RateValue)</td>
+                </tr>
+            }
+        </table>
+    </div>
+</div>
+<script>
+    $(function(){
+        var labels = @Html.Raw(labels.ToJson()) || [];
+        var data = @Html.Raw(data.ToJson()) || [];
+        var ctx = document.getElementById("chart-area");
+        var myChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: labels,
+                datasets:[{
+                    label: "@(node.Name)",
+                    data:data,
+                    backgroundColor: "rgba(255,99,132,0.2)",
+                    borderColor: "rgba(255,99,132,1)",
+                    borderWidth: 1,
+                    hoverBackgroundColor: "rgba(255,99,132,0.4)",
+                    hoverBorderColor: "rgba(255,99,132,1)"
+                }]
+            }
+        });
+    });
+</script>

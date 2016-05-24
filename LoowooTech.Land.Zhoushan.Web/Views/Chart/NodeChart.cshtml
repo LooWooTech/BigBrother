@@ -17,14 +17,14 @@
             <tr>
                 <th>分类</th>
                 <th>@(valueType.Name)(@(valueType.Unit))</th>
-                <th>@(parameter.RateType.Value.GetDescription())</th>
+                <th>@(parameter.RateType.Value.GetDescription()) %</th>
             </tr>
             @foreach (var val in nodeValues)
             {
                 <tr>
                     <td>@(selectedNode.Name)</td>
                     <td>@(val.Value)</td>
-                    <td>@(val.RateValue)</td>
+                    <td>@(val.RateValue.ToString("f2"))</td>
                 </tr>
             }
             @foreach (var node in childNodes)
@@ -35,7 +35,7 @@
                         -- @(node.Name)
                     </td>
                     <td>@(val.Value)</td>
-                    <td>@(val.RateValue)</td>
+                    <td>@(val.RateValue.ToString("f2"))</td>
                 </tr>
             }
         </table>

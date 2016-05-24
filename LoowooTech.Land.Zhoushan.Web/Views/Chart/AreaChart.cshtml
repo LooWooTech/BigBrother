@@ -25,7 +25,7 @@
             <tr>
                 <th>地区名称</th>
                 <th>@(valueType.Name)(@(valueType.Unit))</th>
-                <th>@(parameter.RateType.Value.GetDescription())</th>
+                <th>@(parameter.RateType.Value.GetDescription()) %</th>
             </tr>
             @foreach (var area in areas)
             {
@@ -33,7 +33,7 @@
                 <tr>
                     <td>@(area.Name)</td>
                     <td>@(val.Value)</td>
-                    <td>@(val.RateValue)</td>
+                    <td>@(val.RateValue.ToString("f2"))</td>
                 </tr>
             }
         </table>

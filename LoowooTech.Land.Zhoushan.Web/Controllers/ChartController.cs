@@ -51,6 +51,7 @@ namespace LoowooTech.Land.Zhoushan.Web.Controllers
             parameter.Years = years.ToArray();
             parameter.Quarters = new Quarter[] { Quarter.First, Quarter.Second, Quarter.Third, Quarter.Fourth };
             ViewBag.Parameter = parameter;
+            parameter.RateType = null;
             ViewBag.Values = Core.FormManager.GetNodeValues(parameter);
             ViewBag.Node = Core.FormManager.GetNode(parameter.NodeID);
             ViewBag.ValueType = Core.FormManager.GetNodeValueType(parameter.TypeID) ?? new NodeValueType { ID = 0, Name = "-/-", Unit = "/" };

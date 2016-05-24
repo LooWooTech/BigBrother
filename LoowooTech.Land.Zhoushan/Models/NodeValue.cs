@@ -56,7 +56,14 @@ namespace LoowooTech.Land.Zhoushan.Models
         public DateTime UpdateTime { get; set; }
 
         [NotMapped]
-        public double RateValue { get; internal set; }
+        public double RateValue
+        {
+            get
+            {
+                if (CompareValue == 0) return 0;
+                return (Value - CompareValue) / CompareValue * 100;
+            }
+        }
 
         [NotMapped]
         public double CompareValue { get; set; }

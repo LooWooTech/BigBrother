@@ -10,6 +10,7 @@ using System.Web.Mvc;
 
 namespace LoowooTech.Land.Zhoushan.Web
 {
+    [UserAuthorize]
     public class ControllerBase : AsyncController
     {
         protected UserIdentity CurrentIdentity { get; private set; }

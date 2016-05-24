@@ -1,0 +1,119 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>舟山国土资源局统计季报</title>
+    <link rel="stylesheet" href="~/Content/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/Content/bootstrap-theme.min.css" />
+    <link rel="stylesheet" href="~/Content/font-awesome.min.css" />
+    <link rel="stylesheet" href="~/Content/site.css" />
+    <script src="~/Scripts/jquery-1.9.1.min.js"></script>
+    <script src="~/Scripts/bootstrap.min.js"></script>
+    <script src="~/Scripts/Chart.min.js"></script>
+    <script src="~/Scripts/common.js"></script>
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+        <script src="~/Scripts/html5shiv.min.js"></script>
+        <script src="~/Scripts/respond.min.js"></script>
+    <![endif]-->
+    <style>
+        .login-form {
+            margin: 0 auto 20px;
+            width: 320px;
+            margin-top: 100px;
+            border: solid 1px #ddd;
+        }
+
+        .has-feedback-left .form-control-feedback {
+            right: auto;
+            left: 0;
+        }
+
+        .has-feedback-left .form-control {
+            padding-right: 12px;
+            padding-left: 36px;
+        }
+
+        .has-feedback .form-control {
+            padding-right: 36px;
+        }
+
+        .has-feedback .form-control {
+            padding-right: 45px;
+        }
+
+        .form-control-feedback {
+            width: 38px;
+            color: #333;
+            z-index: 3;
+        }
+
+        .form-control-feedback {
+            position: absolute;
+            top: 0;
+            right: 0;
+            z-index: 2;
+            display: block;
+            width: 36px;
+            height: 36px;
+            line-height: 36px;
+            text-align: center;
+            pointer-events: none;
+        }
+
+        .text-muted {
+            color: #777;
+        }
+    </style>
+</head>
+
+<body class="login-container">
+
+    <div class="navbar navbar-inverse navbar-fixed-top">
+        <div class="navbar-header">
+            <a href="/" class="navbar-brand">舟山国土资源局统计季报</a>
+            <ul class="nav navbar-nav pull-right visible-xs-block">
+                <li><a data-toggle="collapse" data-target="#navbar-mobile"><i class="icon-tree5"></i></a></li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="page-container">
+        <form id="form-login" method="post" action="/user/login">
+            <div class="panel panel-body login-form">
+                <div class="text-center">
+                    <h1 class="text-success"><i class="fa fa-lock"></i></h1>
+                </div>
+
+                <div class="form-group has-feedback has-feedback-left">
+                    <input type="text" name="Username" class="form-control" placeholder="用户名">
+                    <div class="form-control-feedback">
+                        <i class="fa fa-user text-muted"></i>
+                    </div>
+                </div>
+
+                <div class="form-group has-feedback has-feedback-left">
+                    <input type="password" name="password" class="form-control" placeholder="密码">
+                    <div class="form-control-feedback">
+                        <i class="fa fa-key text-muted"></i>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <button type="submit" class="btn btn-primary btn-block">登录 <i class="fa fa-arrow-circle-o-right"></i></button>
+                </div>
+
+            </div>
+        </form>
+
+    </div>
+    <script>
+        $(function () {
+            $("#form-login").registerSubmit(function () {
+                window.location.href = "@(Request.QueryString["returnUrl"])";
+            });
+        });
+    </script>
+</body>
+</html>

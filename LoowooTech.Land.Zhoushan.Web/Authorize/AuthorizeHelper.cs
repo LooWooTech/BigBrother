@@ -1,4 +1,5 @@
-﻿using LoowooTech.Land.Zhoushan.Web.Security;
+﻿using LoowooTech.Land.Zhoushan.Models;
+using LoowooTech.Land.Zhoushan.Web.Security;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,14 +21,16 @@ namespace LoowooTech.Land.Zhoushan.Web
                 if (ticket != null && !string.IsNullOrEmpty(ticket.Name))
                 {
                     var values = ticket.Name.Split('|');
-                    if (values.Length == 2)
+                    if (values.Length >= 3)
                     {
                         var userId = int.Parse(values[0]);
                         var name = values[1];
+                        var role = Enum.Parse(typeof(UserRole), values[2]);
                         return new UserIdentity
                         {
                             ID = userId,
-                            Name = name
+                            Name = name,
+                            Role = (UserRole)role
                         };
                     }
                 }
@@ -35,9 +38,9 @@ namespace LoowooTech.Land.Zhoushan.Web
             return UserIdentity.Anonymouse;
         }
 
-        public static void Login(HttpContextBase context, UserIdentity identity)
+        public static void Login(HttpContextBase context, User user)
         {
-            var tokenValue = identity.ID + "|" + identity.Name + "|" + identity.Role + "|" + DateTime.Now;
+            var tokenValue = user.ID + "|" + user.Name + "|" + user.Role + "|" + DateTime.Now;
             var ticket = new FormsAuthenticationTicket(tokenValue, false, int.MaxValue);
             var cookie = new HttpCookie(_tokenKey, FormsAuthentication.Encrypt(ticket));
             cookie.Expires = DateTime.Now.AddDays(1);

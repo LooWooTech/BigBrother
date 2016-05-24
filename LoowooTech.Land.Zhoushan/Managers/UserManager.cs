@@ -24,6 +24,22 @@ namespace LoowooTech.Land.Zhoushan.Managers
             }
         }
 
+        public User GetUser(string username, string password = null)
+        {
+            using (var db = GetDbContext())
+            {
+                var user =db.Users.FirstOrDefault(e => e.Username == username.ToLower());
+                if (user != null)
+                {
+                    if (!string.IsNullOrEmpty(password) && user.Password != password.MD5())
+                    {
+                        throw new ArgumentException("密码错误");
+                    }
+                }
+                return user;
+            }
+        }
+
         public User GetUser(int id)
         {
             if (id == 0) return null;

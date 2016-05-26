@@ -13,6 +13,7 @@
 <table class="table table-hover">
     <thead>
         <tr>
+            <th style="width:60px;">ID</th>
             <th>报表名称</th>
             <th style="width:250px;">操作</th>
         </tr>
@@ -20,6 +21,7 @@
     @foreach (var item in list)
     {
         <tr>
+            <td>@(item.ID)</td>
             <td><a href="/node/?formId=@(item.ID)">@(item.Name)</a></td>
             <td>
                 <a href="/chart/?formId=@(item.ID)" class="btn btn-success btn-xs" title="统计"><i class="fa fa-bar-chart"></i> 统计</a>

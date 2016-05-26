@@ -31,5 +31,7 @@ namespace LoowooTech.Land.Zhoushan.Managers
         public FormManager FormManager { get; private set; }
 
         public AreaManager AreaManager { get; private set; }
+
+        public TemplateManager TemplateManager { get; private set; }
     }
 }

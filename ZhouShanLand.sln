@@ -13,6 +13,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "docs", "docs", "{41136D72-6
 		docs\舟山系统UI.xlsx = docs\舟山系统UI.xlsx
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LoowooTech.Land.ZhoushanTests", "LoowooTech.Land.ZhoushanTests\LoowooTech.Land.ZhoushanTests.csproj", "{5CFAE38C-FFA0-43D5-BF7A-2AF1373E8D22}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{0E457AF1-813F-4D05-89D1-F2C8F3944DBE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0E457AF1-813F-4D05-89D1-F2C8F3944DBE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0E457AF1-813F-4D05-89D1-F2C8F3944DBE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5CFAE38C-FFA0-43D5-BF7A-2AF1373E8D22}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5CFAE38C-FFA0-43D5-BF7A-2AF1373E8D22}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5CFAE38C-FFA0-43D5-BF7A-2AF1373E8D22}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5CFAE38C-FFA0-43D5-BF7A-2AF1373E8D22}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

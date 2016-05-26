@@ -196,13 +196,11 @@
     };
 
     $.fn.loadUrl = function (href) {
-        href = (href || "").replace(/#/g, "");
+        var self = $(this);
+        href = (href || self.attr("href")).replace(/#/g, "");
         if (!href) {
             return false;
         }
-        var self = $(this);
-        href = href || self.attr("href");
-        if (!href) return;
         self.attr("href", href);
 
         var hash = "#" + href;

@@ -103,7 +103,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Content\bootstrap-overrides.css" />
     <Content Include="Content\bootstrap-theme.css" />
     <Content Include="Content\bootstrap-theme.min.css" />
     <Content Include="Content\bootstrap.css" />
@@ -152,6 +151,7 @@
     <Compile Include="Controllers\ControllerBase.cs" />
     <Compile Include="Controllers\AreaController.cs" />
     <Compile Include="Controllers\ChartController.cs" />
+    <Compile Include="Controllers\ExcelController.cs" />
     <Compile Include="Controllers\FormController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\NodeController.cs" />
@@ -202,6 +202,7 @@
     <Content Include="Views\Chart\AreaChart.cshtml" />
     <Content Include="Views\User\Login.cshtml" />
     <Content Include="Views\User\EditPassword.cshtml" />
+    <Content Include="templates\建设用地审批.xlsx" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -212,6 +213,7 @@
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Models\" />
+    <Folder Include="Views\Excel\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\LoowooTech.Land.Zhoushan\LoowooTech.Land.Zhoushan.csproj">

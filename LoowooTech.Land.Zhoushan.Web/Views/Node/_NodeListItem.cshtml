@@ -3,6 +3,7 @@
     var model = Model ?? new Node();
 }
 <tr class="node-item">
+    <td>@(model.ID)</td>
     <td class="node-level-@(model.Level)">
         <a href="/node/values?nodeId=@(model.ID)">@(model.Name)</a>
     </td>

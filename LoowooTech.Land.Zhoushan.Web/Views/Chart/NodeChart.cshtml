@@ -4,72 +4,88 @@
     List<NodeValue> childValues = ViewBag.ChildValues;
     List<NodeValue> nodeValues = ViewBag.NodeValues;
     NodeValueParameter parameter = ViewBag.Parameter;
-    Node selectedNode = ViewBag.Node;
+    Node node = ViewBag.Node;
+
+    var groups = childNodes.GroupBy(e => e.Group).ToDictionary(g => g.Key ?? node.Name, g => g.ToList());
+    var index = 0;
 }
-<div class="col-lg-12">
-    <hr />
-    <h4>@(selectedNode.Name)</h4>
-    <div class="col-lg-4">
-        <canvas id="chart-childnode"></canvas>
-    </div>
-    <div class="col-lg-5">
-        <table class="table">
-            <tr>
-                <th>分类</th>
-                <th>@(valueType.Name)(@(valueType.Unit))</th>
-                <th>@(parameter.RateType.Value.GetDescription()) %</th>
-            </tr>
-            @foreach (var val in nodeValues)
-            {
+@foreach (var kv in groups)
+{
+    index++;
+    var group = kv.Key;
+    var children = kv.Value;
+    var nodeIds = children.Select(e => e.ID).ToArray();
+    var values = childValues.Where(e => nodeIds.Contains(e.NodeID)).ToList();
+    var labels = children.OrderBy(e => e.ID).Select(e => e.Name).ToArray();
+    var data = values.OrderBy(e => e.NodeID).Select(e => e.Value).ToArray();
+    <div class="col-lg-12">
+        <hr />
+        <h4>@(group)</h4>
+        <div class="col-lg-4">
+            <canvas id="chart-childnode-@(index)"></canvas>
+        </div>
+        <div class="col-lg-5">
+            <table class="table">
                 <tr>
-                    <td>@(selectedNode.Name)</td>
-                    <td>@(val.Value)</td>
-                    <td>@(val.RateValue.ToString("f2"))</td>
+                    <th>分类</th>
+                    <th>@(valueType.Name)(@(valueType.Unit))</th>
+                    <th>@(parameter.RateType.Value.GetDescription()) %</th>
                 </tr>
-            }
-            @foreach (var node in childNodes)
-            {
-                var val = childValues.FirstOrDefault(e => e.NodeID == node.ID) ?? new NodeValue { };
-                <tr>
-                    <td>
-                        -- @(node.Name)
-                    </td>
-                    <td>@(val.Value)</td>
-                    <td>@(val.RateValue.ToString("f2"))</td>
-                </tr>
-            }
-        </table>
+                @if (index == 1)
+                {
+                    foreach (var val in nodeValues)
+                    {
+                        <tr>
+                            <td>@(node.Name)</td>
+                            <td>@(val.Value)</td>
+                            <td>@(val.RateValue.ToString("f1"))</td>
+                        </tr>
+                    }
+                }
+                @foreach (var child in children)
+                {
+                    var val = values.FirstOrDefault(e => e.NodeID == child.ID) ?? new NodeValue { };
+                    <tr>
+                        <td>
+                            -- @(child.Name)
+                        </td>
+                        <td>@(val.Value)</td>
+                        <td>@(val.RateValue.ToString("f1"))</td>
+                    </tr>
+                }
+            </table>
+        </div>
     </div>
-</div>
-<script>
-    $(function () {
-        function getColors(len){
-            var colors = ["#FF6384",
-            "#4BC0C0",
-            "#FFCE56",
-            "#E7E9ED",
-            "#36A2EB"
-            ];
+    <script>
+        $(function () {
+            function getColors(len){
+                var colors = ["#FF6384",
+                "#4BC0C0",
+                "#FFCE56",
+                "#E7E9ED",
+                "#36A2EB"
+                ];
 
-            return colors.slice(0,len);
-        }
-
-        var labels = @Html.Raw(childNodes.OrderBy(e => e.ID).Select(e => e.Name).ToJson()) || [];
-        var data = @Html.Raw(childValues.OrderBy(e => e.NodeID).Select(e => e.Value).ToJson()) || [];
-        var len = labels.length - data.length;
-        for(var i=0;i<len;i++){
-            data.push(0);
-        }
-        var ctx = document.getElementById("chart-childnode");
-        var myChart = new Chart(ctx, {
-            type: 'doughnut',
-            data: {
-                labels: labels,
-                datasets:[{
-                    data:data,
-                    backgroundColor:getColors(data.length)
-                }]
+                return colors.slice(0,len);
             }
+
+            var labels = @Html.Raw(labels.ToJson()) || [];
+            var data = @Html.Raw(data.ToJson()) || [];
+            var len = labels.length - data.length;
+            for(var i=0;i<len;i++){
+                data.push(0);
+            }
+            var ctx = document.getElementById("chart-childnode-@(index)");
+            var myChart = new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: labels,
+                    datasets:[{
+                        data:data,
+                        backgroundColor:getColors(data.length)
+                    }]
+                }
+            });
         });
-    });
-</script>
+    </script>
+}

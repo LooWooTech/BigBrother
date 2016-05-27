@@ -60,8 +60,13 @@ namespace LoowooTech.Land.Zhoushan.Models
         {
             get
             {
-                if (CompareValue == 0) return 0;
-                return (Value - CompareValue) / CompareValue * 100;
+                var val = Value - CompareValue;
+                if(CompareValue == 0)
+                {
+                    if (val == 0) return 0;
+                    return val > 0 ? 100 : -100;
+                }
+                return val / CompareValue * 100;
             }
         }
 

@@ -120,8 +120,6 @@ namespace LoowooTech.Land.Zhoushan.Managers
                     {
                         var compareItem = compareList.FirstOrDefault(e =>
                             e.NodeID == item.NodeID
-                            && e.Year == compareParameter.Year
-                            && e.Quarter == item.Quarter
                             && e.TypeID == item.TypeID
                             && e.AreaID == item.AreaID
                         );

@@ -28,6 +28,8 @@ namespace LoowooTech.Land.Zhoushan.Models
 
         public string Name { get; set; }
 
+        public string Group { get; set; }
+
         [NotMapped]
         public int Level { get; set; }
 

@@ -12,7 +12,7 @@ namespace LoowooTech.Land.Zhoushan.Web.Controllers
         public ActionResult Index(int formId)
         {
             ViewBag.Form = Core.FormManager.GetForm(formId);
-            ViewBag.Nodes = Core.FormManager.GetNodes(formId);
+            ViewBag.Nodes = Core.FormManager.GetNodeRoots(formId);
 
             return View();
         }

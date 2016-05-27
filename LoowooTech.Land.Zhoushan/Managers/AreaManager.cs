@@ -10,43 +10,48 @@ namespace LoowooTech.Land.Zhoushan.Managers
 {
     public class AreaManager : ManagerBase
     {
+        private static readonly string AreaCacheKey = "areas";
+
+        private void ClearCache()
+        {
+            Cache.Remove(AreaCacheKey);
+        }
+
+        private List<Area> GetAreas()
+        {
+            return Cache.GetOrSet(AreaCacheKey, () =>
+            {
+                using (var db = GetDbContext())
+                {
+                    var list = db.Areas.ToList();
+                    foreach (var root in list.Where(e => e.ParentID == 0))
+                    {
+                        root.GetChildren(list);
+                    }
+                    return list;
+                }
+            });
+        }
 
         public List<Area> GetAreaTree()
         {
-            using (var db = GetDbContext())
-            {
-                var result = new List<Area>();
-                var list = db.Areas.ToList();
-                foreach (var root in list.Where(e => e.ParentID == 0))
-                {
-                    root.GetChildren(list);
-                    result.Add(root);
-                }
-
-                return result;
-            }
+            return GetAreas().Where(e => e.ParentID == 0).ToList();
         }
 
         public Area GetArea(int id)
         {
             if (id == 0) return null;
-            using (var db = GetDbContext())
-            {
-                return db.Areas.FirstOrDefault(e => e.ID == id);
-            }
+            return GetAreas().FirstOrDefault(e => e.ID == id);
         }
 
         public List<Area> GetAreas(int? parentId = null)
         {
-            using (var db = GetDbContext())
+            var list = GetAreas();
+            if (parentId.HasValue)
             {
-                var query = db.Areas.AsQueryable();
-                if(parentId.HasValue)
-                {
-                    query = query.Where(e => e.ParentID == parentId.Value);
-                }
-                return query.ToList();
+                list = list.Where(e => e.ParentID == parentId.Value).ToList();
             }
+            return list;
         }
 
         public void Save(Area model)
@@ -67,6 +72,7 @@ namespace LoowooTech.Land.Zhoushan.Managers
                     db.Areas.Add(model);
                 }
                 db.SaveChanges();
+                ClearCache();
             }
         }
 
@@ -77,6 +83,7 @@ namespace LoowooTech.Land.Zhoushan.Managers
                 var entity = db.Areas.FirstOrDefault(e => e.ID == id);
                 db.Areas.Remove(entity);
                 db.SaveChanges();
+                ClearCache();
             }
         }
     }

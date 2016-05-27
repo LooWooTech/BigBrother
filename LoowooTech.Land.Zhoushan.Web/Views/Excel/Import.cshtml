@@ -1,0 +1,82 @@
+﻿@{
+    ViewBag.Title = "导入表格";
+    Form form = ViewBag.Form;
+    List<Form> forms = ViewBag.Forms;
+}
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <h3 class="panel-title"><i class="fa fa-upload"></i>@(ViewBag.Title)</h3>
+    </div>
+    <div class="panel-body">
+        <form id="form-import" action="/excel/import" method="post" class="form-horizontal">
+            <div class="modal-body">
+                @if (form == null)
+                {
+                    <div class="form-group">
+                        <label for="Type" class="control-label col-lg-3">选择表单</label>
+                        <div class="col-lg-8">
+                            <select class="form-control" name="formId">
+                                <option value="0">选择表单</option>
+                                @foreach (var item in forms)
+                                {
+                                    <option value="@(item.ID)">@(item.Name)</option>
+                                }
+                            </select>
+                        </div>
+                    </div>
+                }
+                else
+                {
+                    <input type="hidden" name="FormId" value="@(form.ID)" />
+                }
+                <div class="form-group">
+                    <label for="Type" class="control-label col-lg-3">选择年份</label>
+                    <div class="col-lg-8">
+                        @Html.Partial("_YearDropdown")
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="Type" class="control-label col-lg-3">选择季度</label>
+                    <div class="col-lg-8">
+                        @Html.Partial("_QuarterDropdown")
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="Type" class="control-label col-lg-3">选择Excel</label>
+                    <div class="col-lg-8">
+                        <input type="file" id="file1" name="file" class="form-control" />
+                        <span class="help-block" id="span-file"></span>
+                        <input type="hidden" name="filePath" id="hide-file" />
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <div class="col-lg-8 col-lg-offset-3">
+                    <button type="submit" id="" class="btn btn-primary"><i class="glyphicon glyphicon-ok"></i> 确定</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<script>
+    $(function () {
+        $("#file1").setUpload("/excel/upload", function (json) {
+            $("#hide-file").val(json.data.filePath);
+            $("#span-file").text(json.data.filePath);
+        });
+
+        $("#form-import").submit(function () {
+            var enctype = $(this).attr("enctype");
+            if (enctype == "multipart/form-data") {
+                return;
+            }
+            var data = $(this).serialize();
+            $.request("/excel/import", data, function () {
+                alert("导入成功");
+                $("#form-import").reset();
+            });
+            return false;
+        });
+    });
+</script>
+

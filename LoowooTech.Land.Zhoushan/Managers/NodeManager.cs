@@ -1,4 +1,5 @@
-﻿using LoowooTech.Land.Zhoushan.Models;
+﻿using LoowooTech.Land.Zhoushan.Caching;
+using LoowooTech.Land.Zhoushan.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,36 +10,43 @@ namespace LoowooTech.Land.Zhoushan.Managers
 {
     public partial class FormManager
     {
+        private static readonly string NodeCacheKey = "nodes";
+
         public Node GetNode(int id)
         {
             if (id == 0) return null;
-            using (var db = GetDbContext())
-            {
-                return db.Nodes.FirstOrDefault(e => e.ID == id);
-            }
+            return GetNodes().FirstOrDefault(e => e.ID == id);
         }
 
         public List<Node> GetNodeChildren(int parentId)
         {
-            using (var db = GetDbContext())
-            {
-                return db.Nodes.Where(e => e.ParentID == parentId).ToList();
-            }
+            return GetNodes().Where(e => e.ParentID == parentId).ToList();
         }
 
-        public List<Node> GetNodes(int formId)
+        private void ClearNodeCache()
         {
-            using (var db = GetDbContext())
+            Cache.Remove(NodeCacheKey);
+        }
+
+        private List<Node> GetNodes()
+        {
+            return Cache.GetOrSet(NodeCacheKey, () =>
             {
-                var list = db.Nodes.Where(e => e.FormID == formId);
-                var result = new List<Node>();
-                foreach (var root in list.Where(e => e.ParentID == 0))
+                using (var db = GetDbContext())
                 {
-                    root.GetChildren(list);
-                    result.Add(root);
+                    var list = db.Nodes.ToList();
+                    foreach (var root in list.Where(e => e.ParentID == 0))
+                    {
+                        root.GetChildren(list);
+                    }
+                    return list;
                 }
-                return result;
-            }
+            });
+        }
+
+        public List<Node> GetNodeRoots(int formId)
+        {
+            return GetNodes().Where(e => e.FormID == formId && e.ParentID == 0).ToList();
         }
 
         public void SaveNode(Node model)
@@ -55,6 +63,7 @@ namespace LoowooTech.Land.Zhoushan.Managers
                     db.Entry(entity).CurrentValues.SetValues(model);
                 }
                 db.SaveChanges();
+                ClearNodeCache();
             }
         }
 
@@ -70,6 +79,7 @@ namespace LoowooTech.Land.Zhoushan.Managers
                 var entity = db.Nodes.FirstOrDefault(e => e.ID == nodeId);
                 db.Nodes.Remove(entity);
                 db.SaveChanges();
+                ClearNodeCache();
             }
         }
     }

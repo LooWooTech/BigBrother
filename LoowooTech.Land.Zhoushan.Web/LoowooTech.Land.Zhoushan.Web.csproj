@@ -203,6 +203,7 @@
     <Content Include="Views\User\Login.cshtml" />
     <Content Include="Views\User\EditPassword.cshtml" />
     <Content Include="templates\建设用地审批.xlsx" />
+    <Content Include="Views\Excel\Import.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -213,7 +214,7 @@
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Models\" />
-    <Folder Include="Views\Excel\" />
+    <Folder Include="uploads\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\LoowooTech.Land.Zhoushan\LoowooTech.Land.Zhoushan.csproj">

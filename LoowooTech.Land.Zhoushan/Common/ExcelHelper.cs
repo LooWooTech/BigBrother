@@ -88,27 +88,34 @@ namespace LoowooTech.Land.Zhoushan.Common
 
         public static List<ExcelCell> ReadData(string filePath, int sheetIndex = 0)
         {
-            using (var fs = new FileStream(filePath, FileMode.Open))
+            using (var fs = new FileStream(filePath, FileMode.Open, FileAccess.Read))
             {
-                var workbook = WorkbookFactory.Create(fs);
-                var sheet = workbook.GetSheetAt(sheetIndex);
-                var list = new List<ExcelCell>();
-                for (var i = sheet.FirstRowNum; i <= sheet.LastRowNum; i++)
-                {
-                    var row = sheet.GetRow(i);
-                    if (row == null) continue;
-                    foreach (var cell in row.Cells)
-                    {
-                        if(cell.CellType == CellType.Blank)
-                        {
-                            continue;
-                        }
-                        var excelCell = ConvertToExcelCell(cell);
-                        list.Add(excelCell);
-                    }
-                }
-                return list;
+                return ReadData(fs, sheetIndex);
             }
+        }
+
+        public static List<ExcelCell> ReadData(Stream stream, int sheetIndex = 0)
+        {
+            var workbook = WorkbookFactory.Create(stream);
+            var sheet = workbook.GetSheetAt(sheetIndex);
+            var list = new List<ExcelCell>();
+            for (var i = sheet.FirstRowNum; i <= sheet.LastRowNum; i++)
+            {
+                var row = sheet.GetRow(i);
+                if (row == null) continue;
+                foreach (var cell in row.Cells)
+                {
+                    if (cell.CellType == CellType.Blank)
+                    {
+                        continue;
+                    }
+                    var excelCell = ConvertToExcelCell(cell);
+                    list.Add(excelCell);
+                }
+            }
+            stream.Close();
+            stream.Dispose();
+            return list;
         }
     }
 }

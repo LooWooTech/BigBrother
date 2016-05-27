@@ -24,6 +24,35 @@ namespace LoowooTech.Land.Zhoushan.Models
                 field.UpdateParameters(Fields);
             }
         }
+
+        /// <summary>
+        /// 从Excel里读取数值
+        /// </summary>
+        /// <param name="list"></param>
+        public void ReadData(List<ExcelCell> list)
+        {
+            foreach (var field in Fields)
+            {
+                field.Value = null;
+                var cell = list.FirstOrDefault(e => e.Row == field.Cell.Row && e.Column == field.Cell.Column);
+                if (cell != null)
+                {
+                    field.Value = cell.Value.ToString();
+                }
+            }
+        }
+
+        public void WriteData(List<ExcelCell> list)
+        {
+            foreach (var cell in list)
+            {
+                var field = Fields.FirstOrDefault(e => e.Cell.Row == cell.Row && e.Cell.Column == cell.Column);
+                if (field != null)
+                {
+                    cell.Value = field.Cell.Value.ToString().Replace(field.Template, field.Value ?? string.Empty);
+                }
+            }
+        }
     }
 
     public class Field
@@ -63,7 +92,7 @@ namespace LoowooTech.Land.Zhoushan.Models
 
         public void UpdateParameters(List<Field> fields)
         {
-            if (!IsValueField)
+            if (!IsValueField && !IsRateField)
             {
                 return;
             }
@@ -74,7 +103,7 @@ namespace LoowooTech.Land.Zhoushan.Models
             foreach (var f in upFields)
             {
                 //如果是第一次碰到值列，跳过，如是第二次碰到，则停止搜寻
-                if (f.IsValueField)
+                if (f.IsValueField || f.IsRateField)
                 {
                     if (hasFind)
                         break;
@@ -83,7 +112,7 @@ namespace LoowooTech.Land.Zhoushan.Models
                 }
                 else
                 {
-                    if(f.Parameters.Count>0)
+                    if (f.Parameters.Count > 0)
                     {
                         hasFind = true;
                     }
@@ -94,7 +123,7 @@ namespace LoowooTech.Land.Zhoushan.Models
             var leftFields = fields.Where(e => e.Cell.Column < Cell.Column && e.IncludRow(Cell.Row)).OrderByDescending(e => e.Cell.Column);
             foreach (var f in leftFields)
             {
-                if (f.IsValueField)
+                if (f.IsValueField || f.IsRateField)
                 {
                     if (hasFind)
                         break;
@@ -116,7 +145,15 @@ namespace LoowooTech.Land.Zhoushan.Models
         {
             get
             {
-                return Parameters.Any(e => e.Type == FieldType.Value || e.Type == FieldType.RateValue);
+                return Parameters.Any(e => e.Type == FieldType.Value);
+            }
+        }
+
+        public bool IsRateField
+        {
+            get
+            {
+                return Parameters.Any(e => e.Type == FieldType.RateValue);
             }
         }
 
@@ -162,6 +199,7 @@ namespace LoowooTech.Land.Zhoushan.Models
         Type,
         Area,
         Value,
+        Year,
         RateValue
     }
 }

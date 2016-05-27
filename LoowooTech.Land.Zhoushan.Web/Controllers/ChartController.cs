@@ -86,7 +86,7 @@ namespace LoowooTech.Land.Zhoushan.Web.Controllers
         public ActionResult NodeDropdown(int formId, int nodeId = 0)
         {
             ViewBag.NodeID = nodeId;
-            ViewBag.Nodes = Core.FormManager.GetNodes(formId);
+            ViewBag.Nodes = Core.FormManager.GetNodeRoots(formId);
             return View();
         }
     }

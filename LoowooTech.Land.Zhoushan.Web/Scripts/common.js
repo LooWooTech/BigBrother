@@ -40,7 +40,7 @@
             });
             form.submit();
             iframe.load(function () {
-                var content = $(this).contents().find("body").html();
+                var content = $(this).contents().find("pre").html() || $(this).contents().find("body").html();
                 try {
                     var json = eval("(" + content + ")");
                     callback(json);
@@ -197,7 +197,7 @@
 
     $.fn.loadUrl = function (href) {
         var self = $(this);
-        href = (href || self.attr("href")).replace(/#/g, "");
+        href = (href || self.attr("href") || "").replace(/#/g, "");
         if (!href) {
             return false;
         }

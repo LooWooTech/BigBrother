@@ -10,12 +10,21 @@ namespace LoowooTech.Land.Zhoushan.Managers
 {
     public partial class FormManager
     {
+        private static readonly string ValueCacheKey = "valueTypes";
+        private void ClearValueCache()
+        {
+            Cache.Remove(ValueCacheKey);
+        }
+
         public List<NodeValueType> GetNodeValueTypes()
         {
-            using (var db = GetDbContext())
+            return Cache.GetOrSet(ValueCacheKey, () =>
             {
-                return db.NodeValueTypes.ToList();
-            }
+                using (var db = GetDbContext())
+                {
+                    return db.NodeValueTypes.ToList();
+                }
+            });
         }
 
         public List<NodeValueType> GetNodeValueTypes(int nodeId)
@@ -30,10 +39,7 @@ namespace LoowooTech.Land.Zhoushan.Managers
         public NodeValueType GetNodeValueType(int id)
         {
             if (id == 0) return null;
-            using (var db = GetDbContext())
-            {
-                return db.NodeValueTypes.FirstOrDefault(e => e.ID == id);
-            }
+            return GetNodeValueTypes().FirstOrDefault(e => e.ID == id);
         }
 
         public void SaveNodeValueType(NodeValueType model)
@@ -50,6 +56,7 @@ namespace LoowooTech.Land.Zhoushan.Managers
                     db.NodeValueTypes.Add(model);
                 }
                 db.SaveChanges();
+                ClearValueCache();
             }
         }
 
@@ -60,6 +67,7 @@ namespace LoowooTech.Land.Zhoushan.Managers
                 var entity = db.NodeValueTypes.FirstOrDefault(e => e.ID == id);
                 db.NodeValueTypes.Remove(entity);
                 db.SaveChanges();
+                ClearValueCache();
             }
         }
     }

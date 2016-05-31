@@ -1,16 +1,24 @@
 ﻿@{
-    ViewBag.Title = "报表管理";
     List<Form> list = ViewBag.Forms;
+    UserRole role = ((UserIdentity)ViewBag.CurrentIdentity).Role;
+    var hasEditRight = role >= UserRole.Writer;
+    ViewBag.Title = "表单列表";
+
 }
 
 <h2 class="page-header">
     @(ViewBag.Title)
-    <a class="btn btn-success" href="/form/edit" data-toggle="modal" data-target="#modal">
-        <i class="glyphicon glyphicon-plus"></i>添加表单
-    </a>
-
-    <a class="btn btn-warning" href="/excel/import" data-toggle="modal" data-target="#modal">
-        <i class="fa fa-upload"></i> 导入数据
+    @if (hasEditRight)
+    {
+        <a class="btn btn-success" href="/form/edit" data-toggle="modal" data-target="#modal">
+            <i class="glyphicon glyphicon-plus"></i>添加表单
+        </a>
+        <a class="btn btn-warning" href="/excel/import" data-toggle="modal" data-target="#modal">
+            <i class="fa fa-download"></i> 导入数据
+        </a>
+    }
+    <a class="btn btn-info" href="/excel/export" data-toggle="modal" data-target="#modal">
+        <i class="fa fa-upload"></i> 导出报告
     </a>
 </h2>
 
@@ -29,8 +37,12 @@
             <td><a href="/node/?formId=@(item.ID)">@(item.Name)</a></td>
             <td>
                 <a href="/chart/?formId=@(item.ID)" class="btn btn-success btn-xs" title="统计"><i class="fa fa-bar-chart"></i> 统计</a>
-                <a href="/form/edit?id=@(item.ID)" class="btn btn-default btn-xs" data-toggle="modal" data-target="#modal" title="编辑"><i class="fa fa-edit"></i> 编辑</a>
-                <a href="/form/delete?id=@(item.ID)" class="btn btn-danger btn-xs" title="删除" data-target="#delete"><i class="fa fa-trash-o"></i> 删除</a>
+                <a href="/node/?formId=@(item.ID)" class="btn btn-info btn-xs" title="统计"><i class="fa fa-list"></i> 分类</a>
+                @if (hasEditRight)
+                {
+                    <a href="/form/edit?id=@(item.ID)" class="btn btn-default btn-xs" data-toggle="modal" data-target="#modal" title="编辑"><i class="fa fa-pencil"></i> 编辑</a>
+                    <a href="/form/delete?id=@(item.ID)" class="btn btn-danger btn-xs" title="删除" data-target="#delete"><i class="glyphicon glyphicon-remove"></i> 删除</a>
+                }
             </td>
         </tr>
     }

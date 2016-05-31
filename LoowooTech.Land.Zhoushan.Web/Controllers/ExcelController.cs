@@ -9,6 +9,7 @@ using System.Web.Mvc;
 
 namespace LoowooTech.Land.Zhoushan.Web.Controllers
 {
+    [UserRoleFilter(UserRole.Writer)]
     public class ExcelController : ControllerBase
     {
         [HttpGet]
@@ -26,6 +27,24 @@ namespace LoowooTech.Land.Zhoushan.Web.Controllers
             return View();
         }
 
+        [HttpPost]
+        public ActionResult Import(int formId, int year, Quarter quarter, string filePath)
+        {
+            var form = Core.FormManager.GetForm(formId);
+            if (form == null)
+            {
+                throw new ArgumentException("没有找到该表单");
+            }
+            var template = new Template(form.Name);
+
+            var excelData = ExcelHelper.ReadData(filePath);
+
+            Core.TemplateManager.WriteExcelDataToDb(year, quarter, excelData, template);
+
+            return JsonSuccessResult();
+
+        }
+
         public ActionResult Upload(int formId)
         {
             if (Request.Files.Count == 0)
@@ -39,22 +58,41 @@ namespace LoowooTech.Land.Zhoushan.Web.Controllers
             return JsonSuccessResult(new { filePath });
         }
 
+        [HttpGet]
+        public ActionResult Export(int formId = 0)
+        {
+            var form = Core.FormManager.GetForm(formId);
+            if (form != null)
+            {
+                ViewBag.Form = form;
+            }
+            else
+            {
+                ViewBag.Forms = Core.FormManager.GetForms();
+            }
+            return View();
+        }
+
         [HttpPost]
-        public ActionResult Import(int formId, int year, Quarter quarter, string filePath)
+        public void Export(int formId, int year, Quarter quarter)
         {
             var form = Core.FormManager.GetForm(formId);
             if (form == null)
             {
-                throw new ArgumentException("没有找到该表单");
+                throw new ArgumentException("请选择一个报表");
             }
-            var template = Core.TemplateManager.GetTemplate(form);
+            var template = new Template(form.Name);
 
-            var excelData = ExcelHelper.ReadData(filePath);
+            var excelData = Core.TemplateManager.WriteDbDataToExcel(form, year, quarter, template);
 
-            Core.TemplateManager.WriteData(year, quarter, excelData, template);
-
-            return JsonSuccessResult();
-
+            using (var stream = ExcelHelper.WriteData(template.FilePath, excelData))
+            {
+                var fileName = form.Name + "-" + year + "年" + quarter.GetDescription() + "报告.xlsx";
+                Response.ContentType = "application/vnd.ms-excel;charset=UTF-8";
+                Response.AddHeader("Content-Disposition", string.Format("attachment;filename={0}", HttpUtility.UrlEncode(fileName)));
+                Response.BinaryWrite(((MemoryStream)stream).GetBuffer());
+                Response.End();
+            }
         }
     }
 }

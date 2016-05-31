@@ -68,8 +68,9 @@ namespace LoowooTech.Land.Zhoushan.Web.Controllers
             AuthorizeHelper.Logout(HttpContext);
             return RedirectToAction("Login");
         }
-        
 
+
+        [UserRoleFilter(UserRole.Administrator)]
         public ActionResult Index(string searchKey, int page = 1, int rows = 20)
         {
             var parameter = new UserParameter
@@ -83,6 +84,7 @@ namespace LoowooTech.Land.Zhoushan.Web.Controllers
             return View();
         }
 
+        [UserRoleFilter(UserRole.Administrator)]
         [HttpGet]
         public ActionResult Edit(int id = 0)
         {
@@ -90,6 +92,7 @@ namespace LoowooTech.Land.Zhoushan.Web.Controllers
             return View();
         }
 
+        [UserRoleFilter(UserRole.Administrator)]
         [HttpPost]
         public ActionResult Edit(User model)
         {
@@ -97,6 +100,7 @@ namespace LoowooTech.Land.Zhoushan.Web.Controllers
             return JsonSuccessResult();
         }
 
+        [UserRoleFilter(UserRole.Administrator)]
         public ActionResult Delete(int id)
         {
             Core.UserManager.Delete(id);

@@ -25,7 +25,7 @@
             @Html.Action("Dropdown", "Area", new { AreaID = parameter.AreaID })
             @Html.Partial("_RateTypeDropdown", parameter.RateType)
             <button type="submit" class="btn btn-primary"><i class="fa fa-bar-chart-o"></i> 统计</button>
-            <a class="btn btn-default" href="/form/">
+            <a class="btn btn-default" href="javascript:history.back()">
                 <i class="fa fa-chevron-left"></i> 返回
             </a>
         </div>

@@ -15,29 +15,10 @@ namespace LoowooTech.Land.Zhoushan.Managers
 {
     public class TemplateManager : ManagerBase
     {
-        private static readonly string CacheKey = "templates";
-
-        public Template GetTemplate(Form form)
-        {
-            var cells = ExcelHelper.ReadData(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Templates", form.Name + ".xlsx"));
-            var template = new Template();
-            foreach (var cell in cells)
-            {
-                if (string.IsNullOrEmpty(cell.Value.ToString()))
-                {
-                    continue;
-                }
-                template.Fields.Add(new Field(cell));
-            }
-            template.UpdateFieldParameters();
-            return template;
-        }
-
-
         /// <summary>
         /// 把Template的Field中的Value数据写入数据库
         /// </summary>
-        public void WriteData(int year, Quarter quarter, List<ExcelCell> data, Template template)
+        public void WriteExcelDataToDb(int year, Quarter quarter, List<ExcelCell> data, Template template)
         {
             template.ReadData(data);
             using (var db = GetDbContext())
@@ -61,16 +42,67 @@ namespace LoowooTech.Land.Zhoushan.Managers
                 db.SaveChanges();
             }
         }
+
+        public List<ExcelCell> WriteDbDataToExcel(Form form, int year, Quarter quarter, Template template)
+        {
+            using (var db = GetDbContext())
+            {
+                var result = new List<ExcelCell>();
+                var areas = Core.AreaManager.GetAreas();
+
+                foreach (var field in template.Fields)
+                {
+                    if (field.Parameters.Count > 0)
+                    {
+                        var firstParameter = field.Parameters[0];
+                        switch (firstParameter.Type)
+                        {
+                            case FieldType.Form:
+                                field.Value = form.Name;
+                                break;
+                            case FieldType.Area:
+                                var area = Core.AreaManager.GetArea(firstParameter.Value);
+                                field.Value = area == null ? "未知区域" : area.Name;
+                                break;
+                            case FieldType.Node:
+                                var node = Core.FormManager.GetNode(firstParameter.Value);
+                                field.Value = node == null ? "未知分类" : node.Name;
+                                break;
+                            case FieldType.Quarter:
+                                field.Value = (firstParameter.Value == 0 ? (int)quarter : firstParameter.Value).ToString();
+                                break;
+                            case FieldType.Type:
+                                var valueType = Core.FormManager.GetNodeValueType(firstParameter.Value);
+                                field.Value = valueType == null ? "未知类型" : valueType.Name + "(" + valueType.Unit + ")";
+                                break;
+                            case FieldType.Year:
+                                field.Value = firstParameter.Value == 0 ? year.ToString() : firstParameter.Value.ToString();
+                                break;
+                            case FieldType.Value:
+                            case FieldType.RateValue:
+                                var query = db.NodeValues.AsQueryable();
+                                var entity = field.GetEntity(query, year, quarter) ?? new NodeValue();
+                                field.Value = (firstParameter.Type == FieldType.Value ? entity.Value : entity.RateValue).ToString("f2");
+                                break;
+                        }
+                    }
+                    result.Add(field.Cell);
+                }
+
+                template.WriteData(result);
+                return result;
+            }
+        }
     }
 
     internal static class FieldExtension
     {
         public static NodeValue GetEntity(this Field field, IQueryable<NodeValue> query, int year, Quarter quarter)
         {
+            var hasYear = false;
+            var hasQuarter = false;
             foreach (var parameter in field.Parameters)
             {
-                var hasYear = false;
-                var hasQuarter = false;
                 switch (parameter.Type)
                 {
                     case FieldType.Area:
@@ -80,26 +112,32 @@ namespace LoowooTech.Land.Zhoushan.Managers
                         query = query.Where(e => e.NodeID == parameter.Value);
                         break;
                     case FieldType.Quarter:
-                        hasQuarter = true;
-                        query = query.Where(e => e.Quarter == (Quarter)parameter.Value);
+                        if (parameter.Value > 0)
+                        {
+                            hasQuarter = true;
+                            query = query.Where(e => e.Quarter == (Quarter)parameter.Value);
+                        }
                         break;
                     case FieldType.Type:
                     case FieldType.Value:
                         query = query.Where(e => e.TypeID == parameter.Value);
                         break;
                     case FieldType.Year:
-                        hasYear = true;
-                        query = query.Where(e => e.Year == parameter.Value);
+                        if (parameter.Value > 0)
+                        {
+                            hasYear = true;
+                            query = query.Where(e => e.Year == parameter.Value);
+                        }
                         break;
                 }
-                if (!hasYear)
-                {
-                    query = query.Where(e => e.Year == year);
-                }
-                if (!hasQuarter)
-                {
-                    query = query.Where(e => e.Quarter == quarter);
-                }
+            }
+            if (!hasYear)
+            {
+                query = query.Where(e => e.Year == year);
+            }
+            if (!hasQuarter)
+            {
+                query = query.Where(e => e.Quarter == quarter);
             }
             return query.FirstOrDefault();
         }

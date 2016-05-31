@@ -117,5 +117,20 @@ namespace LoowooTech.Land.Zhoushan.Common
             stream.Dispose();
             return list;
         }
+
+        public static Stream WriteData(string filePath, List<ExcelCell> data, int sheetIndex = 0)
+        {
+            var workbook = WorkbookFactory.Create(filePath);
+            var sheet = workbook.GetSheetAt(sheetIndex);
+            foreach (var item in data)
+            {
+                var row = sheet.GetRow(item.Row);
+                var cell = row.GetCell(item.Column);
+                cell.SetCellValue(item.Value.ToString());
+            }
+            var result = new MemoryStream();
+            workbook.Write(result);
+            return result;
+        }
     }
 }

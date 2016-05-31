@@ -15,6 +15,13 @@ namespace LoowooTech.Land.Zhoushan.Web.Controllers
             return View();
         }
 
+        public ActionResult Charts()
+        {
+            ViewBag.Forms = Core.FormManager.GetForms();
+            return View();
+        }
+
+        [UserRoleFilter(UserRole.Writer)]
         [HttpGet]
         public ActionResult Edit(int id = 0)
         {
@@ -25,6 +32,7 @@ namespace LoowooTech.Land.Zhoushan.Web.Controllers
             return View();
         }
 
+        [UserRoleFilter(UserRole.Writer)]
         [HttpPost]
         public ActionResult Edit(Form form)
         {

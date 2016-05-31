@@ -1,6 +1,7 @@
 ﻿using LoowooTech.Land.Zhoushan.Common;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -10,23 +11,30 @@ namespace LoowooTech.Land.Zhoushan.Models
 {
     public class Template
     {
-        public Template()
+        public Template(string formName)
         {
             Fields = new List<Field>();
-        }
-
-        public List<Field> Fields { get; set; }
-
-        public void UpdateFieldParameters()
-        {
-            foreach (var field in Fields)
+            var filePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Templates", formName + ".xlsx");
+            var cells = ExcelHelper.ReadData(filePath);
+            foreach (var cell in cells)
             {
+                if (string.IsNullOrEmpty(cell.Value.ToString()))
+                {
+                    continue;
+                }
+                var field = new Field(cell);
                 field.UpdateParameters(Fields);
+                Fields.Add(field);
             }
+            FilePath = filePath;
         }
+
+        public string FilePath { get; private set; }
+
+        public List<Field> Fields { get; private set; }
 
         /// <summary>
-        /// 从Excel里读取数值
+        /// 从Excel里读取记录
         /// </summary>
         /// <param name="list"></param>
         public void ReadData(List<ExcelCell> list)
@@ -49,7 +57,7 @@ namespace LoowooTech.Land.Zhoushan.Models
                 var field = Fields.FirstOrDefault(e => e.Cell.Row == cell.Row && e.Cell.Column == cell.Column);
                 if (field != null)
                 {
-                    cell.Value = field.Cell.Value.ToString().Replace(field.Template, field.Value ?? string.Empty);
+                    cell.Value = field.Parameters.Count > 0 ? field.GetReplacedValue() : cell.Value;
                 }
             }
         }
@@ -60,7 +68,7 @@ namespace LoowooTech.Land.Zhoushan.Models
         /// <summary>
         /// {Value=1 Node=1 Area=1 Quater=1}
         /// </summary>
-        private static Regex CellValueRegex = new Regex(@"[^={\s]+=[^\s}]+", RegexOptions.Compiled);
+        private static Regex CellValueRegex = new Regex(@"\w+(=\d+)?", RegexOptions.Compiled);
         public Field(ExcelCell cell)
         {
             Cell = cell;
@@ -89,6 +97,11 @@ namespace LoowooTech.Land.Zhoushan.Models
         public ExcelCell Cell { get; set; }
 
         public List<FieldParameter> Parameters { get; set; }
+
+        public string GetReplacedValue()
+        {
+            return Cell.Value.ToString().Replace(Template, Value);
+        }
 
         public void UpdateParameters(List<Field> fields)
         {
@@ -182,8 +195,10 @@ namespace LoowooTech.Land.Zhoushan.Models
             FieldType type;
             Enum.TryParse(str[0], out type);
             Type = type;
-
-            Value = int.Parse(str[1]);
+            if (str.Length == 2)
+            {
+                Value = int.Parse(str[1]);
+            }
         }
 
         public FieldType Type { get; set; }

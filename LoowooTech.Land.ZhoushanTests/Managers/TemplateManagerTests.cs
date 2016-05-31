@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using LoowooTech.Land.Zhoushan.Models;
 
 namespace LoowooTech.Land.Zhoushan.Managers.Tests
 {
@@ -14,9 +15,8 @@ namespace LoowooTech.Land.Zhoushan.Managers.Tests
         [TestMethod()]
         public void GetTemplateTest()
         {
-            var manager = new TemplateManager();
             var form = ManagerCore.Instance.FormManager.GetForm(1);
-            var template = manager.GetTemplate(form);
+            var template = new Template(form.Name);
         }
     }
 }

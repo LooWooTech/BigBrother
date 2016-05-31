@@ -17,6 +17,7 @@ namespace LoowooTech.Land.Zhoushan.Web.Controllers
             return View();
         }
 
+        [UserRoleFilter(UserRole.Writer)]
         [HttpGet]
         public ActionResult Edit(int formId = 0, int id = 0, int parentId = 0)
         {
@@ -45,6 +46,7 @@ namespace LoowooTech.Land.Zhoushan.Web.Controllers
             return View();
         }
 
+        [UserRoleFilter(UserRole.Writer)]
         [HttpPost]
         public ActionResult Edit(Node model)
         {
@@ -52,6 +54,7 @@ namespace LoowooTech.Land.Zhoushan.Web.Controllers
             return JsonSuccessResult();
         }
 
+        [UserRoleFilter(UserRole.Writer)]
         public ActionResult Delete(int id)
         {
             Core.FormManager.DeleteNode(id);
@@ -78,6 +81,7 @@ namespace LoowooTech.Land.Zhoushan.Web.Controllers
             return View();
         }
 
+        [UserRoleFilter(UserRole.Writer)]
         [HttpGet]
         public ActionResult EditValue(int nodeId = 0, int valueId = 0)
         {
@@ -103,6 +107,7 @@ namespace LoowooTech.Land.Zhoushan.Web.Controllers
             return View();
         }
 
+        [UserRoleFilter(UserRole.Writer)]
         [HttpPost]
         public ActionResult SaveValue(NodeValue data)
         {
@@ -111,6 +116,7 @@ namespace LoowooTech.Land.Zhoushan.Web.Controllers
             return JsonSuccessResult();
         }
 
+        [UserRoleFilter(UserRole.Writer)]
         public ActionResult DeleteValue(int valueId)
         {
             Core.FormManager.DeleteNodeValue(valueId);

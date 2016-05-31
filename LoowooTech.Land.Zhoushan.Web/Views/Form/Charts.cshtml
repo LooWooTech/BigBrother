@@ -1,0 +1,35 @@
+﻿@{
+    List<Form> forms = ViewBag.Forms;
+}
+<table class="table table-hover">
+    <thead>
+        <tr>
+            <th>表单名称</th>
+            <th>时段</th>
+        </tr>
+    </thead>
+    @foreach (var form in forms)
+    {
+        var year = DateTime.Now.Year;
+        var quarter = DateTime.Now.GetQuarter() - 1;
+        <tr>
+            <td><a href="/chart/?formId=@(form.ID)">@(form.Name)</a></td>
+            <td>
+                @for (var y = year - 2; y <= year; y++)
+                {
+                    for (var q = 1; q <= 4; q++)
+                    {
+                        if (y == year && q > quarter)
+                        {
+                            break;
+                        }
+                        var href = "/chart/?formId=" + form.ID + "&year=" + y + "&quarter=" + q;
+                        <a href="@(href)">
+                            @(y)年@(q)季度
+                        </a>@:&nbsp;&nbsp;
+                    }
+                }
+            </td>
+        </tr>
+    }
+</table>

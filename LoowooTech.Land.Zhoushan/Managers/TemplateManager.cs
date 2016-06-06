@@ -38,8 +38,8 @@ namespace LoowooTech.Land.Zhoushan.Managers
                     {
                         field.SetEntity(entity, year, quarter);
                     }
+                    db.SaveChanges();
                 }
-                db.SaveChanges();
             }
         }
 
@@ -73,7 +73,7 @@ namespace LoowooTech.Land.Zhoushan.Managers
                                 break;
                             case FieldType.Type:
                                 var valueType = Core.FormManager.GetNodeValueType(firstParameter.Value);
-                                field.Value = valueType == null ? "未知类型" : valueType.Name + "(" + valueType.Unit + ")";
+                                field.Value = valueType == null ? "未知类型" : valueType.Name;
                                 break;
                             case FieldType.Year:
                                 field.Value = firstParameter.Value == 0 ? year.ToString() : firstParameter.Value.ToString();
@@ -99,8 +99,10 @@ namespace LoowooTech.Land.Zhoushan.Managers
     {
         public static NodeValue GetEntity(this Field field, IQueryable<NodeValue> query, int year, Quarter quarter)
         {
-            var hasYear = false;
-            var hasQuarter = false;
+            field.SetParameter(FieldType.Area, 0);
+            field.SetParameter(FieldType.Year, year);
+            field.SetParameter(FieldType.Quarter, (int)quarter);
+
             foreach (var parameter in field.Parameters)
             {
                 switch (parameter.Type)
@@ -112,32 +114,16 @@ namespace LoowooTech.Land.Zhoushan.Managers
                         query = query.Where(e => e.NodeID == parameter.Value);
                         break;
                     case FieldType.Quarter:
-                        if (parameter.Value > 0)
-                        {
-                            hasQuarter = true;
-                            query = query.Where(e => e.Quarter == (Quarter)parameter.Value);
-                        }
+                        query = query.Where(e => e.Quarter == (Quarter)parameter.Value);
                         break;
                     case FieldType.Type:
                     case FieldType.Value:
                         query = query.Where(e => e.TypeID == parameter.Value);
                         break;
                     case FieldType.Year:
-                        if (parameter.Value > 0)
-                        {
-                            hasYear = true;
                             query = query.Where(e => e.Year == parameter.Value);
-                        }
                         break;
                 }
-            }
-            if (!hasYear)
-            {
-                query = query.Where(e => e.Year == year);
-            }
-            if (!hasQuarter)
-            {
-                query = query.Where(e => e.Quarter == quarter);
             }
             return query.FirstOrDefault();
         }
@@ -169,7 +155,9 @@ namespace LoowooTech.Land.Zhoushan.Managers
             if (entity.Year == 0) entity.Year = year;
             if (entity.Quarter == 0) entity.Quarter = quarter;
 
-            entity.Value = double.Parse(field.Value);
+            double val = 0;
+            double.TryParse(field.Value, out val);
+            entity.Value = val;
         }
 
     }

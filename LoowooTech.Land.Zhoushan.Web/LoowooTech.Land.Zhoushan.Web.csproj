@@ -209,6 +209,7 @@
     <Content Include="Views\Excel\Import.cshtml" />
     <Content Include="Views\Form\Charts.cshtml" />
     <Content Include="Views\Excel\Export.cshtml" />
+    <Content Include="templates\政府储备土地情况.xlsx" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

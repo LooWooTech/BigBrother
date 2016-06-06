@@ -26,14 +26,19 @@ namespace LoowooTech.Land.Zhoushan.Common
         public int Colspan { get; set; }
 
         public object Value { get; set; }
-    }
 
-    public class ExcelHelper
-    {
-        private static ExcelCell ConvertToExcelCell(ICell cell)
+        public bool Cover(int row, int column)
         {
-            if (cell == null) return null;
-            var result = new ExcelCell();
+
+            return Row <= row && (Row + Rowspan - 1) >= row && (Column + Colspan - 1 >= column) && Column <= column;
+        }
+
+        /// <summary>
+        /// 计算Cell的rowspan和colspan
+        /// </summary>
+        /// <param name="list"></param>
+        public void ComputeSpace(ICell cell, List<ExcelCell> list)
+        {
             //如果是合并的单元格，则需要计算该单元格的rowspan和colspan
             if (cell.IsMergedCell && cell.CellType != CellType.Blank)
             {
@@ -43,7 +48,13 @@ namespace LoowooTech.Land.Zhoushan.Common
                     var c = cell.Row.GetCell(i);
                     if (c != null && c.IsMergedCell && c.CellType == CellType.Blank)
                     {
-                        result.Colspan++;
+                        //判断list中是否有Cell已经占用该单元格，如果占用，则不计算
+                        var t = list.FirstOrDefault(e => e.Cover(c.RowIndex, c.ColumnIndex));
+                        if (list.Any(e => e.Cover(c.RowIndex, c.ColumnIndex)))
+                        {
+                            break;
+                        }
+                        Colspan++;
                     }
                     else
                     {
@@ -59,7 +70,12 @@ namespace LoowooTech.Land.Zhoushan.Common
                         var c = row.GetCell(cell.ColumnIndex);
                         if (c != null && c.IsMergedCell && c.CellType == CellType.Blank)
                         {
-                            result.Rowspan++;
+                            //判断list中是否有Cell已经占用该单元格，如果占用，则不计算
+                            if (list.Any(e => e.Cover(c.RowIndex, c.ColumnIndex)))
+                            {
+                                break;
+                            }
+                            Rowspan++;
                         }
                         else
                         {
@@ -72,10 +88,24 @@ namespace LoowooTech.Land.Zhoushan.Common
                     }
                 }
             }
+        }
+    }
+
+    public class ExcelHelper
+    {
+        private static ExcelCell ConvertToExcelCell(ICell cell)
+        {
+            if (cell == null) return null;
+            var result = new ExcelCell();
             switch (cell.CellType)
             {
                 case CellType.Numeric:
                     result.Value = cell.NumericCellValue;
+                    break;
+                case CellType.Formula:
+                case CellType.Blank:
+                case CellType.Error:
+                case CellType.Unknown:
                     break;
                 default:
                     result.Value = cell.StringCellValue;
@@ -110,6 +140,7 @@ namespace LoowooTech.Land.Zhoushan.Common
                         continue;
                     }
                     var excelCell = ConvertToExcelCell(cell);
+                    excelCell.ComputeSpace(cell, list);
                     list.Add(excelCell);
                 }
             }

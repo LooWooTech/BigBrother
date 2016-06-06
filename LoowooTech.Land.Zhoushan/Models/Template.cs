@@ -18,13 +18,9 @@ namespace LoowooTech.Land.Zhoushan.Models
             var cells = ExcelHelper.ReadData(filePath);
             foreach (var cell in cells)
             {
-                if (string.IsNullOrEmpty(cell.Value.ToString()))
-                {
+                if (cell.Value == null)
                     continue;
-                }
-                var field = new Field(cell);
-                field.UpdateParameters(Fields);
-                Fields.Add(field);
+                AddFields(cell);
             }
             FilePath = filePath;
         }
@@ -54,11 +50,22 @@ namespace LoowooTech.Land.Zhoushan.Models
         {
             foreach (var cell in list)
             {
-                var field = Fields.FirstOrDefault(e => e.Cell.Row == cell.Row && e.Cell.Column == cell.Column);
-                if (field != null)
+                foreach (var field in Fields.Where(e => e.Cell.Row == cell.Row && e.Cell.Column == cell.Column))
                 {
                     cell.Value = field.Parameters.Count > 0 ? field.GetReplacedValue() : cell.Value;
                 }
+            }
+        }
+
+        private static Regex FieldRegex = new Regex(@"\{\w+(=\d+)?\}", RegexOptions.Compiled);
+
+        public void AddFields(ExcelCell cell)
+        {
+            foreach (Match m in FieldRegex.Matches(cell.Value.ToString()))
+            {
+                var field = new Field(m.Groups[0].Value, cell);
+                field.UpdateParameters(Fields);
+                Fields.Add(field);
             }
         }
     }
@@ -69,24 +76,15 @@ namespace LoowooTech.Land.Zhoushan.Models
         /// {Value=1 Node=1 Area=1 Quater=1}
         /// </summary>
         private static Regex CellValueRegex = new Regex(@"\w+(=\d+)?", RegexOptions.Compiled);
-        public Field(ExcelCell cell)
+
+        public Field(string template, ExcelCell cell)
         {
             Cell = cell;
             Parameters = new List<FieldParameter>();
-            var val = cell.Value.ToString();
-            var startIndex = val.IndexOf('{');
-            var endIndex = val.LastIndexOf('}');
-            if (startIndex > -1 && endIndex > -1)
+            Template = template;
+            foreach (Match m in CellValueRegex.Matches(Template))
             {
-                Template = val.Substring(startIndex, endIndex - startIndex + 1);
-                foreach (Match m in CellValueRegex.Matches(Template))
-                {
-                    Parameters.Add(new FieldParameter(m.Groups[0].Value));
-                }
-            }
-            else
-            {
-                Template = val;
+                Parameters.Add(new FieldParameter(m.Groups[0].Value));
             }
         }
 
@@ -129,7 +127,7 @@ namespace LoowooTech.Land.Zhoushan.Models
                     {
                         hasFind = true;
                     }
-                    Parameters.AddRange(f.Parameters);
+                    AddParameters(f.Parameters);
                 }
             }
             hasFind = false;
@@ -149,7 +147,38 @@ namespace LoowooTech.Land.Zhoushan.Models
                     {
                         hasFind = true;
                     }
-                    Parameters.AddRange(f.Parameters);
+                    AddParameters(f.Parameters);
+                }
+            }
+        }
+
+        internal void SetParameter(FieldType type, int value)
+        {
+            var p = Parameters.FirstOrDefault(e => e.Type == type);
+            if (p == null)
+            {
+                Parameters.Add(new FieldParameter(type, value));
+            }
+            else if (p.Value == 0)
+            {
+                p.Value = value;
+            }
+        }
+
+        private void AddParameters(List<FieldParameter> parameters)
+        {
+            //如果已存在的参数，则不再添加（以最下最右为主）
+            foreach (var p in parameters)
+            {
+                var p1 = Parameters.FirstOrDefault(e => e.Type == p.Type);
+                if (p1 != null)
+                {
+                    if (p.Value == 0 && p1.Value > 0)
+                        p.Value = p1.Value;
+                }
+                else
+                {
+                    Parameters.Add(p);
                 }
             }
         }
@@ -189,6 +218,11 @@ namespace LoowooTech.Land.Zhoushan.Models
 
     public class FieldParameter
     {
+        public FieldParameter(FieldType type, int value)
+        {
+
+        }
+
         public FieldParameter(string template)
         {
             var str = template.Split('=');

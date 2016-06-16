@@ -78,11 +78,6 @@ namespace LoowooTech.Land.Zhoushan.Web.Controllers
             return View();
         }
 
-        public ActionResult GetNodeValueTypes(int nodeId)
-        {
-            return JsonSuccessResult(Core.FormManager.GetNodeValueTypes(nodeId));
-        }
-
         public ActionResult NodeDropdown(int formId, int nodeId = 0)
         {
             ViewBag.NodeID = nodeId;

@@ -16,6 +16,17 @@ namespace LoowooTech.Land.Zhoushan.Models
         public int ID { get; set; }
 
         public string Name { get; set; }
-        
+
+        [Column("ValueTypes")]
+        public string ValueTypes { get; set; }
+
+        [NotMapped]
+        public int[] NodeValueTypes
+        {
+            get
+            {
+                return ValueTypes.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries).Select(str => int.Parse(str)).ToArray();
+            }
+        }
     }
 }

@@ -14,7 +14,7 @@ namespace LoowooTech.Land.Zhoushan.Common
             return JsonConvert.SerializeObject(obj);
         }
 
-        public static T ToObject<T>(string jsonString)
+        public static T ToObject<T>(this string jsonString)
         {
             return JsonConvert.DeserializeObject<T>(jsonString);
         }

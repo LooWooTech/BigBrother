@@ -19,16 +19,16 @@
         <span class="input-group-addon">选择条件</span>
         <div class="input-group-btn">
             @Html.Action("NodeDropdown", "Chart", new { formId = form.ID, nodeId = parameter.NodeID })
-            <select class="form-control" name="TypeId" id="ddl-typeId"></select>
+            @Html.Action("ValueTypeDropdown", "Node", new { ids = form.ValueTypes })
             @Html.Partial("_YearDropdown", parameter.Year)
             @Html.Partial("_QuarterDropdown", parameter.Quarter)
             @Html.Action("Dropdown", "Area", new { AreaID = parameter.AreaID })
             @Html.Partial("_RateTypeDropdown", parameter.RateType)
             <button type="submit" class="btn btn-primary"><i class="fa fa-bar-chart-o"></i> 统计</button>
-            <a class="btn btn-default" href="javascript:history.back()">
-                <i class="fa fa-chevron-left"></i> 返回
-            </a>
         </div>
+        &nbsp;<a class="btn btn-default" href="javascript:history.back()">
+            <i class="fa fa-chevron-left"></i> 返回
+        </a>
     </div>
 </form>
 <div id="panel-node">
@@ -42,17 +42,6 @@
 </div>
 <script>
     $(function () {
-        $("#form-filter select[name='NodeId']").change(function () {
-            var val = $(this).val();
-            $.request("/chart/GetNodeValueTypes?nodeid=" + val, null, function (json) {
-                var html = "";
-                $.each(json.data, function (k, v) {
-                    html += "<option value=\"" + v.ID + "\">" + v.Name + "</option>";
-                });
-                $("#ddl-typeId").html(html);
-            });
-        }).trigger("change");
-
         $("#form-filter").submit(function () {
             var data = $(this).serialize();
             var action = $(this).attr("action");

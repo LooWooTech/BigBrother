@@ -40,6 +40,7 @@ namespace LoowooTech.Land.Zhoushan.Managers
                     if(entity != null)
                     {
                         entity.Name = model.Name;
+                        entity.ValueTypes = model.ValueTypes;
                     }
                 }
                 db.SaveChanges();

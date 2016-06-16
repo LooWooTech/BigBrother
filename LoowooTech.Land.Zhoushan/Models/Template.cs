@@ -57,7 +57,7 @@ namespace LoowooTech.Land.Zhoushan.Models
             }
         }
 
-        private static Regex FieldRegex = new Regex(@"\{\w+(=\d+)?\}", RegexOptions.Compiled);
+        private static Regex FieldRegex = new Regex(@"\{(\w+(=\d+)?\s?)+\}", RegexOptions.Compiled);
 
         public void AddFields(ExcelCell cell)
         {
@@ -220,7 +220,8 @@ namespace LoowooTech.Land.Zhoushan.Models
     {
         public FieldParameter(FieldType type, int value)
         {
-
+            Type = type;
+            Value = value;
         }
 
         public FieldParameter(string template)

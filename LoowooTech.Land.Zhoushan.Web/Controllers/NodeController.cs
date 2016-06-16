@@ -1,4 +1,5 @@
-﻿using LoowooTech.Land.Zhoushan.Models;
+﻿using LoowooTech.Land.Zhoushan.Common;
+using LoowooTech.Land.Zhoushan.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -61,10 +62,11 @@ namespace LoowooTech.Land.Zhoushan.Web.Controllers
             return JsonSuccessResult();
         }
 
-        public ActionResult ValueTypeDropdown(int typeId = 0)
+        public ActionResult ValueTypeDropdown(string ids, int typeId = 0)
         {
+            ids = ids ?? string.Empty;
             ViewBag.TypeID = typeId;
-            ViewBag.List = Core.FormManager.GetNodeValueTypes();
+            ViewBag.List = Core.FormManager.GetNodeValueTypes(ids.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries).Select(str => int.Parse(str)).ToArray());
             return View();
         }
 
@@ -79,6 +81,39 @@ namespace LoowooTech.Land.Zhoushan.Web.Controllers
             ViewBag.Model = node;
             ViewBag.Parameter = parameter;
             return View();
+        }
+
+        [UserRoleFilter(UserRole.Writer)]
+        [HttpGet]
+        public ActionResult EditValues(int formId)
+        {
+            var form = Core.FormManager.GetForm(formId);
+            if (form == null)
+            {
+                throw new ArgumentException("参数错误，未找到该表单");
+            }
+            ViewBag.Form = form;
+            ViewBag.Nodes = Core.FormManager.GetNodeRoots(formId);
+            ViewBag.ValueTypes = Core.FormManager.GetNodeValueTypes(form.NodeValueTypes);
+            return View();
+        }
+
+        public ActionResult SaveValues(int formId,  string data)
+        {
+            var form = Core.FormManager.GetForm(formId);
+
+            var values = data.ToObject<List<NodeValue>>();
+
+            Core.FormManager.SaveNodeValues(values);
+
+            return JsonSuccessResult();
+        }
+
+        public ActionResult GetNodeValues(NodeValueParameter parameter)
+        {
+            var list = Core.FormManager.GetNodeValues(parameter);
+
+            return JsonSuccessResult(list);
         }
 
         [UserRoleFilter(UserRole.Writer)]

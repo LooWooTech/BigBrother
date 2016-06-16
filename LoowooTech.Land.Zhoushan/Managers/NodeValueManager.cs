@@ -45,6 +45,11 @@ namespace LoowooTech.Land.Zhoushan.Managers
         {
             using (var db = GetDbContext())
             {
+                if (parameter.FormID > 0 && parameter.NodeID==0 && (parameter.NodeIds == null || parameter.NodeIds.Length == 0))
+                {
+                    parameter.NodeIds = db.Nodes.Where(e => e.FormID == parameter.FormID).Select(e => e.ID).ToArray();
+                }
+
                 var query = db.NodeValues.AsQueryable();
 
                 if (parameter.NodeIds != null)
@@ -163,6 +168,14 @@ namespace LoowooTech.Land.Zhoushan.Managers
                     }
                 }
                 db.SaveChanges();
+            }
+        }
+
+        public void SaveNodeValues(List<NodeValue> values)
+        {
+            foreach (var val in values)
+            {
+                SaveNodeValue(val);
             }
         }
 

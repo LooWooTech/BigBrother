@@ -1,0 +1,22 @@
+﻿@model Node
+@{
+    var model = Model ?? new Node();
+    List<NodeValueType> types = ViewBag.ValueTypes;
+
+}
+<tr class="node-item" id="node-item-@(model.ID)">
+    <td class="node-level-@(model.Level)">
+        @(model.Name)
+    </td>
+    @foreach (var item in types)
+    {
+        <td>
+            <input type="text" class="node-value" id="node-value-@(item.ID)" nodeId="@(model.ID)" typeId="@(item.ID)" />
+        </td>
+    }
+</tr>
+@foreach (var child in model.Children)
+{
+    Html.RenderPartial("_NodeValueListItem", child);
+}
+

@@ -1,0 +1,106 @@
+﻿@{
+    Form form = ViewBag.Form;
+    List<Node> root = ViewBag.Nodes;
+    List<NodeValueType> types = ViewBag.ValueTypes;
+}
+<h3 class="page-header">
+    @(form.Name)-记录管理
+</h3>
+<form id="form-filter" action="/node/GetNodeValues" method="get" class="form-inline">
+    <input type="hidden" name="formId" value="@(form.ID)" />
+    <div class="input-group">
+        <span class="input-group-addon">选择条件</span>
+        <div class="input-group-btn">
+            @Html.Partial("_YearDropdown")
+            @Html.Partial("_QuarterDropdown")
+            @Html.Action("Dropdown", "Area")
+            <button type="submit" class="btn btn-primary" id="btn-load"><i class="fa fa-circle-o-notch"></i> 加载</button>
+        </div>
+
+        &nbsp;<button id="btn-submit" class="btn btn-success">
+            <i class="fa fa-save"></i> 保存
+        </button>
+        &nbsp;<a class="btn btn-default" href="javascript:history.back()">
+            <i class="fa fa-chevron-left"></i> 返回
+        </a>
+    </div>
+</form>
+
+<table class="table table-hover" id="list-node-values">
+    <thead>
+        <tr>
+            <th>
+                分类
+            </th>
+            @foreach (var item in types)
+            {
+                <th>@(item.Name)(@(item.Unit))</th>
+            }
+        </tr>
+    </thead>
+    @foreach (var node in root)
+    {
+        Html.RenderPartial("_NodeValueListItem", node);
+    }
+</table>
+<script>
+    $(function () {
+        $("#form-filter").submit(function () {
+            var data = $(this).serialize();
+            var action = $(this).attr("action");
+
+            $.request(action, data, function (json) {
+                $(".node-value").val('');
+                $.each(json.data, function (k, v) {
+                    updateNodeValue(v);
+                });
+            });
+            return false;
+        });
+
+        $("#btn-load").click();
+
+        function updateNodeValue(val) {
+            var rowId = "#node-item-" + val.NodeID;
+            var control = $("#node-value-" + val.TypeID, rowId)
+            control.val(val.Value || 0);
+            control.attr("valueId", val.ID);
+        }
+
+        $("#btn-submit").click(function () {
+            var data = [];
+            var year = $("select[name='Year']").eq(0).val();
+            var quarter = $("select[name='Quarter']").eq(0).val();
+            var area = $("select[name='areaId']").eq(0).val();
+            $("#list-node-values .node-value").each(function (k, v) {
+                var control = $(v);
+                var val = control.val();
+                if (!val) return;
+
+                var nodeId = control.attr("nodeId");
+                if (nodeId == 0) {
+                    return;
+                }
+                var typeId = control.attr("typeId");
+                if (typeId == 0) {
+                    return;
+                }
+                data.push({
+                    ID: control.attr("ValueID") || 0,
+                    Year: year,
+                    Quarter: quarter,
+                    AreaID: area,
+                    NodeID: nodeId,
+                    TypeID: typeId,
+                    Value: val
+                });
+
+            });
+
+            var json = JSON.stringify(data);
+            $.request("/node/SaveValues?formId=@(form.ID)", "data=" + encodeURIComponent(json), function () {
+                alert("保存成功");
+            });
+        });
+    });
+</script>

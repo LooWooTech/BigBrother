@@ -27,7 +27,10 @@
         <tr>
             <th style="width:60px;">ID</th>
             <th>报表名称</th>
-            <th style="width:250px;">操作</th>
+            <th style="width:100px;">统计报表</th>
+            <th style="width:100px;">分类管理</th>
+            <th style="width:100px;">数据管理</th>
+            <th style="width:150px;">操作</th>
         </tr>
     </thead>
     @foreach (var item in list)
@@ -36,8 +39,15 @@
             <td>@(item.ID)</td>
             <td><a href="/node/?formId=@(item.ID)">@(item.Name)</a></td>
             <td>
-                <a href="/chart/?formId=@(item.ID)" class="btn btn-success btn-xs" title="统计"><i class="fa fa-bar-chart"></i> 统计</a>
-                <a href="/node/?formId=@(item.ID)" class="btn btn-info btn-xs" title="统计"><i class="fa fa-list"></i> 分类</a>
+                <a href="/chart/?formId=@(item.ID)" class="btn btn-success btn-xs" title="统计"><i class="fa fa-bar-chart"></i> 查看报表</a>
+            </td>
+            <td>
+                <a href="/node/?formId=@(item.ID)" class="btn btn-info btn-xs" title="统计"><i class="fa fa-list"></i> 查看分类</a>
+            </td>
+            <td>
+                <a href="/node/editValues?formId=@(item.ID)" class="btn btn-primary btn-xs" title="添加/编辑记录"><i class="fa fa-database"></i> 录入数据</a>
+            </td>
+            <td>
                 @if (hasEditRight)
                 {
                     <a href="/form/edit?id=@(item.ID)" class="btn btn-default btn-xs" data-toggle="modal" data-target="#modal" title="编辑"><i class="fa fa-pencil"></i> 编辑</a>

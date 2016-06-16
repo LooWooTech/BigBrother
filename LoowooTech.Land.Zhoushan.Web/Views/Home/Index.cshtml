@@ -1,4 +1,36 @@
 ﻿@{
     Layout = "~/Views/Shared/_Layout.cshtml";
-    ViewBag.Title = "Home Page";
+    ViewBag.Title = "欢迎页";
+    UserRole role = ((LoowooTech.Land.Zhoushan.Web.Security.UserIdentity)ViewBag.CurrentIdentity).Role;
+}
+<h3 class="page-header">欢迎页</h3>
+<div class="col-lg-6">
+    <blockquote>
+        <p><i class="fa fa-pie-chart fa-2x text-info"></i>&nbsp;<a href="#/form/charts">统计报表</a></p>
+        <small>快捷查看各个表单历年来各季度统计结果</small>
+    </blockquote>
+</div>
+
+@if (role > UserRole.Reader)
+{
+    <div class="col-lg-6">
+        <blockquote>
+            <p><i class="fa fa-list-ol fa-2x text-info"></i>&nbsp;<a href="#/form">表单列表</a></p>
+            <small>维护表单和表单的分类，维护分类的各种统计条件下的记录</small>
+        </blockquote>
+    </div>
+
+    <div class="col-lg-6">
+        <blockquote>
+            <p><i class="fa fa-archive fa-2x text-info"></i>&nbsp;<a href="#/valuetype/">类型管理</a></p>
+            <small>维护分类记录的属性和单位。</small>
+        </blockquote>
+    </div>
+    <div class="col-lg-6">
+        <blockquote>
+            <p><i class="fa fa-area-chart fa-2x text-info"></i>&nbsp;<a href="#/area/">地区管理</a></p>
+            <small>维护地区数据</small>
+        </blockquote>
+    </div>
+
 }

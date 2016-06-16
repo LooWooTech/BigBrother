@@ -18,6 +18,8 @@ namespace LoowooTech.Land.Zhoushan.Models
             GetValueType = true;
         }
 
+        public int FormID { get; set; }
+
         public int NodeID { get; set; }
 
         public int Year { get; set; }

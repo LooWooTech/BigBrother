@@ -62,11 +62,21 @@ namespace LoowooTech.Land.Zhoushan.Web.Controllers
             return JsonSuccessResult();
         }
 
-        public ActionResult ValueTypeDropdown(string ids, int typeId = 0)
+        public ActionResult ValueTypeDropdown(string ids, int typeId = 0, int formId = 0)
         {
-            ids = ids ?? string.Empty;
+            int[] valueTypeIds = null;
+            if (formId > 0)
+            {
+                var form = Core.FormManager.GetForm(formId);
+                valueTypeIds = form.NodeValueTypes;
+            }
+            else
+            {
+                ids = ids ?? string.Empty;
+                valueTypeIds = ids.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries).Select(str => int.Parse(str)).ToArray();
+            }
             ViewBag.TypeID = typeId;
-            ViewBag.List = Core.FormManager.GetNodeValueTypes(ids.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries).Select(str => int.Parse(str)).ToArray());
+            ViewBag.List = Core.FormManager.GetNodeValueTypes(valueTypeIds);
             return View();
         }
 
@@ -98,7 +108,7 @@ namespace LoowooTech.Land.Zhoushan.Web.Controllers
             return View();
         }
 
-        public ActionResult SaveValues(int formId,  string data)
+        public ActionResult SaveValues(int formId, string data)
         {
             var form = Core.FormManager.GetForm(formId);
 
@@ -129,16 +139,19 @@ namespace LoowooTech.Land.Zhoushan.Web.Controllers
                 {
                     throw new ArgumentException("参数错误，没有找到该分类");
                 }
+                model = new NodeValue { NodeID = node.ID };
             }
             else
             {
                 model = Core.FormManager.GetNodeValue(valueId);
+                node = Core.FormManager.GetNode(model.NodeID);
             }
             if (node == null && model == null)
             {
                 throw new ArgumentException("参数错误");
             }
-            ViewBag.Model = model ?? new NodeValue { NodeID = node.ID };
+            ViewBag.Node = node;
+            ViewBag.Model = model;
             return View();
         }
 

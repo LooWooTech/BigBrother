@@ -13,6 +13,9 @@
 <h2 class="page-header">
     @(ViewBag.Title)
 </h2>
+<div id="loading" class="alert alert-warning">
+    正在计算，请稍等...
+</div>
 <form id="form-filter" action="/chart/" method="get" class="form-inline">
     <input type="hidden" name="formId" value="@(form.ID)" />
     <div class="input-group">
@@ -49,11 +52,33 @@
                 action = action + "?";
             }
             var href = action + "&" + data;
-            $("#panel-node").load("/chart/nodechart?" + data);
+
+
+            $("#loading").show();
+            var nodeChartCompleted = false;
+            var quarterChartCompleted = false;
+            var areaChartCompleted = false;
+
+            function hideLoading() {
+                if (nodeChartCompleted && quarterChartCompleted && areaChartCompleted) {
+                    $("#loading").hide();
+                }
+            }
+
+            $("#panel-node").load("/chart/nodechart?" + data, function () {
+                nodeChartCompleted = true;
+                hideLoading();
+            });
 
             var years = $("#ddl-years").val() || 3;
-            $("#panel-quarter").load("/chart/quarterchart?yearLength=" + years + "&" + data);
-            $("#panel-area").load("/chart/areachart?" + data);
+            $("#panel-quarter").load("/chart/quarterchart?yearLength=" + years + "&" + data, function () {
+                quarterChartCompleted = true;
+                hideLoading();
+            });
+            $("#panel-area").load("/chart/areachart?" + data, function () {
+                areaChartCompleted = true;
+                hideLoading();
+            });
             return false;
         });
 

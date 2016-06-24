@@ -25,7 +25,7 @@ namespace LoowooTech.Land.Zhoushan.Models
         {
             get
             {
-                return ValueTypes.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries).Select(str => int.Parse(str)).ToArray();
+                return (ValueTypes ?? string.Empty).Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries).Select(str => int.Parse(str)).ToArray();
             }
         }
     }

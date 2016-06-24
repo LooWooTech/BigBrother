@@ -207,15 +207,13 @@
         if (window.location.hash != hash) {
             window.location.hash = hash;
         }
-        else {
-            self.html("加载中...");
-            self.load(href, function (response, status, xhr) {
-                window.location.hash = "#" + href;
-                if (status == "error") {
-                    self.html("程序出错了");
-                }
-            });
-        }
+        self.html("加载中...");
+        self.load(href, function (response, status, xhr) {
+            window.location.hash = "#" + href;
+            if (status == "error") {
+                self.html("程序出错了");
+            }
+        });
     };
 
     $.loadMain = function (href) {

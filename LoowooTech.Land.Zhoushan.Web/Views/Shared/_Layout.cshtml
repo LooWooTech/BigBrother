@@ -69,60 +69,13 @@
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Administrator <span class="caret"></span></a>
                     <ul class="dropdown-menu" role="menu">
                         <li><a href="/user/editpassword" data-toggle="modal" data-target="#modal">修改密码</a></li>
-                        <li><a href="/user/logout">退出</a></li>
+                        <li><a href="/user/logout" data-target="#page">退出</a></li>
                     </ul>
                 </li>
             </ul>
 
         </div>
     </div>
-    @*<div class="sidebar sidebar-light" id="sidebar">
-            @if (role >= UserRole.Writer)
-            {
-                <div class="sidebar-heading"><i class="glyphicon glyphicon-cog"></i> 系统管理</div>
-                <ul class="sidebar-menu">
-                    @if (role == UserRole.Administrator)
-                    {
-                        <li>
-                            <a href="/user/">
-                                <i class="glyphicon glyphicon-user"></i> 用户管理
-                            </a>
-                        </li>
-                    }
-                    <li>
-                        <a href="/form/">
-                            <i class="glyphicon glyphicon-list-alt"></i> 表单管理
-                        </a>
-                    </li>
-                    <li>
-                        <a href="/area/">
-                            <i class="glyphicon glyphicon-map-marker"></i> 地区管理
-                        </a>
-                    </li>
-                    <li>
-                        <a href="/valuetype/">
-                            <i class="glyphicon glyphicon-book"></i> 记录类型管理
-                        </a>
-                    </li>
-                    <li>
-                        <a href="/form">
-                            <i class="glyphicon glyphicon-edit"></i> 填报数据
-                        </a>
-                    </li>
-                </ul>
-            }
-            else
-            {
-                <div class="sidebar-heading"><i class="glyphicon glyphicon-cog"></i> 统计报表</div>
-                <ul class="sidebar-menu">
-                    <li>
-                        <a href="/form">
-                            <i class="fa fa-line-chart"></i> 报表列表
-                        </a>
-                    </li>
-                </ul>
-            }
-        </div>*@
     <div id="main">
         @RenderBody()
     </div>
@@ -147,10 +100,6 @@
             $("#sidebar li").removeClass("active");
             var parent = $(this).parent();
             parent.addClass("active");
-        });
-
-        $(window).on('hashchange', function () {
-            $.loadMain(window.location.hash.substring(1));
         });
 
         $.loadMain(window.location.hash);

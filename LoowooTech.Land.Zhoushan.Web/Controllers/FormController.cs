@@ -21,6 +21,12 @@ namespace LoowooTech.Land.Zhoushan.Web.Controllers
             return View();
         }
 
+        public ActionResult Write()
+        {
+            ViewBag.Forms = Core.FormManager.GetForms();
+            return View();
+        }
+
         [UserRoleFilter(UserRole.Writer)]
         [HttpGet]
         public ActionResult Edit(int id = 0)

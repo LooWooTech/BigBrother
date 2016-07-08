@@ -1,4 +1,32 @@
 ﻿(function () {
+    String.prototype.trimStart = function (trimStr) {
+        if (!trimStr) { return this; }
+        var temp = this;
+        while (true) {
+            if (temp.substr(0, trimStr.length) != trimStr) {
+                break;
+            }
+            temp = temp.substr(trimStr.length);
+        }
+        return temp;
+    };
+    String.prototype.trimEnd = function (trimStr) {
+        if (!trimStr) { return this; }
+        var temp = this;
+        while (true) {
+            if (temp.substr(temp.length - trimStr.length, trimStr.length) != trimStr) {
+                break;
+            }
+            temp = temp.substr(0, temp.length - trimStr.length);
+        }
+        return temp;
+    };
+    String.prototype.trim = function (trimStr) {
+        var temp = trimStr;
+        if (!trimStr) { temp = " "; }
+        return this.trimStart(temp).trimEnd(temp);
+    };
+
     $.fn.setUpload = function (uploadUrl, callback, beforeUpload) {
         var url = uploadUrl;
         if (typeof (uploadUrl) == "function") {
@@ -165,18 +193,24 @@
 
         $.ajax({
             type: options.data ? "POST" : "GET",
-            dataType: "json",
+            dataType: "text",
             global: options.global == undefined,
             url: options.url,
-            data: options.data
-        }).done(function (json, statusText, xhr) {
-            if (options.success) {
-                options.success(json, statusText, xhr);
+            data: options.data,
+            success: function (responseText, statusText, xhr) {
+                var json = {};
+                if (responseText) {
+                    json = $.parseJSON(responseText);
+                }
+                if (options.success) {
+                    options.success(json, statusText, xhr);
+                }
             }
         }).fail(function (xhr) {
             try {
+                var data = {};
                 if (xhr.responseText) {
-                    var data = eval("(" + xhr.responseText + ")");
+                    data = $.parseJSON(xhr.responseText);
                     if (options.error) {
                         options.error(data);
                     }
@@ -184,6 +218,31 @@
             } catch (err) {
                 alert(err);
             }
+        });
+    };
+
+    $.fn.setForm = function (options) {
+        $(this).submit(function () {
+            switch (typeof (options)) {
+                case "string":
+                    options = { url: options };
+                    break;
+                case "function":
+                    options = { success: options };
+                    break;
+                default:
+                    options = options || {};
+                    break;
+            }
+
+            if (options.validate && !options.validate()) {
+                return false;
+            }
+
+            options.url = $(this).attr("action");
+            options.data = $(this).serializeObject();
+            $.request(options);
+            return false;
         });
     };
 
@@ -197,23 +256,43 @@
 
     $.fn.loadUrl = function (href) {
         var self = $(this);
-        href = (href || self.attr("href") || "").replace(/#/g, "");
+        href = href || self.attr("href") || "";
+        if (href && href[0] == "#") {
+            href = href.substring(1);
+        }
         if (!href) {
             return false;
         }
-        self.attr("href", href);
+        var selfId = "#" + self.attr("id");
+        window.location.history[href] = selfId;
 
+        self.attr("href", href);
         var hash = "#" + href;
-        if (window.location.hash != hash) {
+        if (window.location.hash.trimEnd('/').toString() != hash.trimEnd('/').toString()) {
             window.location.hash = hash;
+            return;
         }
-        self.html("加载中...");
+
         self.load(href, function (response, status, xhr) {
             window.location.hash = "#" + href;
             if (status == "error") {
                 self.html("程序出错了");
+            } else {
+                try {
+                    var target = $(response).filter(selfId);
+                    if (target.length == 1) {
+                        self.html(target.html());
+                    }
+                } catch (ex) {
+                }
             }
         });
+    };
+
+    $.fn.reload = function (href) {
+        var self = $(this);
+        href = href || self.attr("href") || "";
+        self.loadUrl(href);
     };
 
     $.loadMain = function (href) {

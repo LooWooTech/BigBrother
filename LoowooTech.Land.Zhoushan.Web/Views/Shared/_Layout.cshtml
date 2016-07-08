@@ -25,7 +25,7 @@
 <body class="layout-content">
     <div class="navbar navbar-inverse navbar-fixed-top">
         <div class="navbar-header">
-            <a href="/" class="navbar-brand" data-target="#page"><i class="fa fa-line-chart"></i> 舟山国土资源局统计季报</a>
+            <a class="navbar-brand" data-target="#page"><i class="fa fa-line-chart"></i> 舟山国土资源局统计季报</a>
             <button class="navbar-toggle" type="button" data-toggle="collapse" data-target="#navbar-main">
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
@@ -34,20 +34,19 @@
         </div>
         <div class="navbar-collapse collapse" id="navbar-main">
             <ul class="nav navbar-nav">
+                <li><a href="/"><i class="fa fa-home"></i> 首页</a></li>
                 <li><a href="/form/charts"><i class="fa fa-pie-chart"></i> 统计报表</a></li>
-                @if (role == UserRole.Administrator)
-                {
-                    <li class="dropdown">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-user"></i> 用户管理 <span class="caret"></span></a>
-                        <ul class="dropdown-menu" role="menu">
-                            <li><a href="/user">用户列表</a></li>
-                            <li><a href="/user/edit" data-toggle="modal" data-target="#modal">添加用户</a></li>
-                        </ul>
-                    </li>
-                }
+                <li><a href="/excel/export" data-toggle="modal" data-target="#modal"><i class="fa fa-share"></i> 导出报告</a></li>
                 @if (role >= UserRole.Writer)
                 {
                     <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-pencil-square-o"></i> 录入数据 <span class="caret"></span></a>
+                        <ul class="dropdown-menu" role="menu">
+                            <li><a href="/form/write" data-toggle="modal" data-target="#modal">手动录入</a></li>
+                            <li><a href="/excel/import" data-toggle="modal" data-target="#modal">导入Excel</a></li>
+                        </ul>
+                    </li>
+                   <li class="dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-files-o"></i> 表单管理 <span class="caret"></span></a>
                         <ul class="dropdown-menu" role="menu">
                             <li><a href="/form">表单列表</a></li>
@@ -60,6 +59,16 @@
                             <li><a href="/area/">地区管理</a></li>
                             <li class="divider"></li>
                             <li><a href="/valuetype/">单位类型管理</a></li>
+                        </ul>
+                    </li>
+                }
+                @if (role == UserRole.Administrator)
+                {
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-user"></i> 用户管理 <span class="caret"></span></a>
+                        <ul class="dropdown-menu" role="menu">
+                            <li><a href="/user">用户列表</a></li>
+                            <li><a href="/user/edit" data-toggle="modal" data-target="#modal">添加用户</a></li>
                         </ul>
                     </li>
                 }
@@ -102,29 +111,65 @@
             parent.addClass("active");
         });
 
+        window.location.history = {};
+        $(window).on('hashchange', function () {
+            //程序需要记录上一次的loadUrl使用的targetId
+            var href = window.location.hash.substring(1);
+            if (href) {
+                var targetId = window.location.history[href];
+                if (targetId) {
+                    $(targetId).loadUrl(href);
+                }
+            } else {
+                $("#body").loadUrl("/");
+            }
+        });
+
         $.loadMain(window.location.hash);
 
         $(document).on("click", "a", function () {
-            var targetId = $(this).attr("data-target") || "#main";
-            var href = $(this).attr("href");
-            if (href.indexOf("javascript:") > -1) {
+            var self = $(this);
+            var targetId = self.attr("data-target") || "#main";
+            var href = self.attr("href");
+            //如果是空连接，不处理
+            if (!href || href == "#") {
                 return;
             }
-            //如果是弹窗放行
-            if (targetId == "#modal") {
+
+            //如果是javascript连接，则不处理
+            if (href.indexOf("javascript:") == 0) {
                 return;
             }
-            //如果是删除，执行删除询问
-            if (targetId == "#delete") {
-                if (confirm("你确定要删除该记录吗？")) {
-                    $.request(href);
+
+            //如果是bootstrap的modal弹窗，则不做处理
+            if (self.attr("data-toggle") == "modal") {
+                return;
+            }
+
+            if (self.hasClass("btn-delete") || targetId == "#delete") {
+                if (confirm("你确定要删除这条记录吗？")) {
+                    $.request(href, function () {
+                        $("#main").reload();
+                    });
                 }
                 return false;
             }
-            if (targetId == "#page") {
-                return;
+
+            var parent_parent = self.parent().parent();
+            //如果是分页链接，如果没有指定targetId 则默认为 #main
+            if (parent_parent.hasClass("sidebar-menu")) {
+                //如果是左侧菜单连接，则更换链接的背景色
+                $("#sidebar li").removeClass("active");
+                var parent = self.parent();
+                parent.addClass("active");
             }
-            if (targetId == "#javascript") {
+            else if (parent_parent.hasClass("dropdown-menu")) {
+                //如果是下拉菜单，则隐藏菜单
+                parent_parent.parent().removeClass("open");
+            }
+
+            //如果没有指定targetId，则不处理
+            if (!targetId) {
                 return;
             }
 

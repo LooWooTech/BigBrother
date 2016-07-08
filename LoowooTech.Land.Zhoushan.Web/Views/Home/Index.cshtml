@@ -1,5 +1,8 @@
 ﻿@{
-    Layout = "~/Views/Shared/_Layout.cshtml";
+    if (!IsAjax)
+    {
+        Layout = "~/Views/Shared/_Layout.cshtml";
+    }
     ViewBag.Title = "欢迎页";
     UserRole role = ((LoowooTech.Land.Zhoushan.Web.Security.UserIdentity)ViewBag.CurrentIdentity).Role;
 }

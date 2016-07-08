@@ -3,61 +3,58 @@
     Form form = ViewBag.Form;
     List<Form> forms = ViewBag.Forms;
 }
-<div class="panel panel-default">
-    <div class="panel-heading">
-        <h3 class="panel-title"><i class="fa fa-download"></i>@(ViewBag.Title)</h3>
+<form id="form-import" action="/excel/import" method="post" class="form-horizontal">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title"><i class="fa fa-download"></i> @(ViewBag.Title)</h4>
     </div>
-    <div class="panel-body">
-        <form id="form-import" action="/excel/import" method="post" class="form-horizontal">
-            <div class="modal-body">
-                @if (form == null)
-                {
-                    <div class="form-group">
-                        <label for="Type" class="control-label col-lg-3">选择表单</label>
-                        <div class="col-lg-8">
-                            <select class="form-control" name="formId">
-                                <option value="0">选择表单</option>
-                                @foreach (var item in forms)
-                                {
-                                    <option value="@(item.ID)">@(item.Name)</option>
-                                }
-                            </select>
-                        </div>
-                    </div>
-                }
-                else
-                {
-                    <input type="hidden" name="FormId" value="@(form.ID)" />
-                }
-                <div class="form-group">
-                    <label for="Type" class="control-label col-lg-3">选择年份</label>
-                    <div class="col-lg-8">
-                        @Html.Partial("_YearDropdown")
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label for="Type" class="control-label col-lg-3">选择季度</label>
-                    <div class="col-lg-8">
-                        @Html.Partial("_QuarterDropdown")
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label for="Type" class="control-label col-lg-3">选择Excel</label>
-                    <div class="col-lg-8">
-                        <input type="file" id="file1" name="file" class="form-control" />
-                        <span class="help-block" id="span-file"></span>
-                        <input type="hidden" name="filePath" id="hide-file" />
-                    </div>
+    <div class="modal-body">
+        @if (form == null)
+        {
+            <div class="form-group">
+                <label for="Type" class="control-label col-lg-3">选择表单</label>
+                <div class="col-lg-8">
+                    <select class="form-control" name="formId">
+                        <option value="0">选择表单</option>
+                        @foreach (var item in forms)
+                        {
+                            <option value="@(item.ID)">@(item.Name)</option>
+                        }
+                    </select>
                 </div>
             </div>
-            <div class="modal-footer">
-                <div class="col-lg-8 col-lg-offset-3">
-                    <button type="submit" id="" class="btn btn-primary"><i class="glyphicon glyphicon-ok"></i> 确定</button>
-                </div>
+        }
+        else
+        {
+            <input type="hidden" name="FormId" value="@(form.ID)" />
+        }
+        <div class="form-group">
+            <label for="Type" class="control-label col-lg-3">选择年份</label>
+            <div class="col-lg-8">
+                @Html.Partial("_YearDropdown")
             </div>
-        </form>
+        </div>
+        <div class="form-group">
+            <label for="Type" class="control-label col-lg-3">选择季度</label>
+            <div class="col-lg-8">
+                @Html.Partial("_QuarterDropdown")
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="Type" class="control-label col-lg-3">选择Excel</label>
+            <div class="col-lg-8">
+                <input type="file" id="file1" name="file" class="form-control" />
+                <span class="help-block" id="span-file"></span>
+                <input type="hidden" name="filePath" id="hide-file" />
+            </div>
+        </div>
     </div>
-</div>
+    <div class="modal-footer">
+        <div class="col-lg-8 col-lg-offset-3">
+            <button type="submit" id="" class="btn btn-primary"><i class="glyphicon glyphicon-ok"></i> 确定</button>
+        </div>
+    </div>
+</form>
 <script>
     $(function () {
         $("#file1").setUpload("/excel/upload", function (json) {

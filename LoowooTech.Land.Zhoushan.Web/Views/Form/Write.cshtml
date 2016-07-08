@@ -1,0 +1,44 @@
+﻿@{
+    ViewBag.Title = "选择表单";
+    List<Form> forms = ViewBag.Forms;
+}
+<form id="form-write" method="post" class="form-horizontal">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title"><i class="fa fa-pencil-square-o"></i> @(ViewBag.Title)</h4>
+    </div>
+    <div class="modal-body">
+        <div class="form-group">
+            <label for="Type" class="control-label col-lg-3">选择表单</label>
+            <div class="col-lg-8">
+                <select class="form-control" name="formId" id="control-form">
+                    <option value="0">选择表单</option>
+                    @foreach (var item in forms)
+                    {
+                        <option value="@(item.ID)">@(item.Name)</option>
+                    }
+                </select>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <div class="col-lg-8 col-lg-offset-3">
+            <button type="submit" id="" class="btn btn-primary"><i class="glyphicon glyphicon-ok"></i> 确定</button>
+        </div>
+    </div>
+</form>
+<script>
+    $(function () {
+        $("#form-write").submit(function () {
+            var formId = $("#control-form").val();
+            if (formId == 0) {
+                alert("请选择表单");
+                return false;
+            }
+            $.closeWindow();
+            $("#main").loadUrl("/node/editvalues?formId=" + formId);
+            return false;
+        });
+    });
+</script>
+

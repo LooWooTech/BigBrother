@@ -3,34 +3,31 @@
     var isAdd = model.ID == 0;
     ViewBag.Title = isAdd ? "添加类型" : "修改类型";
 }
-<div class="panel panel-default">
-    <div class="panel-heading">
-        <h3 class="panel-title"><i class="glyphicon glyphicon-@(isAdd?"plus":"pencil")"></i> @(model.ID == 0 ? "添加" : "修改")类型</h3>
+<form id="form-type" action="/ValueType/edit?id=@(model.ID)" method="post" class="form-horizontal">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title"><i class="glyphicon glyphicon-@(isAdd?"plus":"pencil")"></i> @(model.ID == 0 ? "添加" : "修改")类型</h4>
     </div>
-    <div class="panel-body">
-        <form id="form-type" action="/ValueType/edit?id=@(model.ID)" method="post" class="form-horizontal">
-            <div class="modal-body">
-                <div class="form-group">
-                    <label for="Brand" class="control-label col-lg-3">类型名称</label>
-                    <div class="col-lg-8">
-                        <input type="text" name="name" class="form-control" value="@(model.Name)" />
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label for="Brand" class="control-label col-lg-3">类型单位</label>
-                    <div class="col-lg-8">
-                        <input type="text" name="unit" class="form-control" value="@(model.Unit)" />
-                    </div>
-                </div>
+    <div class="modal-body">
+        <div class="form-group">
+            <label for="Brand" class="control-label col-lg-3">类型名称</label>
+            <div class="col-lg-8">
+                <input type="text" name="name" class="form-control" value="@(model.Name)" />
             </div>
-            <div class="modal-footer">
-                <div class="col-lg-8 col-lg-offset-3">
-                    <button type="submit" class="btn btn-primary"><i class="glyphicon glyphicon-ok"></i> 确定</button>
-                </div>
+        </div>
+        <div class="form-group">
+            <label for="Brand" class="control-label col-lg-3">类型单位</label>
+            <div class="col-lg-8">
+                <input type="text" name="unit" class="form-control" value="@(model.Unit)" />
             </div>
-        </form>
+        </div>
     </div>
-</div>
+    <div class="modal-footer">
+        <div class="col-lg-8 col-lg-offset-3">
+            <button type="submit" class="btn btn-primary"><i class="glyphicon glyphicon-ok"></i> 确定</button>
+        </div>
+    </div>
+</form>
 <script>
     $(function () {
         $("#form-type").registerSubmit(function () {

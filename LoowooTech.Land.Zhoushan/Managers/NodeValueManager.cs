@@ -41,11 +41,22 @@ namespace LoowooTech.Land.Zhoushan.Managers
             }
         }
 
+        public void DeleteNodeValues(int formId, int year, Quarter quarter)
+        {
+            using (var db = GetDbContext())
+            {
+                var nodeIds = db.Nodes.Where(e => e.FormID == formId).Select(e => e.ID).ToArray();
+                var query = db.NodeValues.Where(e => nodeIds.Contains(e.NodeID) && e.Year == year && e.Quarter == quarter);
+                db.NodeValues.RemoveRange(query);
+                db.SaveChanges();
+            }
+        }
+
         public List<NodeValue> GetNodeValues(NodeValueParameter parameter)
         {
             using (var db = GetDbContext())
             {
-                if (parameter.FormID > 0 && parameter.NodeID==0 && (parameter.NodeIds == null || parameter.NodeIds.Length == 0))
+                if (parameter.FormID > 0 && parameter.NodeID == 0 && (parameter.NodeIds == null || parameter.NodeIds.Length == 0))
                 {
                     parameter.NodeIds = db.Nodes.Where(e => e.FormID == parameter.FormID).Select(e => e.ID).ToArray();
                 }

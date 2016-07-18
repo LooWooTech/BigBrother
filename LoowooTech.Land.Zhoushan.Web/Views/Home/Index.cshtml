@@ -9,7 +9,7 @@
 <h3 class="page-header">欢迎页</h3>
 <div class="col-lg-6">
     <blockquote>
-        <p><i class="fa fa-pie-chart fa-2x text-info"></i>&nbsp;<a href="#/form/charts">统计报表</a></p>
+        <p><i class="fa fa-pie-chart fa-2x text-info"></i>&nbsp;<a href="/form/charts">统计报告</a></p>
         <small>快捷查看各个表单历年来各季度统计结果</small>
     </blockquote>
 </div>
@@ -18,21 +18,25 @@
 {
     <div class="col-lg-6">
         <blockquote>
-            <p><i class="fa fa-list-ol fa-2x text-info"></i>&nbsp;<a href="#/form">表单列表</a></p>
-            <small>维护表单和表单的分类，维护分类的各种统计条件下的记录</small>
+            <p><i class="fa fa-mail-forward fa-2x text-info"></i>&nbsp;<a href="/excel/export" data-toggle="modal" data-target="#modal">报告导出</a></p>
+            <small>选择具体的表单和日期，导出相应的报告</small>
         </blockquote>
     </div>
 
     <div class="col-lg-6">
         <blockquote>
-            <p><i class="fa fa-archive fa-2x text-info"></i>&nbsp;<a href="#/valuetype/">类型管理</a></p>
-            <small>维护分类记录的属性和单位。</small>
+            <p><i class="fa fa-download fa-2x text-info"></i>&nbsp;<a href="#">数据导入</a></p>
+            <small>可以<a href="/form/write" data-toggle="modal" data-target="#modal">手动录入表单</a>数据，也可以<a href="/excel/import" data-toggle="modal" data-target="#modal">导入Excel数据</a>。</small>
         </blockquote>
     </div>
     <div class="col-lg-6">
         <blockquote>
-            <p><i class="fa fa-area-chart fa-2x text-info"></i>&nbsp;<a href="#/area/">地区管理</a></p>
-            <small>维护地区数据</small>
+            <p><i class="fa fa-gear fa-2x text-info"></i>&nbsp;<a href="#">系统维护</a></p>
+            <small>
+                维护<a href="/form">表单列表</a>，
+                <a href="/valuetype">数据单位</a>，
+                <a href="/area">地区管理</a>
+            </small>
         </blockquote>
     </div>
 

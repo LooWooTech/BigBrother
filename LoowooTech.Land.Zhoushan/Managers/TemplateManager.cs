@@ -43,7 +43,7 @@ namespace LoowooTech.Land.Zhoushan.Managers
             }
         }
 
-        public List<ExcelCell> WriteDbDataToExcel(Form form, int year, Quarter quarter, Template template)
+        public List<ExcelCell> WriteDbDataToExcel(Form form, int year, Quarter[] quarters, Template template)
         {
             using (var db = GetDbContext())
             {
@@ -69,7 +69,16 @@ namespace LoowooTech.Land.Zhoushan.Managers
                                 field.Value = node == null ? "未知分类" : node.Name;
                                 break;
                             case FieldType.Quarter:
-                                field.Value = (firstParameter.Value == 0 ? (int)quarter : firstParameter.Value).ToString();
+                                {
+                                    if (quarters.Length == 1)
+                                    {
+                                        field.Value = (firstParameter.Value == 0 ? (int)quarters[0] : firstParameter.Value).ToString();
+                                    }
+                                    else
+                                    {
+                                        field.Value = string.Join(",", quarters.Select(e => (int)e));
+                                    }
+                                }
                                 break;
                             case FieldType.Type:
                                 var valueType = Core.FormManager.GetNodeValueType(firstParameter.Value);
@@ -79,10 +88,16 @@ namespace LoowooTech.Land.Zhoushan.Managers
                                 field.Value = firstParameter.Value == 0 ? year.ToString() : firstParameter.Value.ToString();
                                 break;
                             case FieldType.Value:
+                                {
+                                    var entities = field.GetEntities(db.NodeValues.AsQueryable(), year, quarters);
+                                    field.Value = entities.Select(e=>e.Value).DefaultIfEmpty(0).Sum().ToString("f2");
+                                }
+                                break;
                             case FieldType.RateValue:
-                                var query = db.NodeValues.AsQueryable();
-                                var entity = field.GetEntity(query, year, quarter) ?? new NodeValue();
-                                field.Value = (firstParameter.Type == FieldType.Value ? entity.Value : entity.RateValue).ToString("f2");
+                                {
+                                    var entities = field.GetEntities(db.NodeValues.AsQueryable(), year, quarters);
+                                    field.Value = entities.Select(e => e.RateValue).DefaultIfEmpty(0).Sum().ToString("f2");
+                                }
                                 break;
                         }
                     }
@@ -97,6 +112,41 @@ namespace LoowooTech.Land.Zhoushan.Managers
 
     internal static class FieldExtension
     {
+        public static List<NodeValue> GetEntities(this Field field, IQueryable<NodeValue> query, int year, Quarter[] quarters)
+        {
+            field.SetParameter(FieldType.Area, 0);
+            field.SetParameter(FieldType.Year, year);
+            foreach (var parameter in field.Parameters)
+            {
+                switch (parameter.Type)
+                {
+                    case FieldType.Area:
+                        query = query.Where(e => e.AreaID == parameter.Value);
+                        break;
+                    case FieldType.Node:
+                        query = query.Where(e => e.NodeID == parameter.Value);
+                        break;
+                    case FieldType.Quarter:
+                        if (parameter.Value > 0)
+                        {
+                            query = query.Where(e => e.Quarter == (Quarter)parameter.Value);
+                        }
+                        break;
+                    case FieldType.Type:
+                    case FieldType.Value:
+                        query = query.Where(e => e.TypeID == parameter.Value);
+                        break;
+                    case FieldType.Year:
+                        if (parameter.Value > 0)
+                        {
+                            query = query.Where(e => e.Year == parameter.Value);
+                        }
+                        break;
+                }
+            }
+            return query.Where(e => quarters.Contains(e.Quarter)).ToList();
+        }
+
         public static NodeValue GetEntity(this Field field, IQueryable<NodeValue> query, int year, Quarter quarter)
         {
             field.SetParameter(FieldType.Area, 0);
@@ -121,7 +171,7 @@ namespace LoowooTech.Land.Zhoushan.Managers
                         query = query.Where(e => e.TypeID == parameter.Value);
                         break;
                     case FieldType.Year:
-                            query = query.Where(e => e.Year == parameter.Value);
+                        query = query.Where(e => e.Year == parameter.Value);
                         break;
                 }
             }

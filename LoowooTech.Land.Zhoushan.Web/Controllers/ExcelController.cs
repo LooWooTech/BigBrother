@@ -28,16 +28,20 @@ namespace LoowooTech.Land.Zhoushan.Web.Controllers
         }
 
         [HttpPost]
-        public ActionResult Import(int formId, int year, Quarter quarter, string filePath)
+        public ActionResult Import(int formId, int year, Quarter quarter, string filePath, string templateName)
         {
             var form = Core.FormManager.GetForm(formId);
             if (form == null)
             {
                 throw new ArgumentException("没有找到该表单");
             }
-            var template = new Template(form.Name);
+
+            //Core.FormManager.DeleteNodeValues(formId, year, quarter);
+
+            var template = new Template(templateName);
 
             var excelData = ExcelHelper.ReadData(filePath);
+
 
             Core.TemplateManager.WriteExcelDataToDb(year, quarter, excelData, template);
 
@@ -74,20 +78,20 @@ namespace LoowooTech.Land.Zhoushan.Web.Controllers
         }
 
         [HttpPost]
-        public void Export(int formId, int year, Quarter quarter)
+        public void Export(int formId, int year, Quarter[] quarters, string templateName)
         {
             var form = Core.FormManager.GetForm(formId);
             if (form == null)
             {
                 throw new ArgumentException("请选择一个报表");
             }
-            var template = new Template(form.Name);
+            var template = new Template(templateName);
 
-            var excelData = Core.TemplateManager.WriteDbDataToExcel(form, year, quarter, template);
+            var excelData = Core.TemplateManager.WriteDbDataToExcel(form, year, quarters, template);
 
             using (var stream = ExcelHelper.WriteData(template.FilePath, excelData))
             {
-                var fileName = form.Name + "-" + year + "年" + quarter.GetDescription() + "报告.xlsx";
+                var fileName = form.Name + "-" + year + "年" + string.Join("-", (quarters.Select(e => (int)e))) + "季度报告.xlsx";
                 Response.ContentType = "application/vnd.ms-excel;charset=UTF-8";
                 Response.AddHeader("Content-Disposition", string.Format("attachment;filename={0}", HttpUtility.UrlEncode(fileName)));
                 Response.BinaryWrite(((MemoryStream)stream).GetBuffer());

@@ -28,5 +28,32 @@ namespace LoowooTech.Land.Zhoushan.Models
                 return (ValueTypes ?? string.Empty).Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries).Select(str => int.Parse(str)).ToArray();
             }
         }
+
+        private string _importTemplate;
+
+        public string ImportTemplate
+        {
+            get
+            {
+                return _importTemplate = _importTemplate ?? Name;
+            }
+            set
+            {
+                _importTemplate = value;
+            }
+        }
+
+        private string _exportTemplate;
+        public string ExportTemplate
+        {
+            get
+            {
+                return _exportTemplate = _exportTemplate ?? Name;
+            }
+            set
+            {
+                _exportTemplate = value;
+            }
+        }
     }
 }

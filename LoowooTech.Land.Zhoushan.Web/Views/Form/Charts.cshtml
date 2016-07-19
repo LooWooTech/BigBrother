@@ -1,34 +1,41 @@
 ﻿@{
-    List<Form> forms = ViewBag.Forms;
+    Dictionary<Form, int[]> data = ViewBag.Data;
+    var currentYear = DateTime.Now.Year;
+    var currentQuarter = DateTime.Now.GetQuarter();
 }
-<table class="table table-hover">
+<table class="table">
     <thead>
         <tr>
-            <th>表单名称</th>
+            <th style="width:300px;">表单名称</th>
             <th>时段</th>
         </tr>
     </thead>
-    @foreach (var form in forms)
+    @foreach (var kv in data)
     {
-        var year = DateTime.Now.Year;
-        var quarter = DateTime.Now.GetQuarter() - 1;
+        var form = kv.Key;
+        var years = kv.Value;
+
         <tr>
-            <td><a href="/chart/?formId=@(form.ID)">@(form.Name)</a></td>
+            <td>@(form.Name)</td>
             <td>
-                @for (var y = year - 2; y <= year; y++)
-                {
-                    for (var q = 1; q <= 4; q++)
+                    @foreach (var year in years.OrderByDescending(y => y))
                     {
-                        if (y == year && q > quarter)
-                        {
-                            break;
-                        }
-                        var href = "/chart/?formId=" + form.ID + "&year=" + y + "&quarter=" + q;
-                        <a href="@(href)">
-                            @(y)年@(q)季度
-                        </a>@:&nbsp;&nbsp;
+                        <div class="col-lg-12" style="margin:5px;">
+                            @for (var quarter = 4; quarter > 0; quarter--)
+                            {
+                                if (currentYear == year && quarter > currentQuarter)
+                                {
+                                    continue;
+                                }
+                                var href = "/chart/?formId=" + form.ID + "&year=" + year + "&quarter=" + quarter;
+                                <div class="col-lg-3">
+                                    <a href="@(href)" class="btn btn-default btn-sm">
+                                        @(year)年@(quarter)季度
+                                    </a>
+                                </div>
+                            }
+                        </div>
                     }
-                }
             </td>
         </tr>
     }

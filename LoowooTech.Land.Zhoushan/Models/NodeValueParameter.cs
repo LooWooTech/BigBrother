@@ -16,6 +16,7 @@ namespace LoowooTech.Land.Zhoushan.Models
             AreaID = 0;
             GetArea = true;
             GetValueType = true;
+            Quarters = new Quarter[0];
         }
 
         public int FormID { get; set; }

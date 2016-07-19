@@ -22,6 +22,23 @@ namespace LoowooTech.Land.Zhoushan.Managers
             }
         }
 
+        public int[] GetNodeIds(int formId)
+        {
+            using (var db = GetDbContext())
+            {
+                return db.Nodes.Where(e => e.FormID == formId).Select(e => e.ID).ToArray();
+            }
+        }
+
+        public int[] GetFormYears(int formId)
+        {
+            using (var db = GetDbContext())
+            {
+                var nodeIds = GetNodeIds(formId);
+                return db.NodeValues.Where(e => nodeIds.Contains(e.NodeID)).GroupBy(e => e.Year).Select(g => g.Key).ToArray();
+            }
+        }
+
         public List<NodeValue> GetChildNodeValues(NodeValueParameter parameter)
         {
             using (var db = GetDbContext())
@@ -45,7 +62,7 @@ namespace LoowooTech.Land.Zhoushan.Managers
         {
             using (var db = GetDbContext())
             {
-                var nodeIds = db.Nodes.Where(e => e.FormID == formId).Select(e => e.ID).ToArray();
+                var nodeIds = GetNodeIds(formId);
                 var query = db.NodeValues.Where(e => nodeIds.Contains(e.NodeID) && e.Year == year && e.Quarter == quarter);
                 db.NodeValues.RemoveRange(query);
                 db.SaveChanges();
@@ -58,7 +75,7 @@ namespace LoowooTech.Land.Zhoushan.Managers
             {
                 if (parameter.FormID > 0 && parameter.NodeID == 0 && (parameter.NodeIds == null || parameter.NodeIds.Length == 0))
                 {
-                    parameter.NodeIds = db.Nodes.Where(e => e.FormID == parameter.FormID).Select(e => e.ID).ToArray();
+                    parameter.NodeIds = GetNodeIds(parameter.FormID);
                 }
 
                 var query = db.NodeValues.AsQueryable();

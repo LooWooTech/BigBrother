@@ -29,11 +29,14 @@
             </tr>
             @foreach (var area in areas)
             {
-                var val = values.FirstOrDefault(e => e.AreaID == area.ID) ?? new NodeValue();
+                var vals = values.Where(e => e.AreaID == area.ID);
+                var sumValue = vals.Sum(e => e.Value);
+                var sumRate = vals.Sum(e => e.RateValue);
+
                 <tr>
                     <td>@(area.Name)</td>
-                    <td>@(val.Value)</td>
-                    <td>@(val.RateValue.ToString("f1"))</td>
+                    <td>@(sumValue.ToString("f2"))</td>
+                    <td>@(sumRate.ToString("f1"))</td>
                 </tr>
             }
         </table>

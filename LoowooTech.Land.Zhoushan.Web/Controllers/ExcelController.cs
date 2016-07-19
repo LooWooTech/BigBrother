@@ -78,7 +78,7 @@ namespace LoowooTech.Land.Zhoushan.Web.Controllers
         }
 
         [HttpPost]
-        public void Export(int formId, int year, Quarter[] quarters, string templateName)
+        public void Export(int formId, int year, Quarter quarter, string templateName)
         {
             var form = Core.FormManager.GetForm(formId);
             if (form == null)
@@ -87,11 +87,11 @@ namespace LoowooTech.Land.Zhoushan.Web.Controllers
             }
             var template = new Template(templateName);
 
-            var excelData = Core.TemplateManager.WriteDbDataToExcel(form, year, quarters, template);
+            var excelData = Core.TemplateManager.WriteDbDataToExcel(form, year, quarter, template);
 
             using (var stream = ExcelHelper.WriteData(template.FilePath, excelData))
             {
-                var fileName = form.Name + "-" + year + "年" + string.Join("-", (quarters.Select(e => (int)e))) + "季度报告.xlsx";
+                var fileName = form.Name + "-" + year + "-" + (int)quarter + ".xlsx";
                 Response.ContentType = "application/vnd.ms-excel;charset=UTF-8";
                 Response.AddHeader("Content-Disposition", string.Format("attachment;filename={0}", HttpUtility.UrlEncode(fileName)));
                 Response.BinaryWrite(((MemoryStream)stream).GetBuffer());

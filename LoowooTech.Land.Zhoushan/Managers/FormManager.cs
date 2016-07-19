@@ -37,11 +37,7 @@ namespace LoowooTech.Land.Zhoushan.Managers
                 else
                 {
                     var entity = db.Forms.FirstOrDefault(e => e.ID == model.ID);
-                    if(entity != null)
-                    {
-                        entity.Name = model.Name;
-                        entity.ValueTypes = model.ValueTypes;
-                    }
+                    db.Entry(entity).CurrentValues.SetValues(model);
                 }
                 db.SaveChanges();
             }

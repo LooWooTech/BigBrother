@@ -176,7 +176,7 @@ namespace LoowooTech.Land.Zhoushan.Models
                     if (p.Value == 0 && p1.Value > 0)
                         p.Value = p1.Value;
                 }
-                else
+                else if(p.Type != FieldType.Hidden)
                 {
                     Parameters.Add(p);
                 }
@@ -196,6 +196,14 @@ namespace LoowooTech.Land.Zhoushan.Models
             get
             {
                 return Parameters.Any(e => e.Type == FieldType.RateValue);
+            }
+        }
+
+        public bool IsHiddenField
+        {
+            get
+            {
+                return Parameters.Any(e => e.Type == FieldType.Hidden);
             }
         }
 
@@ -228,7 +236,7 @@ namespace LoowooTech.Land.Zhoushan.Models
         {
             var str = template.Split('=');
             FieldType type;
-            Enum.TryParse(str[0], out type);
+            Enum.TryParse(str[0], true, out type);
             Type = type;
             if (str.Length == 2)
             {
@@ -243,13 +251,18 @@ namespace LoowooTech.Land.Zhoushan.Models
 
     public enum FieldType
     {
-        Form,
+        Form = 1,
         Node,
         Quarter,
+        /// <summary>
+        /// 举例：{Quarters=3}统计前三个季度
+        /// </summary>
+        Quarters,
         Type,
         Area,
         Value,
         Year,
-        RateValue
+        RateValue,
+        Hidden
     }
 }

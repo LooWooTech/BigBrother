@@ -9,6 +9,7 @@
     List<NodeValue> quarterValues = ViewBag.QuarterValues;
     List<NodeValue> areaValues = ViewBag.AreaValues;
     List<Node> childNodes = ViewBag.ChildNodes;
+    int[] years = ViewBag.Years;
 }
 <h2 class="page-header">
     @(ViewBag.Title)
@@ -23,8 +24,20 @@
         <div class="input-group-btn">
             @Html.Action("NodeDropdown", "Chart", new { formId = form.ID, nodeId = parameter.NodeID })
             @Html.Action("ValueTypeDropdown", "Node", new { ids = form.ValueTypes })
-            @Html.Partial("_YearDropdown", parameter.Year)
-            @Html.Partial("_QuarterDropdown", parameter.Quarter)
+            <select name="Year" class="form-control">
+                @foreach (var year in years)
+                {
+                    <option value="@(year)" @(parameter.Year == year ? "selected" : null)>@(year)</option>
+                }
+            </select>
+            <select name="Quarters" class="form-control">
+                @foreach (Quarter val in Enum.GetValues(typeof(Quarter)))
+                {
+                    <option value="@((int)val)" @(val == parameter.Quarter ? "selected" : null)>@(val.GetDescription())</option>
+                }
+                <option value="1,2" @(string.Join(",", parameter.Quarters) == "1,2" ? "selected" : null)>上半年</option>
+                <option value="1,2,3,4" @(string.Join(",", parameter.Quarters) == "1,2,3,4" ? "selected" : null)>全年</option>
+            </select>
             @Html.Action("Dropdown", "Area", new { AreaID = parameter.AreaID })
             @Html.Partial("_RateTypeDropdown", parameter.RateType)
             <button type="submit" class="btn btn-primary"><i class="fa fa-bar-chart-o"></i> 统计</button>
@@ -71,7 +84,7 @@
             });
 
             var years = $("#ddl-years").val() || 3;
-            $("#panel-quarter").load("/chart/quarterchart?yearLength=" + years + "&" + data, function () {
+            $("#panel-quarter").load("/chart/quarterchart?formId=@(form.ID)&" + data, function () {
                 quarterChartCompleted = true;
                 hideLoading();
             });

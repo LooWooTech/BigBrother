@@ -17,7 +17,14 @@ namespace LoowooTech.Land.Zhoushan.Web.Controllers
 
         public ActionResult Charts()
         {
-            ViewBag.Forms = Core.FormManager.GetForms();
+            var data = new Dictionary<Form, int[]>();
+            var forms  = Core.FormManager.GetForms();
+            foreach (var form in forms)
+            {
+                var years = Core.FormManager.GetFormYears(form.ID);
+                data.Add(form, years);
+            }
+            ViewBag.Data = data;
             return View();
         }
 

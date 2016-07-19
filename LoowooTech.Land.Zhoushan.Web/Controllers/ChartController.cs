@@ -14,11 +14,20 @@ namespace LoowooTech.Land.Zhoushan.Web.Controllers
         {
             ViewBag.Form = Core.FormManager.GetForm(formId);
             ViewBag.Parameter = parameter;
+            //获取可用年份
+            ViewBag.Years = Core.FormManager.GetFormYears(formId);
             return View();
         }
 
         public ActionResult NodeChart(NodeValueParameter parameter)
         {
+            parameter.Quarters = Request.QueryString["quarters"].Split(',').Select(str => (Quarter)int.Parse(str)).ToArray();
+            if (parameter.Quarters.Length < 2)
+            {
+                parameter.Quarter = parameter.Quarters[0];
+                parameter.Quarters = null;
+            }
+
             ViewBag.Node = Core.FormManager.GetNode(parameter.NodeID);
             ViewBag.NodeValues = Core.FormManager.GetNodeValues(parameter);
             ViewBag.ValueType = Core.FormManager.GetNodeValueType(parameter.TypeID) ?? new NodeValueType { ID = 0, Name = "-/-", Unit = "/" };
@@ -41,14 +50,9 @@ namespace LoowooTech.Land.Zhoushan.Web.Controllers
             return View();
         }
 
-        public ActionResult QuarterChart(int yearLength, NodeValueParameter parameter)
+        public ActionResult QuarterChart(int formId, NodeValueParameter parameter)
         {
-            var years = new List<int>();
-            for (var i = 0; i < yearLength; i++)
-            {
-                years.Add(DateTime.Now.Year - i);
-            }
-            parameter.Years = years.ToArray();
+            parameter.Years = Core.FormManager.GetFormYears(formId);
             parameter.Quarters = new Quarter[] { Quarter.First, Quarter.Second, Quarter.Third, Quarter.Fourth };
             ViewBag.Parameter = parameter;
             parameter.RateType = null;
@@ -60,6 +64,13 @@ namespace LoowooTech.Land.Zhoushan.Web.Controllers
 
         public ActionResult AreaChart(NodeValueParameter parameter)
         {
+            parameter.Quarters = Request.QueryString["quarters"].Split(',').Select(str => (Quarter)int.Parse(str)).ToArray();
+            if (parameter.Quarters.Length < 2)
+            {
+                parameter.Quarter = parameter.Quarters[0];
+                parameter.Quarters = null;
+            }
+
             var areas = Core.AreaManager.GetAreas(parameter.AreaID);
             var areaIds = areas.Select(e => e.ID).ToArray();
             parameter.AreaIds = areaIds;

@@ -100,7 +100,6 @@
             var data = $(this).serialize();
             $.request("/excel/import", data, function () {
                 alert("导入成功");
-                $("#form-import").reset();
             });
             return false;
         });

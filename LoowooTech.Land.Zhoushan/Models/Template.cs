@@ -263,6 +263,10 @@ namespace LoowooTech.Land.Zhoushan.Models
         Value,
         Year,
         RateValue,
+        /// <summary>
+        /// 指定是同比还是环比
+        /// </summary>
+        Rate,
         Hidden
     }
 }

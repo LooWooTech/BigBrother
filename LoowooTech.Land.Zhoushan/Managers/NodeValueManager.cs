@@ -80,7 +80,7 @@ namespace LoowooTech.Land.Zhoushan.Managers
 
                 var query = db.NodeValues.AsQueryable();
 
-                if (parameter.NodeIds != null)
+                if (parameter.NodeIds != null && parameter.NodeIds.Length > 0)
                 {
                     query = query.Where(e => parameter.NodeIds.Contains(e.NodeID));
                 }
@@ -88,12 +88,8 @@ namespace LoowooTech.Land.Zhoushan.Managers
                 {
                     query = query.Where(e => e.NodeID == parameter.NodeID);
                 }
-                else
-                {
-                    throw new ArgumentException("参数不正确");
-                }
 
-                if (parameter.Years != null)
+                if (parameter.Years != null && parameter.Years.Length > 0)
                 {
                     query = query.Where(e => parameter.Years.Contains(e.Year));
                 }
@@ -102,7 +98,7 @@ namespace LoowooTech.Land.Zhoushan.Managers
                     query = query.Where(e => e.Year == parameter.Year);
                 }
 
-                if (parameter.TypeIds != null)
+                if (parameter.TypeIds != null && parameter.TypeIds.Length > 0)
                 {
                     query = query.Where(e => parameter.TypeIds.Contains(e.TypeID));
                 }
@@ -111,7 +107,7 @@ namespace LoowooTech.Land.Zhoushan.Managers
                     query = query.Where(e => e.TypeID == parameter.TypeID);
                 }
 
-                if (parameter.Quarters != null)
+                if (parameter.Quarters != null && parameter.Quarters.Length > 0)
                 {
                     query = query.Where(e => parameter.Quarters.Contains(e.Quarter));
                 }
@@ -120,7 +116,7 @@ namespace LoowooTech.Land.Zhoushan.Managers
                     query = query.Where(e => e.Quarter == parameter.Quarter);
                 }
 
-                if (parameter.AreaIds != null)
+                if (parameter.AreaIds != null && parameter.AreaIds.Length > 0)
                 {
                     query = query.Where(e => parameter.AreaIds.Contains(e.AreaID));
                 }

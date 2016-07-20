@@ -220,6 +220,12 @@
     <Content Include="templates\15土地供应-导入.xlsx" />
     <Content Include="templates\14土地供应-单季度导出.xlsx" />
     <Content Include="templates\建设用地审批批准累计-导出.xlsx" />
+    <Content Include="templates\14土地供应-多季度导出.xlsx" />
+    <Content Include="templates\15土地供应-单季度导出.xlsx" />
+    <Content Include="templates\15土地供应-多季度导出.xlsx" />
+    <Content Include="templates\土地违法案件查处-单季度导出.xlsx" />
+    <Content Include="templates\土地违法案件查处-多季度导出.xlsx" />
+    <Content Include="templates\土地违法案件查处-导入.xlsx" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

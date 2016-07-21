@@ -39,24 +39,24 @@ namespace LoowooTech.Land.Zhoushan.Managers
             }
         }
 
-        public List<NodeValue> GetChildNodeValues(NodeValueParameter parameter)
-        {
-            using (var db = GetDbContext())
-            {
-                var nodes = Core.FormManager.GetNodeChildren(parameter.NodeID);
-                var childIds = nodes.Select(e => e.ID).ToArray();
-                var p = (NodeValueParameter)parameter.Clone();
-                p.NodeID = 0;
-                p.NodeIds = childIds;
-                p.GetNode = false;
-                var list = Core.FormManager.GetNodeValues(p);
-                foreach (var item in list)
-                {
-                    item.Node = nodes.FirstOrDefault(e => e.ID == item.NodeID);
-                }
-                return list;
-            }
-        }
+        //public List<NodeValue> GetChildNodeValues(NodeValueParameter parameter)
+        //{
+        //    using (var db = GetDbContext())
+        //    {
+        //        var nodes = Core.FormManager.GetNodeChildren(parameter.NodeID);
+        //        var childIds = nodes.Select(e => e.ID).ToArray();
+        //        var p = (NodeValueParameter)parameter.Clone();
+        //        p.NodeID = 0;
+        //        p.NodeIds = childIds;
+        //        p.GetNode = false;
+        //        var list = Core.FormManager.GetNodeValues(p);
+        //        foreach (var item in list)
+        //        {
+        //            item.Node = nodes.FirstOrDefault(e => e.ID == item.NodeID);
+        //        }
+        //        return list;
+        //    }
+        //}
 
         public void DeleteNodeValues(int formId, int year, Quarter quarter)
         {
@@ -130,6 +130,10 @@ namespace LoowooTech.Land.Zhoushan.Managers
                 List<NodeValueType> types = parameter.GetValueType ? Core.FormManager.GetNodeValueTypes() : null;
                 foreach (var item in list)
                 {
+                    if (parameter.GetNode)
+                    {
+                        item.Node = Core.FormManager.GetNode(item.NodeID);
+                    }
                     if (parameter.GetArea)
                     {
                         item.Area = areas.FirstOrDefault(e => e.ID == item.AreaID);

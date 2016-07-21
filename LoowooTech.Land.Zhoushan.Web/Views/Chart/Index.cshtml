@@ -1,14 +1,7 @@
 ﻿@{
     Form form = ViewBag.Form;
-    Node selectedNode = ViewBag.Node;
     ViewBag.Title = "统计图 - " + form.Name;
-    NodeValueType valueType = ViewBag.ValueType;
     NodeValueParameter parameter = ViewBag.Parameter;
-    List<NodeValue> nodeValues = ViewBag.NodeValues;
-    List<NodeValue> childValues = ViewBag.ChildValues;
-    List<NodeValue> quarterValues = ViewBag.QuarterValues;
-    List<NodeValue> areaValues = ViewBag.AreaValues;
-    List<Node> childNodes = ViewBag.ChildNodes;
     int[] years = ViewBag.Years;
 }
 <h2 class="page-header">
@@ -23,7 +16,6 @@
         <span class="input-group-addon">选择条件</span>
         <div class="input-group-btn">
             @Html.Action("NodeDropdown", "Chart", new { formId = form.ID, nodeId = parameter.NodeID })
-            @Html.Action("ValueTypeDropdown", "Node", new { ids = form.ValueTypes })
             <select name="Year" class="form-control">
                 @foreach (var year in years)
                 {
@@ -57,6 +49,20 @@
 
 </div>
 <script>
+    var colors = ["#FF6384", "#4BC0C0", "#FFCE56", "#E7E9ED", "#36A2EB", "#F38630", "#E0E4CC", "#69D2E7", "#F7464A", "#E2EAE9", "#D4CCC5", "#949FB1", "#4D5360"];
+    function getChartColors(len) {
+        if (len >= colors.length) {
+            return colors;
+        }
+        return colors.slice(0, len);
+    }
+    function getChartColor(i) {
+        if (i >= colors.length) {
+            return colors[i % colors.length];
+        }
+        return colors[i];
+    }
+
     $(function () {
         $("#form-filter").submit(function () {
             var data = $(this).serialize();

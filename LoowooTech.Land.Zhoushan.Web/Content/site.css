@@ -6,7 +6,7 @@
 .modal-content { border-radius: 3px; }
     .modal-content .panel { margin-bottom: 0; }
     .modal-content .panel-body { padding: 0; }
-.modal-header,.modal-footer { background-color: #f5f5f5; }
+.modal-header, .modal-footer { background-color: #f5f5f5; }
 
 
 .navbar-inverse { background-color: #34aae1; border-color: #2b97ca; }
@@ -27,9 +27,11 @@
 .node-level-2:before { content: "--"; }
 .node-level-3:before { content: "---"; }
 .node-level-4:before { content: "----"; }
-.navbar-brand {
-    font-size: 1.6em;
-    padding: 15px 50px 0px 10px;
-}
+.navbar-brand { font-size: 1.6em; padding: 15px 50px 0px 10px; }
 .node-value { padding: 0px 5px; line-height: 20px; height: 20px; max-width: 100px; }
 #loading { position: absolute; /* width: 50%; */ /* height: 100px; */ z-index: 99; font-size: 2em; line-height: 40px; text-align: center; left: 30%; right: 30%; top: 0px; display: none; }
+
+
+.grid { line-height: 2em; }
+.grid-header { background: #eee; border-bottom: solid 1px #ddd; clear: both; font-weight: bold; overflow: hidden; }
+.grid-row { border-bottom: solid 1px #eee; clear:both; }

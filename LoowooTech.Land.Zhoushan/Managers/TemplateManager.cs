@@ -139,7 +139,7 @@ namespace LoowooTech.Land.Zhoushan.Managers
                 field.SetParameter(FieldType.Quarter, (int)quarter);
             }
 
-            var result = new NodeValueParameter();
+            var result = new NodeValueParameter { GetArea = false, GetNode = false, GetValueType = false };
 
             foreach (var parameter in field.Parameters)
             {

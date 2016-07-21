@@ -1,18 +1,29 @@
 ﻿@{
-    List<Node> childNodes = ViewBag.ChildNodes;
-    NodeValueType valueType = ViewBag.ValueType;
-    List<NodeValue> childValues = ViewBag.ChildValues;
-    List<NodeValue> nodeValues = ViewBag.NodeValues;
-    NodeValueParameter parameter = ViewBag.Parameter;
-    Node node = ViewBag.Node;
+    Form form = ViewBag.Form;
+    List<NodeValueType> valueTypes = ViewBag.ValueTypes;
 
-    var groups = childNodes.GroupBy(e => e.Group).ToDictionary(g => g.Key ?? node.Name, g => g.ToList());
+    List<Node> childNodes = ViewBag.ChildNodes;
+    List<NodeValue> childValues = ViewBag.ChildValues;
+
+    NodeValueParameter parameter = ViewBag.Parameter;
+    Node currentNode = ViewBag.CurrentNode;
+    List<NodeValue> currentValues = ViewBag.CurrentNodeValues;
+    ////如果当前没有选择分类，且没有分组，则不显示饼图
+    //if (currentNode == null && !childNodes.Any(e=>!string.IsNullOrEmpty(e.Group)))
+    //{
+    //    return;
+    //}
+    var groups = childNodes.GroupBy(e => e.Group).ToDictionary(g => g.Key ?? string.Empty, g => g.ToList());
     var index = 0;
 }
 @foreach (var kv in groups)
 {
     index++;
     var group = kv.Key;
+    if (currentNode == null && string.IsNullOrEmpty(group))
+    {
+        continue;
+    }
     var children = kv.Value;
     var nodeIds = children.Select(e => e.ID).ToArray();
     var values = childValues.Where(e => nodeIds.Contains(e.NodeID)).ToList();
@@ -24,55 +35,59 @@
         <div class="col-lg-4">
             <canvas id="chart-childnode-@(index)"></canvas>
         </div>
-        <div class="col-lg-5">
-            <table class="table">
-                <tr>
-                    <th>分类</th>
-                    <th>@(valueType.Name)(@(valueType.Unit))</th>
-                    <th>@(parameter.RateType.Value.GetDescription()) %</th>
-                </tr>
-                @if (index == 1)
+        <div class="col-lg-5 grid">
+            <div class="row grid-header">
+                <div class="col-lg-7">分类</div>
+                <div class="col-lg-3">值</div>
+                <div class="col-lg-2">@(parameter.RateType.Value.GetDescription()) %</div>
+            </div>
+            @if (currentNode != null && currentValues != null && index == 1)
                 {
-                    foreach (var g in nodeValues.GroupBy(n=>n.NodeID))
+                <div class="row grid-row">
+                    <div class="col-lg-7">
+                        @(currentNode.Name)
+                    </div>
+                    @foreach (var g in currentValues.GroupBy(e => e.TypeID))
                     {
+                        var type = valueTypes.FirstOrDefault(e => e.ID == g.Key);
                         var val = g.Sum(e => e.Value);
                         var rateValue = g.Sum(e => e.RateValue);
-                        <tr>
-                            <td>@(node.Name)</td>
-                            <td>@(val.ToString("f2"))</td>
-                            <td>@(rateValue.ToString("f1"))</td>
-                        </tr>
+                        <div class="col-lg-3">
+                            @(val.ToString("f2"))
+                            （@(type.Unit)）
+                        </div>
+                        <div class="col-lg-2">
+                            @(rateValue.ToString("f1"))
+                        </div>
                     }
-                }
-                @foreach (var child in children)
+                </div>
+            }
+            @foreach (var child in children)
                 {
                     var vals = values.Where(e => e.NodeID == child.ID);
-                    var sumValue = vals.Sum(e => e.Value);
-                    var sumRate = vals.Sum(e => e.RateValue);
-                    <tr>
-                        <td>
-                            -- @(child.Name)
-                        </td>
-                        <td>@(sumValue.ToString("f2"))</td>
-                        <td>@(sumRate.ToString("f1"))</td>
-                    </tr>
-                }
-            </table>
+                <div class="row grid-row">
+                    <div class="col-lg-7">
+                        - @(child.Name)
+                    </div>
+                    @foreach (var g in vals.GroupBy(e => e.TypeID))
+                    {
+                        var type = valueTypes.FirstOrDefault(e => e.ID == g.Key);
+                        var val = g.Sum(e => e.Value);
+                        var rateValue = g.Sum(e => e.RateValue);
+                        <div class="col-lg-3">
+                            @(val.ToString("f2"))
+                            （@(type.Unit)）
+                        </div>
+                        <div class="col-lg-2">
+                            @(rateValue.ToString("f1"))
+                        </div>
+                    }
+                </div>
+            }
         </div>
     </div>
     <script>
         $(function () {
-            function getColors(len){
-                var colors = ["#FF6384",
-                "#4BC0C0",
-                "#FFCE56",
-                "#E7E9ED",
-                "#36A2EB"
-                ];
-
-                return colors.slice(0,len);
-            }
-
             var labels = @Html.Raw(labels.ToJson()) || [];
             var data = @Html.Raw(data.ToJson()) || [];
             var len = labels.length - data.length;
@@ -86,7 +101,7 @@
                     labels: labels,
                     datasets:[{
                         data:data,
-                        backgroundColor:getColors(data.length)
+                        backgroundColor:getChartColors(data.length)
                     }]
                 }
             });

@@ -18,8 +18,14 @@ namespace LoowooTech.Land.Zhoushan.Managers
             return GetNodes().FirstOrDefault(e => e.ID == id);
         }
 
+        public List<Node> GetRootNodes(int formId)
+        {
+            return GetNodes().Where(e => e.FormID == formId && e.ParentID == 0).ToList();
+        }
+
         public List<Node> GetNodeChildren(int parentId)
         {
+            if (parentId == 0) throw new ArgumentException("parentId不能为0");
             return GetNodes().Where(e => e.ParentID == parentId).ToList();
         }
 

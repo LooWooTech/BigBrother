@@ -1,18 +1,23 @@
 ﻿@{
 
-    List<Area> areas = ViewBag.Areas;
-    List<NodeValue> values = ViewBag.Values;
-    NodeValueType valueType = ViewBag.ValueType;
     Node node = ViewBag.Node;
-    NodeValueParameter parameter = ViewBag.Parameter;
-    var labels = new List<string>();
-    var data = new List<double>();
-    foreach (var area in areas)
+    if (node == null)
     {
-        labels.Add(area.Name);
-        var val = values.FirstOrDefault(e => e.AreaID == area.ID);
-        data.Add(val == null ? 0 : val.Value);
+        return;
     }
+
+    List<Area> areas = ViewBag.Areas;
+
+    List<NodeValue> nodeValues = ViewBag.NodeValues;
+    if (nodeValues.Count == 0)
+    {
+        return;
+    }
+    List<NodeValueType> valueTypes = ViewBag.ValueTypes;
+    NodeValueParameter parameter = ViewBag.Parameter;
+    var areaLabels = areas.OrderBy(e => e.ID).Select(e => e.Name).ToArray();
+    var types = nodeValues.GroupBy(e => e.TypeID).Select(g => g.Key).ToArray();
+
 }
 <div class="col-lg-12">
     <hr />
@@ -21,45 +26,84 @@
         <canvas id="chart-area"></canvas>
     </div>
     <div class="col-lg-5">
-        <table class="table">
-            <tr>
-                <th>地区名称</th>
-                <th>@(valueType.Name)(@(valueType.Unit))</th>
-                <th>@(parameter.RateType.Value.GetDescription()) %</th>
-            </tr>
+        <div class="grid">
+            <div class="grid-header row">
+                <div class="col-lg-4">地区名称</div>
+                <div class="col-lg-5">值</div>
+                <div class="col-lg-3">@(parameter.RateType.Value.GetDescription()) %</div>
+            </div>
             @foreach (var area in areas)
             {
-                var vals = values.Where(e => e.AreaID == area.ID);
-                var sumValue = vals.Sum(e => e.Value);
-                var sumRate = vals.Sum(e => e.RateValue);
-
-                <tr>
-                    <td>@(area.Name)</td>
-                    <td>@(sumValue.ToString("f2"))</td>
-                    <td>@(sumRate.ToString("f1"))</td>
-                </tr>
+                var rowIndex = 0;
+                var vals = nodeValues.Where(e => e.AreaID == area.ID);
+                <div class="grid-row">
+                    <div class="col-lg-4">
+                        @(area.Name)
+                    </div>
+                    @foreach (var g in vals.GroupBy(g => g.TypeID))
+                    {
+                        rowIndex++;
+                        var type = g.FirstOrDefault().Type;
+                        var sumValue = g.Sum(e => e.Value);
+                        var sumRate = g.Sum(e => e.RateValue);
+                        <div class="col-lg-5 @(rowIndex>1?"col-lg-offset-2":null)">
+                            @(sumValue.ToString("f2"))
+                            （@(type.Unit)）
+                        </div>
+                        <div class="col-lg-3">
+                            @(sumRate.ToString("f2"))
+                        </div>
+                    }
+                </div>
             }
-        </table>
+        </div>
     </div>
 </div>
 <script>
     $(function(){
-        var labels = @Html.Raw(labels.ToJson()) || [];
-        var data = @Html.Raw(data.ToJson()) || [];
+        var labels = @Html.Raw(areaLabels.ToJson()) || [];
         var ctx = document.getElementById("chart-area");
         var myChart = new Chart(ctx, {
             type: 'bar',
             data: {
                 labels: labels,
-                datasets:[{
-                    label: "@(node.Name)",
-                    data:data,
-                    backgroundColor: "rgba(255,99,132,0.2)",
-                    borderColor: "rgba(255,99,132,1)",
-                    borderWidth: 1,
-                    hoverBackgroundColor: "rgba(255,99,132,0.4)",
-                    hoverBorderColor: "rgba(255,99,132,1)"
-                }]
+                datasets:[
+                @for (var i = 0; i < types.Length; i++) {
+                    var valueType = valueTypes.FirstOrDefault(e => e.ID == types[i]);
+                    var data = new List<double>();
+                    foreach (var areaId in areas.OrderBy(e => e.ID).Select(e=>e.ID))
+                    {
+                        var values = nodeValues.Where(e => e.TypeID == valueType.ID && e.AreaID == areaId);
+                        data.Add(values.Select(e => e.Value).DefaultIfEmpty(0).Sum());
+                    }
+                    if (i > 0) {
+                        @:,
+                    }
+                    <text>
+                        {
+                            label: "@(valueType.Name)",
+                            data:@(Html.Raw(data.ToJson())),
+                            backgroundColor: [
+                                'rgba(255, 99, 132, 0.2)',
+                                'rgba(54, 162, 235, 0.2)',
+                                'rgba(255, 206, 86, 0.2)',
+                                'rgba(75, 192, 192, 0.2)',
+                                'rgba(153, 102, 255, 0.2)',
+                                'rgba(255, 159, 64, 0.2)'
+                            ],
+                            borderColor: [
+                                'rgba(255,99,132,1)',
+                                'rgba(54, 162, 235, 1)',
+                                'rgba(255, 206, 86, 1)',
+                                'rgba(75, 192, 192, 1)',
+                                'rgba(153, 102, 255, 1)',
+                                'rgba(255, 159, 64, 1)'
+                            ],
+                            borderWidth: 1
+                        }
+                  </text>
+                }
+                ]
             }
         });
     });

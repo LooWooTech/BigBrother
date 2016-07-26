@@ -63,8 +63,16 @@ namespace LoowooTech.Land.Zhoushan.Web.Controllers
             parameter.RateType = null;
             if (parameter.NodeID > 0)
             {
+                var node = Core.FormManager.GetNode(parameter.NodeID);
+                var childNodes = Core.FormManager.GetNodeChildren(formId);
+                var nodeIds = childNodes.Select(e => e.ID).ToList();
+                nodeIds.Insert(0, node.ID);
+                parameter.NodeIds = nodeIds.ToArray();
+
+                childNodes.Insert(0, node);
+
                 ViewBag.NodeValues = Core.FormManager.GetNodeValues(parameter);
-                ViewBag.Nodes = new List<Node> { Core.FormManager.GetNode(parameter.NodeID) };
+                ViewBag.Nodes = childNodes;
             }
             else
             {

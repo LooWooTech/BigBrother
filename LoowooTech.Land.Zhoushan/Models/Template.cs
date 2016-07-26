@@ -98,7 +98,7 @@ namespace LoowooTech.Land.Zhoushan.Models
 
         public string GetReplacedValue()
         {
-            return Cell.Value.ToString().Replace(Template, Value);
+            return Cell.Value.ToString().Replace(Template, Value.TrimEnd('0').TrimEnd('.'));
         }
 
         public void UpdateParameters(List<Field> fields)

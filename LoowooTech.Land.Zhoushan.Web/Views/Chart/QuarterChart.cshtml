@@ -28,32 +28,49 @@
             }
         }
     }
-
+    var groups = nodes.GroupBy(e => e.Group).ToDictionary(g => g.Key ?? string.Empty, g => g.ToList());
+    var index = 0;
 }
-<div class="col-lg-12">
-    <hr />
-    <h4>历史数据</h4>
-    <div class="col-lg-5">
-        <canvas id="chart-quarter"></canvas>
-    </div>
-    <script>
+<hr />
+<h4>历史数据</h4>
+
+@foreach (var kv in groups)
+{
+    index++;
+    var groupNodes = kv.Value;
+  <div class="col-lg-5">
+        <div class="col-lg-12">
+            <canvas id="chart-quarter-@(index)"></canvas>
+        </div>
+        <script>
         $(function(){
-            var ctx = document.getElementById("chart-quarter");
+            var ctx = document.getElementById("chart-quarter-@(index)");
             var myChart = new Chart(ctx, {
                 type: 'line',
                 data: {
                     labels: @(Html.Raw(labels.ToJson())),
                     datasets:[
-                    @for (var i=0;i<nodes.Count;i++)
+                    @for (var i=0;i< groupNodes.Count;i++)
                     {
-                        var node = nodes[i];
-                        var vals = values.Where(e => e.NodeID == node.ID && e.TypeID == typeId);
+                        var node = groupNodes[i];
+                        var vals = values.Where(e => e.NodeID == node.ID);
+                        if (vals.Count() == 0)
+                        {
+                            continue;
+                        }
+                        var nodeTypeId = vals.FirstOrDefault().Type.ID;
+                        if (nodeTypeId != typeId)
+                        {
+
+                        }
+                        vals = vals.Where(e => e.TypeID == nodeTypeId);
+
                         var data = new List<string>();
                         foreach (var year in parameter.Years.OrderBy(e => e))
                         {
                             if (compareYear)
                             {
-                                var val = vals.Where(e => e.Year == year).Select(e => e.Value).DefaultIfEmpty(0).Sum().ToString("F2");
+                                var val = vals.Where(e => e.Year == year).Select(e => e.Value).DefaultIfEmpty(0).Sum().ToString("F2").TrimEnd('0').TrimEnd('.');
                                 data.Add(val);
                             }
                             else
@@ -66,7 +83,7 @@
                                         break;
                                     }
 
-                                    var val = vals.Where(e => e.Year == year && e.Quarter == quarter).Select(e => e.Value).DefaultIfEmpty(0).Sum().ToString("F2");
+                                    var val = vals.Where(e => e.Year == year && e.Quarter == quarter).Select(e => e.Value).DefaultIfEmpty(0).Sum().ToString("F2").TrimEnd('0').TrimEnd('.');
                                     data.Add(val);
                                 }
                             }
@@ -95,5 +112,6 @@
                 }
             });
         });
-    </script>
-</div>
+        </script>
+    </div>
+}

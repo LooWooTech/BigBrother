@@ -42,44 +42,48 @@
                 <div class="col-lg-2">@(parameter.RateType.Value.GetDescription()) %</div>
             </div>
             @if (currentNode != null && currentValues != null && index == 1)
-                {
+            {
+                var rowIndex = 0;
                 <div class="row grid-row">
                     <div class="col-lg-7">
                         @(currentNode.Name)
                     </div>
                     @foreach (var g in currentValues.GroupBy(e => e.TypeID))
                     {
+                        rowIndex++;
                         var type = valueTypes.FirstOrDefault(e => e.ID == g.Key);
                         var val = g.Sum(e => e.Value);
                         var rateValue = g.Sum(e => e.RateValue);
-                        <div class="col-lg-3">
-                            @(val.ToString("f2"))
+                        <div class="col-lg-3 @(rowIndex>1?"col-lg-offset-7":null)">
+                            @(val.ToString("f2").TrimEnd('0').TrimEnd('.'))
                             （@(type.Unit)）
                         </div>
                         <div class="col-lg-2">
-                            @(rateValue.ToString("f1"))
+                            @(rateValue.ToString("f2").TrimEnd('0').TrimEnd('.'))
                         </div>
                     }
                 </div>
             }
             @foreach (var child in children)
-                {
-                    var vals = values.Where(e => e.NodeID == child.ID);
+            {
+                var rowIndex = 0;
+                var vals = values.Where(e => e.NodeID == child.ID);
                 <div class="row grid-row">
                     <div class="col-lg-7">
                         - @(child.Name)
                     </div>
                     @foreach (var g in vals.GroupBy(e => e.TypeID))
                     {
+                        rowIndex++;
                         var type = valueTypes.FirstOrDefault(e => e.ID == g.Key);
                         var val = g.Sum(e => e.Value);
                         var rateValue = g.Sum(e => e.RateValue);
-                        <div class="col-lg-3">
-                            @(val.ToString("f2"))
+                        <div class="col-lg-3 @(rowIndex>1?"col-lg-offset-7":null)">
+                            @(val.ToString("f2").TrimEnd('0').TrimEnd('.'))
                             （@(type.Unit)）
                         </div>
                         <div class="col-lg-2">
-                            @(rateValue.ToString("f1"))
+                            @(rateValue.ToString("f2").TrimEnd('0').TrimEnd('.'))
                         </div>
                     }
                 </div>

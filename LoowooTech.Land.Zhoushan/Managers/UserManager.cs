@@ -95,7 +95,7 @@ namespace LoowooTech.Land.Zhoushan.Managers
                         }
                         entity.Name = model.Name;
                         entity.Role = model.Role;
-                        entity.AreaID = model.AreaID;
+                        entity.AreaID = model.Role == UserRole.Branch ? model.AreaID : null;
                     }
                 }
                 else

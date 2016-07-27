@@ -35,8 +35,12 @@ namespace LoowooTech.Land.Zhoushan.Managers
 
         public List<Area> GetAreaTree(string areaName=null)
         {
-            var list= GetAreas().Where(e => e.ParentID == 0).ToList();
-            if (!string.IsNullOrEmpty(areaName))
+            var list = GetAreas();
+            if (string.IsNullOrEmpty(areaName))
+            {
+                list = list.Where(e => e.ParentID == 0).ToList();
+            }
+            else
             {
                 list = list.Where(e => e.Name == areaName).ToList();
             }

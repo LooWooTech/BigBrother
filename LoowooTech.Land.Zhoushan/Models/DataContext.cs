@@ -23,5 +23,6 @@ namespace LoowooTech.Land.Zhoushan.Models
         public DbSet<Area> Areas { get; set; }
 
         public DbSet<NodeValueType> NodeValueTypes { get; set; }
+        public DbSet<Dossier> Dossiers { get; set; }
     }
 }

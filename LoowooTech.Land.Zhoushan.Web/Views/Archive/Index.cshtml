@@ -1,0 +1,34 @@
+﻿
+@{
+    ViewBag.Title = "档案管理";
+    Dictionary<int, List<Dossier>> dict = ViewBag.Dict;
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<table class="table">
+    <thead>
+        <tr>
+            <th colspan="2">国土资源调控档案</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var entry in dict)
+        {
+            var dossiers = entry.Value;
+            <tr>
+                <td>@(entry.Key)年</td>
+                <td>
+                    <div class="col-md-12" style="margin:5px;">
+                        @foreach (var dossier in dossiers)
+                        {
+                            <div class="col-md-3">
+                                <a href="/@(dossier.FilePath)" class="btn btn-default btn-sm" data-target="#page" target="_blank">@string.Format("{0}年{1}",dossier.Year,dossier.Quarter.GetDescription())</a>
+                            </div>
+                        }
+                    </div>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

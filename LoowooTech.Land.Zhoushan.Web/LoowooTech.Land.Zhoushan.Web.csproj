@@ -154,6 +154,7 @@
     <Compile Include="Authorize\AuthenticateModule.cs" />
     <Compile Include="Authorize\AuthorizeHelper.cs" />
     <Compile Include="Authorize\UserRoleFilterAttribute.cs" />
+    <Compile Include="Controllers\ArchiveController.cs" />
     <Compile Include="Controllers\ControllerBase.cs" />
     <Compile Include="Controllers\AreaController.cs" />
     <Compile Include="Controllers\ChartController.cs" />
@@ -230,6 +231,9 @@
     <Content Include="templates\采矿权出让及许可证发放-多季度导出.xlsx" />
     <Content Include="templates\采矿权出让及许可证发放-导入.xlsx" />
     <Content Include="templates\集体建设用地使用情况钻取.xlsx" />
+    <Content Include="Views\Archive\Import.cshtml" />
+    <Content Include="Views\Archive\Index.cshtml" />
+    <Content Include="Views\Archive\Search.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

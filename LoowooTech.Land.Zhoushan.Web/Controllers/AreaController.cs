@@ -15,7 +15,7 @@ namespace LoowooTech.Land.Zhoushan.Web.Controllers
             return View();
         }
 
-        [UserRoleFilter(UserRole.Writer)]
+        [UserRoleFilter(UserRole.Advanced)]
         [HttpGet]
         public ActionResult Edit(int id = 0)
         {
@@ -26,13 +26,13 @@ namespace LoowooTech.Land.Zhoushan.Web.Controllers
 
         public ActionResult Dropdown(int areaId = 0, string controlName = "areaId")
         {
-            ViewBag.List = Core.AreaManager.GetAreaTree();
+            ViewBag.List = Core.AreaManager.GetAreaTree(CurrentIdentity.AreaName);
             ViewBag.ControlName = controlName;
             ViewBag.AreaID = areaId;
             return View();
         }
 
-        [UserRoleFilter(UserRole.Writer)]
+        [UserRoleFilter(UserRole.Advanced)]
         [HttpPost]
         public ActionResult Edit(Area model)
         {
@@ -40,7 +40,7 @@ namespace LoowooTech.Land.Zhoushan.Web.Controllers
             return JsonSuccessResult();
         }
 
-        [UserRoleFilter(UserRole.Writer)]
+        [UserRoleFilter(UserRole.Advanced)]
         public ActionResult Delete(int id)
         {
             Core.AreaManager.Delete(id);

@@ -34,7 +34,7 @@ namespace LoowooTech.Land.Zhoushan.Web.Controllers
             return View();
         }
 
-        [UserRoleFilter(UserRole.Writer)]
+        [UserRoleFilter(UserRole.Branch)]
         [HttpGet]
         public ActionResult Edit(int id = 0)
         {
@@ -44,7 +44,7 @@ namespace LoowooTech.Land.Zhoushan.Web.Controllers
             return View();
         }
 
-        [UserRoleFilter(UserRole.Writer)]
+        [UserRoleFilter(UserRole.Advanced)]
         [HttpPost]
         public ActionResult Edit(Form form)
         {

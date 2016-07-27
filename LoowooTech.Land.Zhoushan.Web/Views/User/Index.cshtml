@@ -9,12 +9,13 @@
     </a>
 </h2>
 
-<table class="table table-hover">
+<table class="table table-striped">
     <thead>
         <tr>
             <th>用户名</th>
             <th>姓名</th>
             <th>角色</th>
+            <th>区域</th>
             <th>最后登录</th>
             <th>操作</th>
         </tr>
@@ -25,6 +26,7 @@
             <td>@(item.Username)</td>
             <td>@(item.Name)</td>
             <td>@(item.Role.GetDescription())</td>
+            <td>@(item.AreaID.HasValue&&item.Area!=null?item.Area.Name:"/")</td>
             <td>@(item.LastLoginTime.HasValue ? item.LastLoginTime.Value.ToString() : null)</td>
             <td style="width:80px;">
                 <a href="/User/edit?id=@(item.ID)" class="btn btn-primary btn-xs" data-toggle="modal" data-target="#modal" title="编辑"><i class="fa fa-edit"></i></a>

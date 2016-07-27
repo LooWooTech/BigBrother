@@ -12,6 +12,7 @@ namespace LoowooTech.Land.Zhoushan.Managers
     {
         public List<User> GetUsers(UserParameter parameter)
         {
+            List<User> list = null;
             using (var db = GetDbContext())
             {
                 var query = db.Users.AsQueryable();
@@ -19,34 +20,59 @@ namespace LoowooTech.Land.Zhoushan.Managers
                 {
                     query = query.Where(e => e.Name.Contains(parameter.SearchKey));
                 }
-
-                return query.OrderByDescending(e => e.ID).SetPage(parameter.Page).ToList();
+                list= query.OrderByDescending(e => e.ID).SetPage(parameter.Page).ToList();
+               
             }
+            if (list != null)
+            {
+                foreach (var user in list)
+                {
+                    if (user.Role==UserRole.Branch&&user.AreaID.HasValue)
+                    {
+                        user.Area = Core.AreaManager.GetArea(user.AreaID.Value);
+                    }
+                }
+            }
+       
+            return list;
         }
 
         public User GetUser(string username, string password = null)
         {
+            User user = null;
             using (var db = GetDbContext())
             {
-                var user =db.Users.FirstOrDefault(e => e.Username == username.ToLower());
-                if (user != null)
-                {
-                    if (!string.IsNullOrEmpty(password) && user.Password != password.MD5())
-                    {
-                        throw new ArgumentException("密码错误");
-                    }
-                }
-                return user;
+                user =db.Users.FirstOrDefault(e => e.Username == username.ToLower());
+               
             }
+            if (user != null)
+            {
+                if (!string.IsNullOrEmpty(password) && user.Password != password.MD5())
+                {
+                    throw new ArgumentException("密码错误");
+                }
+                if (user.Role == UserRole.Branch && user.AreaID.HasValue)
+                {
+                    user.Area = Core.AreaManager.GetArea(user.AreaID.Value);
+                }
+            }
+            return user;
         }
 
         public User GetUser(int id)
         {
             if (id == 0) return null;
+            User user = null;
             using (var db = GetDbContext())
             {
-                return db.Users.FirstOrDefault(e => e.ID == id);
+                user= db.Users.FirstOrDefault(e => e.ID == id);
+               
             }
+            if (user != null && user.Role==UserRole.Branch&&user.AreaID.HasValue)
+            {
+                user.Area = Core.AreaManager.GetArea(user.AreaID.Value);
+            }
+            return user;
         }
 
         public void Save(User model)
@@ -68,6 +94,8 @@ namespace LoowooTech.Land.Zhoushan.Managers
                             entity.Password = model.Password.MD5();
                         }
                         entity.Name = model.Name;
+                        entity.Role = model.Role;
+                        entity.AreaID = model.AreaID;
                     }
                 }
                 else

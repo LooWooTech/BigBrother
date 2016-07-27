@@ -15,7 +15,7 @@ namespace LoowooTech.Land.Zhoushan.Web.Controllers
             return View();
         }
 
-        [UserRoleFilter(UserRole.Writer)]
+        [UserRoleFilter(UserRole.Branch)]
         [HttpGet]
         public ActionResult Edit(int id = 0)
         {
@@ -23,7 +23,7 @@ namespace LoowooTech.Land.Zhoushan.Web.Controllers
             return View();
         }
 
-        [UserRoleFilter(UserRole.Writer)]
+        [UserRoleFilter(UserRole.Branch)]
         [HttpPost]
         public ActionResult Edit(NodeValueType model)
         {
@@ -31,7 +31,7 @@ namespace LoowooTech.Land.Zhoushan.Web.Controllers
             return JsonSuccessResult();
         }
 
-        [UserRoleFilter(UserRole.Writer)]
+        [UserRoleFilter(UserRole.Branch)]
         public ActionResult Delete(int id)
         {
             Core.FormManager.DeleteNodeValueType(id);

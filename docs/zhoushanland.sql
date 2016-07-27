@@ -191,7 +191,7 @@ CREATE TABLE IF NOT EXISTS `node_value` (
   KEY `NodeID` (`NodeID`)
 ) ENGINE=InnoDB AUTO_INCREMENT=713 DEFAULT CHARSET=utf8;
 
--- 正在导出表  zhoushanland.node_value 的数据：~781 rows (大约)
+-- 正在导出表  zhoushanland.node_value 的数据：~712 rows (大约)
 DELETE FROM `node_value`;
 /*!40000 ALTER TABLE `node_value` DISABLE KEYS */;
 INSERT INTO `node_value` (`ID`, `NodeID`, `Value`, `Quarter`, `AreaID`, `TypeID`, `Year`, `UpdateTime`) VALUES
@@ -919,16 +919,21 @@ CREATE TABLE IF NOT EXISTS `user` (
   `Name` varchar(50) DEFAULT NULL,
   `Deleted` bit(1) NOT NULL,
   `LastLoginTime` time DEFAULT NULL,
+  `AreaID` int(11) DEFAULT NULL,
   PRIMARY KEY (`ID`),
   KEY `Username` (`Username`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8;
 
--- 正在导出表  zhoushanland.user 的数据：~2 rows (大约)
+-- 正在导出表  zhoushanland.user 的数据：~6 rows (大约)
 DELETE FROM `user`;
 /*!40000 ALTER TABLE `user` DISABLE KEYS */;
-INSERT INTO `user` (`ID`, `Username`, `Password`, `Role`, `Name`, `Deleted`, `LastLoginTime`) VALUES
-	(1, 'admin', '202cb962ac59075b964b07152d234b70', 4, 'admin', b'0', NULL),
-	(3, 'loowootech', '202cb962ac59075b964b07152d234b70', 4, 'loowootech', b'0', NULL);
+INSERT INTO `user` (`ID`, `Username`, `Password`, `Role`, `Name`, `Deleted`, `LastLoginTime`, `AreaID`) VALUES
+	(1, 'admin', '202cb962ac59075b964b07152d234b70', 4, 'admin', b'0', NULL, NULL),
+	(3, 'loowootech', '202cb962ac59075b964b07152d234b70', 4, 'loowootech', b'0', NULL, NULL),
+	(4, 'ty', '202cb962ac59075b964b07152d234b70', 3, '唐尧', b'0', NULL, NULL),
+	(5, 'zq', '202cb962ac59075b964b07152d234b70', 2, '赵泉', b'0', NULL, NULL),
+	(6, 'zwj', '202cb962ac59075b964b07152d234b70', 1, '周威俊', b'0', NULL, 6),
+	(7, 'xc', '202cb962ac59075b964b07152d234b70', 1, '新城', b'0', NULL, 2);
 /*!40000 ALTER TABLE `user` ENABLE KEYS */;
 
 

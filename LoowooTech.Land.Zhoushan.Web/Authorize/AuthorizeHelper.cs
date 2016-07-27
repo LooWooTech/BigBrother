@@ -21,7 +21,7 @@ namespace LoowooTech.Land.Zhoushan.Web
                 if (ticket != null && !string.IsNullOrEmpty(ticket.Name))
                 {
                     var values = ticket.Name.Split('|');
-                    if (values.Length >= 3)
+                    if (values.Length >= 4)
                     {
                         var userId = int.Parse(values[0]);
                         var name = values[1];
@@ -30,7 +30,8 @@ namespace LoowooTech.Land.Zhoushan.Web
                         {
                             ID = userId,
                             Name = name,
-                            Role = (UserRole)role
+                            Role = (UserRole)role,
+                            AreaName=values[3]
                         };
                     }
                 }
@@ -40,7 +41,7 @@ namespace LoowooTech.Land.Zhoushan.Web
 
         public static void Login(HttpContextBase context, User user)
         {
-            var tokenValue = user.ID + "|" + user.Name + "|" + user.Role + "|" + DateTime.Now;
+            var tokenValue = user.ID + "|" + user.Name + "|" + user.Role + "|" +(user.Role==UserRole.Branch&&user.Area!=null?user.Area.Name:"")+ "|" + DateTime.Now;
             var ticket = new FormsAuthenticationTicket(tokenValue, false, int.MaxValue);
             var cookie = new HttpCookie(_tokenKey, FormsAuthentication.Encrypt(ticket));
             cookie.Expires = DateTime.Now.AddDays(1);

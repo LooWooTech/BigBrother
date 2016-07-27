@@ -9,7 +9,7 @@ using System.Web.Mvc;
 
 namespace LoowooTech.Land.Zhoushan.Web.Controllers
 {
-    [UserRoleFilter(UserRole.Writer)]
+    [UserRoleFilter(UserRole.Advanced)]
     public class ExcelController : ControllerBase
     {
         [HttpGet]

@@ -88,7 +88,8 @@ namespace LoowooTech.Land.Zhoushan.Web.Controllers
         [HttpGet]
         public ActionResult Edit(int id = 0)
         {
-            ViewBag.Model = Core.UserManager.GetUser(id) ?? new User { Role = UserRole.Reader };
+            ViewBag.Model = Core.UserManager.GetUser(id) ?? new User { Role = UserRole.Branch };
+            ViewBag.Areas = Core.AreaManager.GetAreas();
             return View();
         }
 

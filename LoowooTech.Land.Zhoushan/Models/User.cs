@@ -24,15 +24,22 @@ namespace LoowooTech.Land.Zhoushan.Models
         public UserRole Role { get; set; }
 
         public DateTime? LastLoginTime { get; set; }
+        public int? AreaID { get; set; }
+        [NotMapped]
+        public Area Area { get; set; }
 
     }
 
     [Flags]
     public enum UserRole
     {
-        Guest = 0,
-        Reader = 1,
-        Writer = 2,
+        [System.ComponentModel.Description("分局用户")]
+        Branch =1,
+        [System.ComponentModel.Description("市局用户")]
+        City = 2,
+        [System.ComponentModel.Description("市局高级用户")]
+        Advanced = 3,
+        [System.ComponentModel.Description("系统管理员")]
         Administrator = 4
     }
 

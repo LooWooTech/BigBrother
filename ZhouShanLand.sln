@@ -10,6 +10,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "docs", "docs", "{41136D72-6CF1-4E39-881B-916845111496}"
 	ProjectSection(SolutionItems) = preProject
 		docs\db.sql = docs\db.sql
+		docs\zhoushanland.sql = docs\zhoushanland.sql
 		docs\舟山系统UI.xlsx = docs\舟山系统UI.xlsx
 	EndProjectSection
 EndProject

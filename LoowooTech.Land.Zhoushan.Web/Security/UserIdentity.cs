@@ -32,6 +32,7 @@ namespace LoowooTech.Land.Zhoushan.Web.Security
         }
 
         public string Name { get; set; }
+        public string AreaName { get; set; }
 
     }
 }

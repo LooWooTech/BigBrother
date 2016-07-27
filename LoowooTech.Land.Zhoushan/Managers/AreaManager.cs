@@ -33,9 +33,14 @@ namespace LoowooTech.Land.Zhoushan.Managers
             });
         }
 
-        public List<Area> GetAreaTree()
+        public List<Area> GetAreaTree(string areaName=null)
         {
-            return GetAreas().Where(e => e.ParentID == 0).ToList();
+            var list= GetAreas().Where(e => e.ParentID == 0).ToList();
+            if (!string.IsNullOrEmpty(areaName))
+            {
+                list = list.Where(e => e.Name == areaName).ToList();
+            }
+            return list;
         }
 
         public Area GetArea(int id)

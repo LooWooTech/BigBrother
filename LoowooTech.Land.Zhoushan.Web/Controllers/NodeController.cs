@@ -18,7 +18,7 @@ namespace LoowooTech.Land.Zhoushan.Web.Controllers
             return View();
         }
 
-        [UserRoleFilter(UserRole.Writer)]
+        [UserRoleFilter(UserRole.Branch)]
         [HttpGet]
         public ActionResult Edit(int formId = 0, int id = 0, int parentId = 0)
         {
@@ -47,7 +47,7 @@ namespace LoowooTech.Land.Zhoushan.Web.Controllers
             return View();
         }
 
-        [UserRoleFilter(UserRole.Writer)]
+        [UserRoleFilter(UserRole.Branch)]
         [HttpPost]
         public ActionResult Edit(Node model)
         {
@@ -55,7 +55,7 @@ namespace LoowooTech.Land.Zhoushan.Web.Controllers
             return JsonSuccessResult();
         }
 
-        [UserRoleFilter(UserRole.Writer)]
+        [UserRoleFilter(UserRole.Branch)]
         public ActionResult Delete(int id)
         {
             Core.FormManager.DeleteNode(id);
@@ -93,7 +93,7 @@ namespace LoowooTech.Land.Zhoushan.Web.Controllers
             return View();
         }
 
-        [UserRoleFilter(UserRole.Writer)]
+        [UserRoleFilter(UserRole.Branch)]
         [HttpGet]
         public ActionResult EditValues(int formId)
         {
@@ -126,7 +126,7 @@ namespace LoowooTech.Land.Zhoushan.Web.Controllers
             return JsonSuccessResult(list);
         }
 
-        [UserRoleFilter(UserRole.Writer)]
+        [UserRoleFilter(UserRole.Branch)]
         [HttpGet]
         public ActionResult EditValue(int nodeId = 0, int valueId = 0)
         {
@@ -155,7 +155,7 @@ namespace LoowooTech.Land.Zhoushan.Web.Controllers
             return View();
         }
 
-        [UserRoleFilter(UserRole.Writer)]
+        [UserRoleFilter(UserRole.Branch)]
         [HttpPost]
         public ActionResult SaveValue(NodeValue data)
         {
@@ -164,7 +164,7 @@ namespace LoowooTech.Land.Zhoushan.Web.Controllers
             return JsonSuccessResult();
         }
 
-        [UserRoleFilter(UserRole.Writer)]
+        [UserRoleFilter(UserRole.Branch)]
         public ActionResult DeleteValue(int valueId)
         {
             Core.FormManager.DeleteNodeValue(valueId);

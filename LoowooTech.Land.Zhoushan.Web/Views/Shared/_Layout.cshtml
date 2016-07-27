@@ -1,5 +1,6 @@
 ﻿@{
     UserRole role = ((LoowooTech.Land.Zhoushan.Web.Security.UserIdentity)ViewBag.CurrentIdentity).Role;
+    UserIdentity identity = ViewBag.CurrentIdentity;
 }
 <!DOCTYPE html>
 <html>
@@ -37,15 +38,16 @@
                 <li><a href="/"><i class="fa fa-home"></i> 首页</a></li>
                 <li><a href="/form/charts"><i class="fa fa-pie-chart"></i> 统计报告</a></li>
                 <li><a href="/excel/export" data-toggle="modal" data-target="#modal"><i class="fa fa-share"></i> 报告导出</a></li>
-                @if (role >= UserRole.Writer)
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-pencil-square-o"></i> 数据录入 <span class="caret"></span></a>
+                    <ul class="dropdown-menu" role="menu">
+                        <li><a href="/form/write" data-toggle="modal" data-target="#modal">录入数据</a></li>
+                        <li><a href="/excel/import" data-toggle="modal" data-target="#modal">导入数据</a></li>
+                    </ul>
+                </li>
+            
+                @if (role >= UserRole.Advanced)
                 {
-                    <li class="dropdown">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-pencil-square-o"></i> 数据录入 <span class="caret"></span></a>
-                        <ul class="dropdown-menu" role="menu">
-                            <li><a href="/form/write" data-toggle="modal" data-target="#modal">录入数据</a></li>
-                            <li><a href="/excel/import" data-toggle="modal" data-target="#modal">导入数据</a></li>
-                        </ul>
-                    </li>
                     <li class="dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-send"></i>调控档案<span class="caret"></span></a>
                         <ul class="dropdown-menu" role="menu">
@@ -67,7 +69,7 @@
                             {
                                 <li class="divider"></li>
                                 <li><a href="/user">用户列表</a></li>
-                                <li><a href="/user/edit" data-toggle="modal" data-target="#modal">添加用户</a></li>
+                                    <li><a href="/user/edit" data-toggle="modal" data-target="#modal">添加用户</a></li>
                             }
                         </ul>
                     </li>
@@ -75,7 +77,7 @@
             </ul>
             <ul class="nav navbar-nav navbar-right">
                 <li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Administrator <span class="caret"></span></a>
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">@(identity.Name) <span class="caret"></span></a>
                     <ul class="dropdown-menu" role="menu">
                         <li><a href="/user/editpassword" data-toggle="modal" data-target="#modal">修改密码</a></li>
                         <li><a href="/user/logout" data-target="#page">退出</a></li>

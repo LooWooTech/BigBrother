@@ -5,7 +5,7 @@
 <form id="form-pdf" action="/Archive/Import" method="post" class="form-horizontal" enctype="multipart/form-data">
     <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <h4 class="modal-title"><i class="glyphicon glyphicon-plus"></i>统计册子上传</h4>
+        <h4 class="modal-title"><i class="glyphicon glyphicon-plus"></i>调控档案上传</h4>
     </div>
     <div class="modal-body">
         <div class="alert alert-warning" role="alert" id="alert-pdf">
@@ -26,9 +26,29 @@
         <div class="form-group">
             <label class="control-label col-md-3">文件：</label>
             <div class="col-md-8">
-                <input type="file" name="file" class="form-control" id="filepdf" />
-                <span class="help-block" id="span-pdf"></span>
-                <input type="hidden" name="filePath" id="hide-pdf" />
+                <button type="button" class="btn btn-primary btn-sm" name="AddFile"><i class="fa fa-file"></i>添加文件</button>
+                <div id="File-List">
+                    <input type="file" name="file" class="form-control" id="filepdf" />
+                    <span class="help-block" id="span-pdf"></span>
+                    <input type="hidden" name="filePath" id="hide-pdf" />
+                    @*<div class="input-group" style="margin:2px;">
+                        <input type="file" name="file" class="form-control" />
+                        <span class="input-group-btn">
+                            <button type="button" class="btn btn-danger btn-remove"><i class="glyphicon glyphicon-remove-circle"></i></button>
+                        </span>
+                    </div>
+                    <div class="input-group" role="group">
+                        <input type="file" name="file" class="form-control" />
+                        <span class="help-block"></span>
+                        <input type="hidden" name="filePath" />
+                    </div>
+                    <div class="input-group" role="group">
+                        <input type="file" name="file" class="form-control" />
+                        <span class="help-block"></span>
+                        <input type="hidden" name="filePath" />
+                    </div>*@  
+                </div>
+             
             </div>
         </div>
     </div>
@@ -39,9 +59,39 @@
     </div>
 </form>
 
+
+<div class="hide">
+    <div id="file">
+        <div class="input-group" style="margin:2px;">
+            <input type="file" name="file" class="form-control" />
+            <input type="hidden" name="filePath" class="form-control" />
+            <span class="input-group-btn">
+                <button type="button" class="btn btn-danger btn-remove"><i class="glyphicon glyphicon-remove-circle"></i></button>
+            </span>
+        </div>
+        <span class="help-block"></span>
+    </div>
+   
+</div>
+
 <script>
     $("#alert-pdf").hide();
+    var fileHtml = $("#file").html();
     $(function () {
+
+        $("button[name='AddFile']").click(function () {
+            $("#File-List").append(fileHtml);
+            $(".input-group-btn>.btn-remove").unbind("click").bind("click", function () {
+                $(this).parent().parent().remove();
+            });
+
+            $(".input-group>input[name='file']").setUpload("/Archive/Upload", function (json) {
+                $(this).next("input[name='filePath']").val(json.data.filePath);
+                $(this).next(".help-block").text(json.data.filePath);
+            });
+        });
+
+
         $("#filepdf").setUpload("/Archive/Upload", function (json) {
             $("#hide-pdf").val(json.data.filePath);
             $("#span-pdf").text(json.data.filePath);

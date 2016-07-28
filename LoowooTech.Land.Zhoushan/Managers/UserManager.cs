@@ -27,9 +27,12 @@ namespace LoowooTech.Land.Zhoushan.Managers
             {
                 foreach (var user in list)
                 {
-                    if (user.Role==UserRole.Branch&&user.AreaID.HasValue)
+                    if (user.AreaID.HasValue)
                     {
-                        user.Area = Core.AreaManager.GetArea(user.AreaID.Value);
+                        if (user.Role == UserRole.City || user.Role == UserRole.Branch)
+                        {
+                            user.Area = Core.AreaManager.GetArea(user.AreaID.Value);
+                        }
                     }
                 }
             }
@@ -51,7 +54,7 @@ namespace LoowooTech.Land.Zhoushan.Managers
                 {
                     throw new ArgumentException("密码错误");
                 }
-                if (user.Role == UserRole.Branch && user.AreaID.HasValue)
+                if (user.AreaID.HasValue)
                 {
                     user.Area = Core.AreaManager.GetArea(user.AreaID.Value);
                 }
@@ -77,6 +80,22 @@ namespace LoowooTech.Land.Zhoushan.Managers
 
         public void Save(User model)
         {
+            if (model.Role == UserRole.City)
+            {
+                var area = Core.AreaManager.GetArea(System.Configuration.ConfigurationManager.AppSettings["CITY"]);
+                if (area == null)
+                {
+                    throw new ArgumentException("未找到市本级相关区域记录");
+                }
+                model.AreaID = area.ID;
+            }else if (model.Role == UserRole.Branch)
+            {
+
+            }
+            else
+            {
+                model.AreaID = null;
+            }
             using (var db = GetDbContext())
             {
                 if (model.ID > 0)
@@ -95,7 +114,7 @@ namespace LoowooTech.Land.Zhoushan.Managers
                         }
                         entity.Name = model.Name;
                         entity.Role = model.Role;
-                        entity.AreaID = model.Role == UserRole.Branch ? model.AreaID : null;
+                        entity.AreaID = model.AreaID;
                     }
                 }
                 else

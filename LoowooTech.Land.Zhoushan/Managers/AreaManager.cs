@@ -53,6 +53,12 @@ namespace LoowooTech.Land.Zhoushan.Managers
             return GetAreas().FirstOrDefault(e => e.ID == id);
         }
 
+        public Area GetArea(string name)
+        {
+            if (string.IsNullOrEmpty(name)) return null;
+            return GetAreas().FirstOrDefault(e => e.Name == name);
+        }
+
         public List<Area> GetAreas(int? parentId = null)
         {
             var list = GetAreas();

@@ -48,6 +48,10 @@
             <div class="col-lg-8">
                 @foreach(var area in Areas)
                 {
+                    if (area.Name == "市本级")
+                    {
+                        continue;
+                    }
                     <label class="radio-inline">
                         <input type="radio" name="AreaID" value="@(area.ID)" @(model.Role==UserRole.Branch&&model.AreaID.HasValue&&model.AreaID.Value==area.ID?"checked=checked":"") />@(area.Name)
                     </label>

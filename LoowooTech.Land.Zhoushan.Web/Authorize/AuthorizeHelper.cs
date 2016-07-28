@@ -41,7 +41,7 @@ namespace LoowooTech.Land.Zhoushan.Web
 
         public static void Login(HttpContextBase context, User user)
         {
-            var tokenValue = user.ID + "|" + user.Name + "|" + user.Role + "|" +(user.Role==UserRole.Branch&&user.Area!=null?user.Area.Name:"")+ "|" + DateTime.Now;
+            var tokenValue = user.ID + "|" + user.Name + "|" + user.Role + "|" +(user.Area!=null?user.Area.Name:"")+ "|" + DateTime.Now;
             var ticket = new FormsAuthenticationTicket(tokenValue, false, int.MaxValue);
             var cookie = new HttpCookie(_tokenKey, FormsAuthentication.Encrypt(ticket));
             cookie.Expires = DateTime.Now.AddDays(1);

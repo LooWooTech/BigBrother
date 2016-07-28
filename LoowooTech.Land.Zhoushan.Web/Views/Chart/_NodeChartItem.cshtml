@@ -1,0 +1,25 @@
+﻿@model Node
+@{
+    List<NodeValue> currentValues = ViewBag.CurrentNodeValues;
+    List<NodeValue> values = ViewBag.ChildValues;
+    Node currentNode = ViewBag.CurrentNode;
+}
+<div class="row grid-row">
+    <div class="col-lg-6 node-level-@(Model.Level)">
+        @(Model.Name)
+    </div>
+    @{
+        if (currentNode!=null && currentNode.ID == Model.ID)
+        {
+            Html.RenderPartial("_NodeValueItem", currentValues);
+        }
+        else
+        {
+            Html.RenderPartial("_NodeValueItem", values.Where(e=>e.NodeID == Model.ID));
+        }
+    }
+</div>
+@foreach (var child in Model.Children)
+{
+    Html.RenderPartial("_NodeChartItem", child);
+}

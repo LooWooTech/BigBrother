@@ -1,0 +1,20 @@
+﻿@model IEnumerable<NodeValue>
+@{
+    var rowIndex = 0;
+    List<NodeValueType> valueTypes = ViewBag.ValueTypes;
+
+}
+@foreach (var g in Model.GroupBy(g => g.TypeID))
+{
+    rowIndex++;
+    var type = valueTypes.FirstOrDefault(e => e.ID == g.Key);
+    var sumValue = g.Sum(e => e.Value);
+    var sumRate = g.Sum(e => e.RateValue);
+    <div class="col-lg-3 @(rowIndex>1?"col-lg-offset-6":null)">
+        @(sumValue.ToString("f2").TrimEnd('0').TrimEnd('.'))
+        （@(type.Unit)）
+    </div>
+    <div class="col-lg-3">
+        @(sumRate.ToString("f2").TrimEnd('0').TrimEnd('.'))
+    </div>
+}

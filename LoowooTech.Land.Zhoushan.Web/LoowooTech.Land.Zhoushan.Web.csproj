@@ -234,6 +234,9 @@
     <Content Include="Views\Archive\Import.cshtml" />
     <Content Include="Views\Archive\Index.cshtml" />
     <Content Include="Views\Archive\Search.cshtml" />
+    <Content Include="Views\Chart\_NodeChartItem.cshtml" />
+    <Content Include="Views\Chart\_NodeValueItem.cshtml" />
+    <Content Include="Views\Chart\_AreaChartItem.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

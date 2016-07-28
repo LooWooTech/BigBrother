@@ -15,6 +15,12 @@ namespace LoowooTech.Land.Zhoushan.Web.Controllers
             return View();
         }
 
+        public ActionResult GetYears(int formId)
+        {
+            var list = Core.FormManager.GetFormYears(formId);
+            return JsonSuccessResult(list);
+        }
+
         public ActionResult Charts()
         {
             var data = new Dictionary<Form, int[]>();

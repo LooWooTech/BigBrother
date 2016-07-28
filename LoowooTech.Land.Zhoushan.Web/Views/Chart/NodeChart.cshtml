@@ -16,99 +16,63 @@
     var groups = childNodes.GroupBy(e => e.Group).ToDictionary(g => g.Key ?? string.Empty, g => g.ToList());
     var index = 0;
 }
-@foreach (var kv in groups)
-{
-    index++;
-    var group = kv.Key;
-    if (currentNode == null && string.IsNullOrEmpty(group))
-    {
-        continue;
-    }
-    var children = kv.Value;
-    var nodeIds = children.Select(e => e.ID).ToArray();
-    var values = childValues.Where(e => nodeIds.Contains(e.NodeID)).ToList();
-    var labels = children.OrderBy(e => e.ID).Select(e => e.Name).ToArray();
-    var data = values.GroupBy(e => e.NodeID).ToDictionary(g => g.Key, g => g.Sum(e => e.Value)).OrderBy(g => g.Key).Select(g => g.Value.ToString("f2"));
-    <div class="col-lg-12">
-        <hr />
-        <h4>@(group)</h4>
-        <div class="col-lg-4">
+
+<div class="col-lg-4">
+    @foreach (var kv in groups)
+            {
+                index++;
+                var group = kv.Key;
+                if (currentNode == null && string.IsNullOrEmpty(group))
+                {
+                    continue;
+                }
+                var children = kv.Value;
+                var nodeIds = children.Select(e => e.ID).ToArray();
+                var values = childValues.Where(e => nodeIds.Contains(e.NodeID)).ToList();
+                var labels = children.OrderBy(e => e.ID).Select(e => e.Name).ToArray();
+                var data = values.GroupBy(e => e.NodeID).ToDictionary(g => g.Key, g => g.Sum(e => e.Value)).OrderBy(g => g.Key).Select(g => g.Value.ToString("f2"));
+        <div class="row">
+            <h4>@(group)</h4>
             <canvas id="chart-childnode-@(index)"></canvas>
         </div>
-        <div class="col-lg-5 grid">
-            <div class="row grid-header">
-                <div class="col-lg-7">分类</div>
-                <div class="col-lg-3">值</div>
-                <div class="col-lg-2">@(parameter.RateType.Value.GetDescription()) %</div>
-            </div>
-            @if (currentNode != null && currentValues != null && index == 1)
-            {
-                var rowIndex = 0;
-                <div class="row grid-row">
-                    <div class="col-lg-7">
-                        @(currentNode.Name)
-                    </div>
-                    @foreach (var g in currentValues.GroupBy(e => e.TypeID))
-                    {
-                        rowIndex++;
-                        var type = valueTypes.FirstOrDefault(e => e.ID == g.Key);
-                        var val = g.Sum(e => e.Value);
-                        var rateValue = g.Sum(e => e.RateValue);
-                        <div class="col-lg-3 @(rowIndex>1?"col-lg-offset-7":null)">
-                            @(val.ToString("f2").TrimEnd('0').TrimEnd('.'))
-                            （@(type.Unit)）
-                        </div>
-                        <div class="col-lg-2">
-                            @(rateValue.ToString("f2").TrimEnd('0').TrimEnd('.'))
-                        </div>
-                    }
-                </div>
-            }
-            @foreach (var child in children)
-            {
-                var rowIndex = 0;
-                var vals = values.Where(e => e.NodeID == child.ID);
-                <div class="row grid-row">
-                    <div class="col-lg-7">
-                        - @(child.Name)
-                    </div>
-                    @foreach (var g in vals.GroupBy(e => e.TypeID))
-                    {
-                        rowIndex++;
-                        var type = valueTypes.FirstOrDefault(e => e.ID == g.Key);
-                        var val = g.Sum(e => e.Value);
-                        var rateValue = g.Sum(e => e.RateValue);
-                        <div class="col-lg-3 @(rowIndex>1?"col-lg-offset-7":null)">
-                            @(val.ToString("f2").TrimEnd('0').TrimEnd('.'))
-                            （@(type.Unit)）
-                        </div>
-                        <div class="col-lg-2">
-                            @(rateValue.ToString("f2").TrimEnd('0').TrimEnd('.'))
-                        </div>
-                    }
-                </div>
-            }
-        </div>
+                <script>
+                    $(function () {
+                        var labels = @Html.Raw(labels.ToJson()) || [];
+                        var data = @Html.Raw(data.ToJson()) || [];
+                        var len = labels.length - data.length;
+                        for(var i=0;i<len;i++){
+                            data.push(0);
+                        }
+                        var ctx = document.getElementById("chart-childnode-@(index)");
+                        var myChart = new Chart(ctx, {
+                            type: 'doughnut',
+                            data: {
+                                labels: labels,
+                                datasets:[{
+                                    data:data,
+                                    backgroundColor:getChartColors(data.length)
+                                }]
+                            }
+                        });
+                    });
+                </script>
+    }
+</div>
+<div class="col-lg-5 grid">
+    <div class="row grid-header">
+        <div class="col-lg-6">分类</div>
+        <div class="col-lg-3">值</div>
+        <div class="col-lg-3">@(parameter.RateType.Value.GetDescription()) %</div>
     </div>
-    <script>
-        $(function () {
-            var labels = @Html.Raw(labels.ToJson()) || [];
-            var data = @Html.Raw(data.ToJson()) || [];
-            var len = labels.length - data.length;
-            for(var i=0;i<len;i++){
-                data.push(0);
-            }
-            var ctx = document.getElementById("chart-childnode-@(index)");
-            var myChart = new Chart(ctx, {
-                type: 'doughnut',
-                data: {
-                    labels: labels,
-                    datasets:[{
-                        data:data,
-                        backgroundColor:getChartColors(data.length)
-                    }]
-                }
-            });
-        });
-    </script>
-}
+    @if (currentNode != null && currentValues != null)
+    {
+        Html.RenderPartial("_NodeChartItem", currentNode);
+    }
+    else
+    {
+        foreach (var child in childNodes)
+        {
+            Html.RenderPartial("_NodeChartItem", child);
+        }
+    }
+</div>

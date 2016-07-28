@@ -18,6 +18,12 @@ namespace LoowooTech.Land.Zhoushan.Web.Controllers
             return View();
         }
 
+        public ActionResult GetList(int formId)
+        {
+            var data = Core.FormManager.GetNodeRoots(formId);
+            return JsonSuccessResult(data);
+        }
+
         [UserRoleFilter(UserRole.Branch)]
         [HttpGet]
         public ActionResult Edit(int formId = 0, int id = 0, int parentId = 0)

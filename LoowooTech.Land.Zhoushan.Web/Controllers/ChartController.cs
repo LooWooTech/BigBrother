@@ -10,12 +10,14 @@ namespace LoowooTech.Land.Zhoushan.Web.Controllers
 {
     public class ChartController : ControllerBase
     {
-        public ActionResult Index(int formId, NodeValueParameter parameter)
+        public ActionResult Index(NodeValueParameter parameter)
         {
-            ViewBag.Form = Core.FormManager.GetForm(formId);
+            if (parameter.FormID > 0)
+            {
+                ViewBag.Form = Core.FormManager.GetForm(parameter.FormID);
+            }
+            ViewBag.Forms = Core.FormManager.GetForms();
             ViewBag.Parameter = parameter;
-            //获取可用年份
-            ViewBag.Years = Core.FormManager.GetFormYears(formId);
             return View();
         }
 
@@ -38,18 +40,18 @@ namespace LoowooTech.Land.Zhoushan.Web.Controllers
                 ViewBag.CurrentNodeValues = Core.FormManager.GetNodeValues(parameter);
             }
 
-            var childNodes = parameter.NodeID == 0 ? Core.FormManager.GetRootNodes(parameter.FormID) : Core.FormManager.GetNodeChildren(parameter.NodeID);
-            ViewBag.ChildNodes = childNodes;
+            var childNodes = Core.FormManager.GetAllChildrenNodes(parameter.FormID, parameter.NodeID);
+            ViewBag.ChildNodes = childNodes.Where(e => e.ParentID == parameter.NodeID).ToList();
+            parameter.NodeIds = childNodes.Select(e => e.ID).ToArray();
+            parameter.GetNode = false;
+            parameter.GetArea = false;
 
-            var childIds = childNodes.Select(e => e.ID).ToArray();
-            parameter.NodeIds = childIds;
             var list = Core.FormManager.GetNodeValues(parameter);
             foreach (var item in list)
             {
                 item.Node = childNodes.FirstOrDefault(e => e.ID == item.NodeID);
             }
             ViewBag.ChildValues = list;
-
             ViewBag.Parameter = parameter;
             return View();
         }
@@ -98,15 +100,15 @@ namespace LoowooTech.Land.Zhoushan.Web.Controllers
                 parameter.Quarters = null;
             }
 
-            var areas = Core.AreaManager.GetAreas(parameter.AreaID);
+            var areas = Core.AreaManager.GetAreas();
             var areaIds = areas.Select(e => e.ID).ToArray();
             parameter.AreaIds = areaIds;
             parameter.AreaID = null;
             ViewBag.Parameter = parameter;
 
-            ViewBag.Areas = areas;
+            ViewBag.Areas = areas.Where(e=>e.ParentID == (parameter.AreaID ?? 0)).ToList();
             ViewBag.ValueTypes = Core.FormManager.GetNodeValueTypes();
-            ViewBag.NodeValues = Core.FormManager.GetNodeValues(parameter);
+            ViewBag.AreaValues = Core.FormManager.GetNodeValues(parameter);
             ViewBag.Node = Core.FormManager.GetNode(parameter.NodeID);
             return View();
         }

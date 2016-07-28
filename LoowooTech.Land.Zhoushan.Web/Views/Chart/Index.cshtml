@@ -1,6 +1,6 @@
 ﻿@{
-    Form form = ViewBag.Form;
-    ViewBag.Title = "统计图 - " + form.Name;
+    List<Form> forms = ViewBag.Forms;
+    ViewBag.Title = "统计图";
     NodeValueParameter parameter = ViewBag.Parameter;
     int[] years = ViewBag.Years;
 }
@@ -11,18 +11,22 @@
     正在计算，请稍等...
 </div>
 <form id="form-filter" action="/chart/" method="get" class="form-inline">
-    <input type="hidden" name="formId" value="@(form.ID)" />
     <div class="input-group">
         <span class="input-group-addon">选择条件</span>
         <div class="input-group-btn">
-            @Html.Action("NodeDropdown", "Chart", new { formId = form.ID, nodeId = parameter.NodeID })
-            <select name="Year" class="form-control">
-                @foreach (var year in years)
+            <select id="ddl-form" name="formId" class="form-control">
+                <option value="0">选择报表</option>
+                @if (forms != null)
                 {
-                    <option value="@(year)" @(parameter.Year == year ? "selected" : null)>@(year)</option>
+                    foreach (var f in forms)
+                    {
+                        <option value="@(f.ID)">@(f.Name)</option>
+                    }
                 }
             </select>
-            <select name="Quarters" class="form-control">
+            <select id="ddl-node" name="NodeID" class="form-control"></select>
+            <select id="ddl-year" name="Year" class="form-control"></select>
+            <select id="ddl-quarters" name="Quarters" class="form-control">
                 @foreach (Quarter val in Enum.GetValues(typeof(Quarter)))
                 {
                     <option value="@((int)val)" @(val == parameter.Quarter ? "selected" : null)>@(val.GetDescription())</option>
@@ -39,13 +43,13 @@
         </a>
     </div>
 </form>
-<div id="panel-node">
+<div id="panel-node" class="row col-lg-12" style="margin-top:20px;">
 
 </div>
-<div id="panel-quarter">
+<div id="panel-quarter" class="row col-lg-12">
 
 </div>
-<div id="panel-area">
+<div id="panel-area" class="row col-lg-12">
 
 </div>
 <script>
@@ -64,6 +68,32 @@
     }
 
     $(function () {
+        $("#ddl-form").change(function () {
+            var formId = $(this).val();
+            $.request("/node/getlist?formId=" + formId, function (json) {
+                $("#ddl-node").html(json.data.length > 1?'<option value="0">请选择节点</option>':'');
+                $.each(json.data, function (k, v) {
+                    appendNode(v);
+                });
+            });
+            $.request("/form/getyears?formId=" + formId, function (json) {
+                $("#ddl-year").html('');
+                $.each(json.data, function (k, v) {
+                    $("#ddl-year").append("<option value='" + v + "'>" + v + "</option>");
+                });
+            });
+            var ddlNode = $("#ddl-node");
+            function appendNode(node, deepth) {
+                deepth = deepth || 0;
+                ddlNode.append("<option value='" + node.ID + "'>" + "-".repeat(deepth) + " " + node.Name + "</option>")
+                if (node.Children.length > 0) {
+                    $.each(node.Children, function (k, v) {
+                        appendNode(v, deepth + 1);
+                    })
+                }
+            }
+        });
+
         $("#form-filter").submit(function () {
             var data = $(this).serialize();
             var action = $(this).attr("action");
@@ -90,7 +120,8 @@
             });
 
             var years = $("#ddl-years").val() || 3;
-            $("#panel-quarter").load("/chart/quarterchart?formId=@(form.ID)&" + data, function () {
+            var formId = $("#ddl-form").val();
+            $("#panel-quarter").load("/chart/quarterchart?formId=" + formId + "&" + data, function () {
                 quarterChartCompleted = true;
                 hideLoading();
             });
@@ -100,11 +131,5 @@
             });
             return false;
         });
-
-        setTimeout(function () {
-            if ("@(parameter.NodeID)" == "0") {
-                $("#form-filter").submit();
-            }
-        }, 1000);
     });
 </script>

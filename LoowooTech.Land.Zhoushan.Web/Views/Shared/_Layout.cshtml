@@ -36,7 +36,7 @@
         <div class="navbar-collapse collapse" id="navbar-main">
             <ul class="nav navbar-nav">
                 <li><a href="/"><i class="fa fa-home"></i> 首页</a></li>
-                <li><a href="/form/charts"><i class="fa fa-pie-chart"></i> 统计报告</a></li>
+                <li><a href="/form/charts"><i class="fa fa-pie-chart"></i> 统计报表</a></li>
                 <li><a href="/excel/export" data-toggle="modal" data-target="#modal"><i class="fa fa-share"></i> 报告导出</a></li>
                 <li class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-pencil-square-o"></i> 数据录入 <span class="caret"></span></a>
@@ -49,11 +49,11 @@
                 @if (role >= UserRole.Advanced)
                 {
                     <li class="dropdown">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-send"></i>调控档案<span class="caret"></span></a>
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-send"></i> 调控档案<span class="caret"></span></a>
                         <ul class="dropdown-menu" role="menu">
                             <li><a href="/Archive/Import" data-toggle="modal" data-target="#modal">档案上传</a></li>
-                            <li><a href="/Archive/" data-target="#page">档案管理</a></li>
-                            <li><a href="/Archive/Search" data-target="#page">档案查询</a></li>
+                            <li><a href="/Archive/">档案管理</a></li>
+                            <li><a href="/Archive/Search">档案查询</a></li>
                         </ul>
                     </li>
                     <li class="dropdown">

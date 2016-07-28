@@ -39,6 +39,38 @@ namespace LoowooTech.Land.Zhoushan.Managers
             }
         }
 
+        public List<Node> GetAllChildrenNodes(int formId, int nodeId)
+        {
+            if (formId == 0 && nodeId == 0)
+            {
+                throw new Exception("参数错误");
+            }
+            if (nodeId > 0)
+            {
+                var nodes = GetNodeChildren(nodeId);
+                var result = new List<Node>();
+                foreach (var node in nodes)
+                {
+                    TileNodeAndChildren(result, node);
+                }
+
+                return result;
+            }
+            else
+            {
+                return GetNodes().Where(e => e.FormID == formId).ToList();
+            }
+        }
+
+        private void TileNodeAndChildren(List<Node> result, Node node)
+        {
+            result.Add(node);
+            foreach (var child in node.Children)
+            {
+                TileNodeAndChildren(result, child);
+            }
+        }
+
         //public List<NodeValue> GetChildNodeValues(NodeValueParameter parameter)
         //{
         //    using (var db = GetDbContext())

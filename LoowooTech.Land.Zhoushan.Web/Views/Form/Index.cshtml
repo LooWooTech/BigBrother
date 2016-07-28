@@ -1,7 +1,7 @@
 ﻿@{
     List<Form> list = ViewBag.Forms;
     UserRole role = ((UserIdentity)ViewBag.CurrentIdentity).Role;
-    var hasEditRight = role >= UserRole.Writer;
+    var hasEditRight = role >= UserRole.Advanced;
     ViewBag.Title = "表单列表";
 
 }

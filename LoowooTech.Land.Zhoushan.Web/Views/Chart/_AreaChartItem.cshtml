@@ -1,0 +1,18 @@
+﻿@model Area
+@{
+    List<NodeValue> values = ViewBag.AreaValues;
+}
+<div class="row grid-row">
+    <div class="col-lg-6">
+        @if (Model.ParentID > 0)
+        {
+            @:--
+        }
+        @(Model.Name)
+    </div>
+    @Html.Partial("_NodeValueItem", values.Where(e => e.AreaID == Model.ID))
+</div>
+@foreach (var child in Model.Children)
+{
+    Html.RenderPartial("_AreaChartItem", child);
+}

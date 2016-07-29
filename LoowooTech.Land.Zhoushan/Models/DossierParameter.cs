@@ -11,6 +11,7 @@ namespace LoowooTech.Land.Zhoushan.Models
         public int? MinYear { get; set; }
         public int? MaxYear { get; set; }
         public string Quarter { get; set; }
+        public string Remark { get; set; }
 
     }
 }

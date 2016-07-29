@@ -18,12 +18,25 @@ namespace LoowooTech.Land.Zhoushan.Managers
                 return entry != null;
             }
         }
-        public void SaveDossier(Dossier dossier)
+        public int SaveDossier(Dossier dossier)
         {
             using (var db = GetDbContext())
             {
-                db.Dossiers.Add(dossier);
+                if (dossier.ID == 0)
+                {
+                    db.Dossiers.Add(dossier);
+                    
+                }
+                else
+                {
+                    var entry = db.Dossiers.FirstOrDefault(e => e.ID == dossier.ID);
+                    entry.Year = dossier.Year;
+                    entry.Quarter = dossier.Quarter;
+                    entry.UploadTime = dossier.UploadTime;
+                    entry.Remark = dossier.Remark;
+                }
                 db.SaveChanges();
+                return dossier.ID;
             }
         }
 
@@ -31,7 +44,51 @@ namespace LoowooTech.Land.Zhoushan.Managers
         {
             using (var db = GetDbContext())
             {
-                return db.Dossiers.ToList();
+                var list= db.Dossiers.ToList();
+                foreach(var item in list)
+                {
+                    item.Files = db.DossierFiles.Where(e => e.DossierID == item.ID).ToList();
+                }
+                return list;
+            }
+        }
+
+        public void SaveDossierFile(int id,string[] fileName,string[] filePath)
+        {
+            if (id == 0) return;
+            var list = new List<DossierFile>();
+            var count = fileName.Count();
+            for(var i = 0; i < count; i++)
+            {
+                list.Add(new DossierFile() { FileName = fileName[i], FilePath = filePath[i], DossierID = id });
+            }
+            using (var db = GetDbContext())
+            {
+                var old = db.DossierFiles.Where(e => e.DossierID == id).ToList();
+                if (old != null)
+                {
+                    db.DossierFiles.RemoveRange(old);
+                    db.SaveChanges();
+                }
+                db.DossierFiles.AddRange(list);
+                db.SaveChanges();
+            }
+        }
+
+        public Dossier GetDossier(int id)
+        {
+            if (id == 0)
+            {
+                return null;
+            }
+            using (var db = GetDbContext())
+            {
+                var dossier = db.Dossiers.FirstOrDefault(e => e.ID == id);
+                if (dossier != null)
+                {
+                    dossier.Files = db.DossierFiles.Where(e => e.DossierID == dossier.ID).ToList();
+                }
+                return dossier;
             }
         }
 
@@ -48,6 +105,10 @@ namespace LoowooTech.Land.Zhoushan.Managers
                 if (parameter.MaxYear.HasValue)
                 {
                     query = query.Where(e => e.Year <= parameter.MaxYear.Value);
+                }
+                if (!string.IsNullOrEmpty(parameter.Remark))
+                {
+                    query = query.Where(e => e.Remark.Contains(parameter.Remark));
                 }
                 if (!string.IsNullOrEmpty(parameter.Quarter))
                 {
@@ -67,7 +128,12 @@ namespace LoowooTech.Land.Zhoushan.Managers
                             break;
                     }
                 }
-                return query.ToList();
+                var list = query.ToList();
+                foreach(var item in list)
+                {
+                    item.Files = db.DossierFiles.Where(e => e.DossierID == item.ID).ToList();
+                }
+                return list;
             }
         }
     }

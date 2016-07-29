@@ -21,7 +21,17 @@
                         @foreach (var dossier in dossiers)
                         {
                             <div class="col-md-3">
-                                <a href="/@(dossier.FilePath)" class="btn btn-default btn-sm" data-target="#page" target="_blank">@string.Format("{0}年{1}",dossier.Year,dossier.Quarter.GetDescription())</a>
+                                <div class="btn-group">
+                                    <button type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">@string.Format("{0}年{1}", dossier.Year, dossier.Quarter.GetDescription())<span class="caret"></span></button>
+                                    <ul class="dropdown-menu">
+                                        <li><a href="/Archive/Import/?id=@(dossier.ID)" data-toggle="modal" data-target="#modal"><i class="glyphicon glyphicon-edit"></i>编辑</a></li>
+                                        <li role="separator" class="divider"></li>
+                                        @foreach(var file in dossier.Files)
+                                        {
+                                            <li><a href="/@(file.FilePath)" data-target="#page" target="_blank">@(file.FileName)</a></li>
+                                        }
+                                    </ul>
+                                </div>
                             </div>
                         }
                     </div>

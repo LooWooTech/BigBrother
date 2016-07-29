@@ -1,6 +1,6 @@
 ﻿@{
     ViewBag.Title = "";
-
+    Dossier dossier = ViewBag.Dossier;
 }
 <form id="form-pdf" action="/Archive/Import" method="post" class="form-horizontal" enctype="multipart/form-data">
     <div class="modal-header">
@@ -11,44 +11,49 @@
         <div class="alert alert-warning" role="alert" id="alert-pdf">
             <span></span>
         </div>
+        <input type="hidden" name="ID" value="@(dossier!=null?dossier.ID:0)" />
         <div class="form-group">
             <label for="" class="control-label col-md-3">选择年份</label>
             <div class="col-md-8">
-                @Html.Partial("_YearDropdown")
+                @(dossier!=null?Html.Partial("_YearDropdown",dossier.Year):Html.Partial("_YearDropdown"))
             </div>
         </div>
         <div class="form-group">
             <label class="control-label col-md-3">选择季度</label>
             <div class="col-md-8">
-                @Html.Partial("_QuarterDropdown")
+                @(dossier!=null?Html.Partial("_QuarterDropdown",dossier.Quarter):Html.Partial("_QuarterDropdown"))
             </div>
         </div>
         <div class="form-group">
-            <label class="control-label col-md-3">文件：</label>
+            <label class="control-label col-md-3">备注</label>
             <div class="col-md-8">
-                <button type="button" class="btn btn-primary btn-sm" name="AddFile"><i class="fa fa-file"></i>添加文件</button>
+                <textarea name="Remark" class="form-control" rows="4">@(dossier!=null?dossier.Remark:"")</textarea>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="control-label col-md-3">选择文件</label>
+            <div class="col-md-8">
+                <input type="file" name="file" class="form-control" id="filepdf" />       
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="control-label col-md-3">已选择文件</label>
+            <div class="col-md-8">
                 <div id="File-List">
-                    <input type="file" name="file" class="form-control" id="filepdf" />
-                    <span class="help-block" id="span-pdf"></span>
-                    <input type="hidden" name="filePath" id="hide-pdf" />
-                    @*<div class="input-group" style="margin:2px;">
-                        <input type="file" name="file" class="form-control" />
-                        <span class="input-group-btn">
-                            <button type="button" class="btn btn-danger btn-remove"><i class="glyphicon glyphicon-remove-circle"></i></button>
-                        </span>
-                    </div>
-                    <div class="input-group" role="group">
-                        <input type="file" name="file" class="form-control" />
-                        <span class="help-block"></span>
-                        <input type="hidden" name="filePath" />
-                    </div>
-                    <div class="input-group" role="group">
-                        <input type="file" name="file" class="form-control" />
-                        <span class="help-block"></span>
-                        <input type="hidden" name="filePath" />
-                    </div>*@  
+                    @if (dossier != null && dossier.Files != null)
+                    {
+                        foreach (var file in dossier.Files)
+                        {
+                            <div class="input-group" style="margin:2px;">
+                                <input type="text" name="FileName" class="form-control" readonly="readonly" value="@(file.FileName)" />
+                                <input type="hidden" name="FilePath" value="@(file.FilePath)" />
+                                <span class="input-group-btn">
+                                    <button type="button" class="btn btn-danger btn-remove"><i class="glyphicon glyphicon-remove-circle"></i></button>
+                                </span>
+                            </div>
+                        }
+                    }
                 </div>
-             
             </div>
         </div>
     </div>
@@ -61,40 +66,36 @@
 
 
 <div class="hide">
-    <div id="file">
+    <div id="SelectFile">
         <div class="input-group" style="margin:2px;">
-            <input type="file" name="file" class="form-control" />
-            <input type="hidden" name="filePath" class="form-control" />
+            <input type="text" name="FileName" class="form-control" readonly="readonly" value="{FileName}" />
+            <input type="hidden" name="FilePath" value="{FilePath}" />
             <span class="input-group-btn">
                 <button type="button" class="btn btn-danger btn-remove"><i class="glyphicon glyphicon-remove-circle"></i></button>
             </span>
+            
         </div>
-        <span class="help-block"></span>
     </div>
    
 </div>
 
 <script>
     $("#alert-pdf").hide();
-    var fileHtml = $("#file").html();
+    var fileHtml = $("#SelectFile").html();
     $(function () {
 
-        $("button[name='AddFile']").click(function () {
-            $("#File-List").append(fileHtml);
+        $(".input-group-btn>.btn-remove").click(function () {
+            $(this).parent().parent().remove();
+        });
+
+        $("#filepdf").setUpload("/Archive/Upload", function (json) {
+            var appendHtml = fileHtml;
+            appendHtml = appendHtml.replace("{FilePath}", json.data.filePath).replace("{FileName}", json.data.fileName);
+            $("#File-List").append(appendHtml);
+
             $(".input-group-btn>.btn-remove").unbind("click").bind("click", function () {
                 $(this).parent().parent().remove();
             });
-
-            $(".input-group>input[name='file']").setUpload("/Archive/Upload", function (json) {
-                $(this).next("input[name='filePath']").val(json.data.filePath);
-                $(this).next(".help-block").text(json.data.filePath);
-            });
-        });
-
-
-        $("#filepdf").setUpload("/Archive/Upload", function (json) {
-            $("#hide-pdf").val(json.data.filePath);
-            $("#span-pdf").text(json.data.filePath);
         });
 
         $("#form-pdf").submit(function () {

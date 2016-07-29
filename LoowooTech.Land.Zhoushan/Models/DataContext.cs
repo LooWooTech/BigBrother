@@ -24,5 +24,6 @@ namespace LoowooTech.Land.Zhoushan.Models
 
         public DbSet<NodeValueType> NodeValueTypes { get; set; }
         public DbSet<Dossier> Dossiers { get; set; }
+        public DbSet<DossierFile> DossierFiles { get; set; }
     }
 }

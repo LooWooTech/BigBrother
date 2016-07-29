@@ -19,22 +19,25 @@ namespace LoowooTech.Land.Zhoushan.Web.Controllers
             return View();
         }
 
-        public ActionResult Import()
+        public ActionResult Import(int id=0)
         {
+            ViewBag.Dossier = Core.DossierManager.GetDossier(id);
             return View();
         }
 
         [HttpPost]
-        public ActionResult Import(int year,Quarter quarter,string filePath)
+        public ActionResult Import(Dossier dossier,string[] filePath,string[] fileName)
         {
-            if (Core.DossierManager.Exist(year, quarter))
+            if (dossier.ID==0&&Core.DossierManager.Exist(dossier.Year, dossier.Quarter))
             {
-                return JsonErrorResult(string.Format("当前系统中已经存在{0}年{1}的统计季报,如需要更换，请前往管理界面进行管理！", year, quarter.GetDescription()));
+                return JsonErrorResult(string.Format("当前系统中已经存在{0}年{1}的统计季报,如需要更换，请前往管理界面进行管理！", dossier.Year, dossier.Quarter.GetDescription()));
             }
-            Core.DossierManager.SaveDossier(new Dossier() { Year = year, Quarter = quarter, FilePath = filePath });
+            var id = Core.DossierManager.SaveDossier(dossier);
+            Core.DossierManager.SaveDossierFile(id, fileName, filePath);
             return JsonSuccessResult();
         }
 
+        [HttpPost]
         public ActionResult Upload()
         {
             if (Request.Files.Count == 0)
@@ -46,17 +49,18 @@ namespace LoowooTech.Land.Zhoushan.Web.Controllers
             var filePath = "uploads/" + Path.GetFileNameWithoutExtension(fileName)+DateTime.Now.Ticks.ToString()+Path.GetExtension(fileName);
             var savePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, filePath);
             Request.Files[0].SaveAs(savePath);
-            return JsonSuccessResult(new { filePath });
+            return JsonSuccessResult(new { filePath,fileName });
         }
 
         [HttpGet]
-        public ActionResult Search(int? minYear=null,int? maxYear=null,string quarter=null)
+        public ActionResult Search(int? minYear=null,int? maxYear=null,string quarter=null,string remark=null)
         {
             var parameter = new DossierParameter()
             {
                 MinYear = minYear,
                 MaxYear = maxYear,
-                Quarter = quarter
+                Quarter = quarter,
+                Remark=remark
             };
             ViewBag.List = Core.DossierManager.GetDossiers(parameter);
             ViewBag.Parameter = parameter;

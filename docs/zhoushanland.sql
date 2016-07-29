@@ -41,23 +41,48 @@ CREATE TABLE IF NOT EXISTS `dossier` (
   `ID` int(11) NOT NULL AUTO_INCREMENT,
   `Year` int(11) NOT NULL,
   `Quarter` int(11) NOT NULL,
-  `FilePath` varchar(1023) NOT NULL,
+  `Remark` varchar(1023) DEFAULT NULL,
   `UploadTime` datetime NOT NULL,
   PRIMARY KEY (`ID`)
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8;
 
 -- 正在导出表  zhoushanland.dossier 的数据：~7 rows (大约)
 DELETE FROM `dossier`;
 /*!40000 ALTER TABLE `dossier` DISABLE KEYS */;
-INSERT INTO `dossier` (`ID`, `Year`, `Quarter`, `FilePath`, `UploadTime`) VALUES
-	(1, 2016, 1, 'uploads/QL_20160725_0007.pdf', '2016-07-27 11:18:30'),
+INSERT INTO `dossier` (`ID`, `Year`, `Quarter`, `Remark`, `UploadTime`) VALUES
+	(1, 2016, 1, 'uploads/QL_20160725_0007.pdf', '2016-07-29 13:38:14'),
 	(2, 2016, 2, 'uploads/QL_20160725_0007.pdf', '2016-07-27 11:22:58'),
 	(3, 2016, 3, 'uploads/QL_20160725_0007.pdf', '2016-07-27 11:27:07'),
 	(4, 2015, 1, 'uploads/QL_20160725_0008.pdf', '2016-07-27 12:46:35'),
 	(5, 2014, 1, 'uploads/QL_20160725_0008636052294120621473.pdf', '2016-07-27 15:17:01'),
 	(6, 2015, 2, 'uploads/QL_20160725_0008636052294359612835.pdf', '2016-07-27 15:17:17'),
-	(7, 2016, 4, 'uploads/SKM_C364e16072710310_0001636052294514076858.pdf', '2016-07-27 15:17:37');
+	(7, 2016, 4, 'uploads/SKM_C364e16072710310_0001636052294514076858.pdf', '2016-07-27 15:17:37'),
+	(8, 2013, 1, NULL, '2016-07-29 10:22:53'),
+	(9, 2013, 2, '123342', '2016-07-29 10:44:02'),
+	(10, 2012, 2, '第二季度', '2016-07-29 13:38:47');
 /*!40000 ALTER TABLE `dossier` ENABLE KEYS */;
+
+
+-- 导出  表 zhoushanland.dossierfile 结构
+CREATE TABLE IF NOT EXISTS `dossierfile` (
+  `ID` int(11) NOT NULL AUTO_INCREMENT,
+  `FileName` varchar(255) NOT NULL,
+  `FilePath` varchar(1023) NOT NULL,
+  `DossierID` int(11) NOT NULL,
+  PRIMARY KEY (`ID`)
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8;
+
+-- 正在导出表  zhoushanland.dossierfile 的数据：~0 rows (大约)
+DELETE FROM `dossierfile`;
+/*!40000 ALTER TABLE `dossierfile` DISABLE KEYS */;
+INSERT INTO `dossierfile` (`ID`, `FileName`, `FilePath`, `DossierID`) VALUES
+	(1, 'QL_20160725_0007.pdf', 'uploads/QL_20160725_0007636053858312597793.pdf', 9),
+	(2, 'QL_20160725_0008.pdf', 'uploads/QL_20160725_0008636053858344267208.pdf', 9),
+	(3, 'SKM_C364e16072710310_0001.pdf', 'uploads/SKM_C364e16072710310_0001636053858373893285.pdf', 9),
+	(4, 'SKM_C364e16072710310_0003.pdf', 'uploads/SKM_C364e16072710310_0003636053858404059122.pdf', 9),
+	(5, 'QL_20160725_0007.pdf', 'uploads/QL_20160725_0007636053962884252665.pdf', 1),
+	(6, 'SKM_C364e16072710310_0004.pdf', 'uploads/SKM_C364e16072710310_0004636053963259065437.pdf', 10);
+/*!40000 ALTER TABLE `dossierfile` ENABLE KEYS */;
 
 
 -- 导出  表 zhoushanland.form 结构
@@ -191,7 +216,7 @@ CREATE TABLE IF NOT EXISTS `node_value` (
   KEY `NodeID` (`NodeID`)
 ) ENGINE=InnoDB AUTO_INCREMENT=713 DEFAULT CHARSET=utf8;
 
--- 正在导出表  zhoushanland.node_value 的数据：~712 rows (大约)
+-- 正在导出表  zhoushanland.node_value 的数据：~781 rows (大约)
 DELETE FROM `node_value`;
 /*!40000 ALTER TABLE `node_value` DISABLE KEYS */;
 INSERT INTO `node_value` (`ID`, `NodeID`, `Value`, `Quarter`, `AreaID`, `TypeID`, `Year`, `UpdateTime`) VALUES
@@ -931,7 +956,7 @@ INSERT INTO `user` (`ID`, `Username`, `Password`, `Role`, `Name`, `Deleted`, `La
 	(1, 'admin', '202cb962ac59075b964b07152d234b70', 4, 'admin', b'0', NULL, NULL),
 	(3, 'loowootech', '202cb962ac59075b964b07152d234b70', 4, 'loowootech', b'0', NULL, NULL),
 	(4, 'ty', '202cb962ac59075b964b07152d234b70', 3, '唐尧', b'0', NULL, NULL),
-	(5, 'zq', '202cb962ac59075b964b07152d234b70', 2, '赵泉', b'0', NULL, NULL),
+	(5, 'zq', '202cb962ac59075b964b07152d234b70', 2, '赵泉', b'0', NULL, 1),
 	(6, 'zwj', '202cb962ac59075b964b07152d234b70', 1, '周威俊', b'0', NULL, 6),
 	(7, 'xc', '202cb962ac59075b964b07152d234b70', 1, '新城', b'0', NULL, 2);
 /*!40000 ALTER TABLE `user` ENABLE KEYS */;

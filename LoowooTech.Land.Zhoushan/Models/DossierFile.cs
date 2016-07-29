@@ -8,22 +8,15 @@ using System.Threading.Tasks;
 
 namespace LoowooTech.Land.Zhoushan.Models
 {
-    [Table("dossier")]
-    public class Dossier
+    [Table("dossierfile")]
+    public class DossierFile
     {
-        public Dossier()
-        {
-            UploadTime = DateTime.Now;
-        }
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int ID { get; set; }
-        public int Year { get; set; }
-        public Quarter Quarter { get; set; }
-        public DateTime UploadTime { get; set; }
+        public string FileName { get; set; }
         [MaxLength(1023)]
-        public string Remark { get; set; }
-        [NotMapped]
-        public List<DossierFile> Files { get; set; }
+        public string FilePath { get; set; }
+        public int DossierID { get; set; }
     }
 }

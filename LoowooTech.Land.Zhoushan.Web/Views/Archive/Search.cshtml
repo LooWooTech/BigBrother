@@ -6,7 +6,7 @@
 
 <div class="col-md-3 col-sm-3 col-xs-3 well" style="padding:0px;">
     <fieldset><legend >查询设置</legend></fieldset>
-    <form method="get" id="Search-Dossier" action="/Archive/Search">
+    <form method="get" id="Search-Dossier">
         <div class="row">
             <div class="col-md-12 col-xs-12 col-sm-12">
                 <div class="form-group">
@@ -32,12 +32,23 @@
                         </div>
                     </div>
                 </div>
+                <div class="form-group">
+                    <label class="control-label">备注</label>
+                    <div class="col-md-12">
+                        <div class="input-group">
+                            <span class="input-group-btn">
+                                <button type="button" class="btn btn-@(string.IsNullOrEmpty(parameter.Remark)?"primary":"default")" name="Remark">全部</button>
+                            </span>
+                            <input type="text" name="Remark" class="form-control" placeholder="关键字" value="@(parameter.Remark)" />
+                        </div>
+                    </div>
+                </div>
                 <hr />
 
                 <div class="form-group">
                     <div class="col-md-12 col-xs-12 col-sm-12">
                         <div class="btn-group">
-                            <button type="submit" class="btn btn-primary"><i class="glyphicon glyphicon-search"></i>立即查询</button>
+                            <a href="/Archive/Search" class="btn btn-primary" name="Search"><i class="glyphicon glyphicon-search"></i>立即查询</a>
                         </div>
                     </div>
                 </div>
@@ -46,11 +57,12 @@
     </form>
 </div>
 <div class="col-md-9 col-xs-9 col-sm-9">
-    <table class="table table-striped">
+    <table class="table table-striped table-condensed">
         <thead>
             <tr>
                 <th>年份</th>
                 <th>季度</th>
+                <th>备注</th>
                 <th>下载</th>
             </tr>
         </thead>
@@ -60,7 +72,24 @@
                 <tr>
                     <td>@(dossier.Year)</td>
                     <td>@(dossier.Quarter.GetDescription())</td>
-                    <td><a href="/@(dossier.FilePath)" class="btn btn-default btn-sm" data-target="#page" target="_blank">@(string.Format("{0}年{1}",dossier.Year,dossier.Quarter.GetDescription()))<i class="glyphicon glyphicon-download-alt"></i></a></td>
+                    <td>@(dossier.Remark)</td>
+                    <td>
+                        <div class="btn-group">
+                            <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                @(string.Format("{0}年{1}", dossier.Year, dossier.Quarter.GetDescription())) <span class="caret"></span>
+                            </button>
+                            <ul class="dropdown-menu">
+                                @if (dossier.Files.Count == 0)
+                                {
+                                    <li><a href="javascript:void(0)">未上传文件</a></li>
+                                }
+                                @foreach(var file in dossier.Files)
+                                {
+                                    <li><a href="/@(file.FilePath)" data-target="#page" target="_blank">@(file.FileName)</a></li>
+                                }
+                            </ul>
+                        </div>
+                    </td>
                 </tr>
             }
         </tbody>
@@ -81,6 +110,33 @@
             $(".btn-group>button[name='" + name + "']").removeClass("btn-primary").addClass("btn-default");
             $(this).removeClass("btn-default").addClass("btn-primary");
             $("input[name='" + name + "']").val(val);
+        });
+
+        $(".input-group>.input-group-btn>button").click(function () {
+            var name = $(this).attr("name");
+            if (name == undefined) {
+                return;
+            }
+            var text = $(this).text();
+            if (text == "全部") {
+                $(".input-group>input[name='" + name + "']").val("");
+            }
+            $(this).removeClass("btn-default").addClass("btn-primary");
+        });
+
+        $(".input-group>input").focus(function () {
+            $(this).prev().children().removeClass("btn-primary").addClass("btn-default");
+        }).blur(function () {
+            var val = $(this).val();
+            if (val == "") {
+                $(this).prev().children().removeClass("btn-default").addClass("btn-primary");
+            }
+        });
+
+        $("a[name='Search']").click(function () {
+            var data = $("#Search-Dossier").serialize();
+            var href = $(this).attr("href");
+            $(this).attr("href", href + "/?" + data);
         });
     })
 </script>

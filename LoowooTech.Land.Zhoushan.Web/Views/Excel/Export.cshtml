@@ -1,5 +1,5 @@
 ﻿@{
-    ViewBag.Title = "导出统计报告";
+    ViewBag.Title = "导出统计数据";
     Form form = ViewBag.Form;
     List<Form> forms = ViewBag.Forms;
 }
@@ -67,7 +67,24 @@
         <div class="form-group">
             <label for="Type" class="control-label col-lg-3">选择季度</label>
             <div class="col-lg-8">
-                @Html.Partial("_QuarterDropdown")
+                <select name="Quarters" class="form-control">
+                    <option value="1">第一季度</option>
+                    <option value="2">第二季度/上半年</option>
+                    <option value="3">第三季度/前三季度</option>
+                    <option value="4">第四季度/全年</option>
+                </select>
+                <span class="help-block">
+                    如果需要导出累计数据，请选择多季度导出模板。
+                </span>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="Type" class="control-label col-lg-3">选择地区</label>
+            <div class="col-lg-8">
+                @Html.Action("Dropdown","Area")
+                <span class="help-block">
+                    如果选择区域，请选择区域专用的导出模板
+                </span>
             </div>
         </div>
     </div>

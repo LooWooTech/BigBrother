@@ -1,8 +1,8 @@
 -- --------------------------------------------------------
--- 主机:                           10.22.102.90
+-- 主机:                           192.168.31.10
 -- 服务器版本:                        5.1.73-community - MySQL Community Server (GPL)
--- 服务器操作系统:                      Win32
--- HeidiSQL 版本:                  9.3.0.4984
+-- 服务器操作系统:                      Win64
+-- HeidiSQL 版本:                  9.3.0.5086
 -- --------------------------------------------------------
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
@@ -10,10 +10,10 @@
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 
+
 -- 导出 zhoushanland 的数据库结构
 CREATE DATABASE IF NOT EXISTS `zhoushanland` /*!40100 DEFAULT CHARACTER SET utf8 */;
 USE `zhoushanland`;
-
 
 -- 导出  表 zhoushanland.area 结构
 CREATE TABLE IF NOT EXISTS `area` (
@@ -35,7 +35,6 @@ INSERT INTO `area` (`ID`, `Name`, `ParentID`) VALUES
 	(6, '嵊泗县', 0);
 /*!40000 ALTER TABLE `area` ENABLE KEYS */;
 
-
 -- 导出  表 zhoushanland.dossier 结构
 CREATE TABLE IF NOT EXISTS `dossier` (
   `ID` int(11) NOT NULL AUTO_INCREMENT,
@@ -46,7 +45,7 @@ CREATE TABLE IF NOT EXISTS `dossier` (
   PRIMARY KEY (`ID`)
 ) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8;
 
--- 正在导出表  zhoushanland.dossier 的数据：~7 rows (大约)
+-- 正在导出表  zhoushanland.dossier 的数据：~10 rows (大约)
 DELETE FROM `dossier`;
 /*!40000 ALTER TABLE `dossier` DISABLE KEYS */;
 INSERT INTO `dossier` (`ID`, `Year`, `Quarter`, `Remark`, `UploadTime`) VALUES
@@ -62,7 +61,6 @@ INSERT INTO `dossier` (`ID`, `Year`, `Quarter`, `Remark`, `UploadTime`) VALUES
 	(10, 2012, 2, '第二季度', '2016-07-29 13:38:47');
 /*!40000 ALTER TABLE `dossier` ENABLE KEYS */;
 
-
 -- 导出  表 zhoushanland.dossierfile 结构
 CREATE TABLE IF NOT EXISTS `dossierfile` (
   `ID` int(11) NOT NULL AUTO_INCREMENT,
@@ -72,7 +70,7 @@ CREATE TABLE IF NOT EXISTS `dossierfile` (
   PRIMARY KEY (`ID`)
 ) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8;
 
--- 正在导出表  zhoushanland.dossierfile 的数据：~0 rows (大约)
+-- 正在导出表  zhoushanland.dossierfile 的数据：~6 rows (大约)
 DELETE FROM `dossierfile`;
 /*!40000 ALTER TABLE `dossierfile` DISABLE KEYS */;
 INSERT INTO `dossierfile` (`ID`, `FileName`, `FilePath`, `DossierID`) VALUES
@@ -83,7 +81,6 @@ INSERT INTO `dossierfile` (`ID`, `FileName`, `FilePath`, `DossierID`) VALUES
 	(5, 'QL_20160725_0007.pdf', 'uploads/QL_20160725_0007636053962884252665.pdf', 1),
 	(6, 'SKM_C364e16072710310_0004.pdf', 'uploads/SKM_C364e16072710310_0004636053963259065437.pdf', 10);
 /*!40000 ALTER TABLE `dossierfile` ENABLE KEYS */;
-
 
 -- 导出  表 zhoushanland.form 结构
 CREATE TABLE IF NOT EXISTS `form` (
@@ -107,7 +104,6 @@ INSERT INTO `form` (`ID`, `Name`, `ValueTypes`, `ImportTemplate`, `ExportTemplat
 	(6, '采矿权出让及许可证发放', '5,6', '采矿权出让及许可证发放-导入', '采矿权出让及许可证发放-单季度导出\r\n采矿权出让及许可证发放-多季度导出'),
 	(7, '集体建设用地使用情况', '1,4', '集体建设用地使用情况钻取', '集体建设用地使用情况钻取');
 /*!40000 ALTER TABLE `form` ENABLE KEYS */;
-
 
 -- 导出  表 zhoushanland.node 结构
 CREATE TABLE IF NOT EXISTS `node` (
@@ -200,7 +196,6 @@ INSERT INTO `node` (`ID`, `FormID`, `ParentID`, `Name`, `Group`) VALUES
 	(85, 7, 82, '新增', NULL),
 	(86, 7, 83, '新增', NULL);
 /*!40000 ALTER TABLE `node` ENABLE KEYS */;
-
 
 -- 导出  表 zhoushanland.node_value 结构
 CREATE TABLE IF NOT EXISTS `node_value` (
@@ -934,6 +929,26 @@ INSERT INTO `node_value` (`ID`, `NodeID`, `Value`, `Quarter`, `AreaID`, `TypeID`
 	(712, 25, 34682.6964, 1, 0, 5, 2012, '2016-07-21 08:43:46');
 /*!40000 ALTER TABLE `node_value` ENABLE KEYS */;
 
+-- 导出  表 zhoushanland.season 结构
+CREATE TABLE IF NOT EXISTS `season` (
+  `ID` int(11) NOT NULL AUTO_INCREMENT,
+  `Quarter` int(11) NOT NULL DEFAULT '0',
+  `StartTime` datetime NOT NULL,
+  `EndTime` datetime NOT NULL,
+  `SetTime` datetime NOT NULL,
+  `Delete` bit(3) NOT NULL DEFAULT b'0',
+  PRIMARY KEY (`ID`)
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
+
+-- 正在导出表  zhoushanland.season 的数据：~4 rows (大约)
+DELETE FROM `season`;
+/*!40000 ALTER TABLE `season` DISABLE KEYS */;
+INSERT INTO `season` (`ID`, `Quarter`, `StartTime`, `EndTime`, `SetTime`, `Delete`) VALUES
+	(1, 1, '2016-01-01 00:00:00', '2016-03-01 00:00:00', '2016-07-30 21:14:23', b'001'),
+	(2, 2, '2016-03-01 00:00:00', '2016-04-29 00:00:00', '2016-07-30 19:47:52', b'000'),
+	(3, 3, '2016-06-01 00:00:00', '2016-08-30 00:00:00', '2016-07-30 20:10:07', b'000'),
+	(4, 4, '2016-11-02 00:00:00', '2016-12-30 00:00:00', '2016-07-30 20:10:21', b'000');
+/*!40000 ALTER TABLE `season` ENABLE KEYS */;
 
 -- 导出  表 zhoushanland.user 结构
 CREATE TABLE IF NOT EXISTS `user` (
@@ -961,7 +976,6 @@ INSERT INTO `user` (`ID`, `Username`, `Password`, `Role`, `Name`, `Deleted`, `La
 	(7, 'xc', '202cb962ac59075b964b07152d234b70', 1, '新城', b'0', NULL, 2);
 /*!40000 ALTER TABLE `user` ENABLE KEYS */;
 
-
 -- 导出  表 zhoushanland.value_type 结构
 CREATE TABLE IF NOT EXISTS `value_type` (
   `ID` int(11) NOT NULL AUTO_INCREMENT,
@@ -981,6 +995,7 @@ INSERT INTO `value_type` (`ID`, `Name`, `Unit`) VALUES
 	(5, '费用', '万元'),
 	(6, '个数', '个');
 /*!40000 ALTER TABLE `value_type` ENABLE KEYS */;
+
 /*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;
 /*!40014 SET FOREIGN_KEY_CHECKS=IF(@OLD_FOREIGN_KEY_CHECKS IS NULL, 1, @OLD_FOREIGN_KEY_CHECKS) */;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

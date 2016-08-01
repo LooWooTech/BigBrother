@@ -17,6 +17,28 @@ namespace LoowooTech.Land.Zhoushan.Models
 
         public string Name { get; set; }
 
-        public string Unit { get; set; }
+        /// <summary>
+        /// 单位之间的比率
+        /// </summary>
+        public int Ratio { get; set; }
+
+        /// <summary>
+        /// 单位名称从小到大 用逗号隔开，例如  亩,公顷
+        /// </summary>
+        [Column("Units")]
+        public string Units { get; set; }
+
+        [NotMapped]
+        public string Unit
+        {
+            get
+            {
+                if (!string.IsNullOrEmpty(Units))
+                {
+                    return Units.Split(',')[0];
+                }
+                return null;
+            }
+        }
     }
 }

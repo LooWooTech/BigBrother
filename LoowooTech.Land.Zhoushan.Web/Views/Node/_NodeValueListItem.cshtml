@@ -8,10 +8,16 @@
     <td class="node-level-@(model.Level)">
         @(model.Name)
     </td>
-    @foreach (var item in types)
+    @foreach (var typeId in model.NodeValueTypes)
     {
+        var type = types.FirstOrDefault(e => e.ID == typeId);
+        if (type == null)
+        {
+            continue;
+        }
         <td>
-            <input type="text" class="node-value form-control input-sm col-sm-1" id="node-value-@(item.ID)" nodeId="@(model.ID)" typeId="@(item.ID)" />
+            <input type="text" class="node-value form-control input-sm col-sm-1" id="node-value-@(type.ID)" nodeId="@(model.ID)" typeId="@(type.ID)" />
+            &nbsp; @(type.Name)（@(type.Unit)）
         </td>
     }
 </tr>

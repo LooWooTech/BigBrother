@@ -38,6 +38,8 @@
             @Html.Partial("_RateTypeDropdown", parameter.RateType)
             <button type="submit" class="btn btn-primary"><i class="fa fa-bar-chart-o"></i> 统计</button>
         </div>
+        &nbsp;
+        <a id="btn-type-change" class="btn btn-success">切换单位</a>
         &nbsp;<a class="btn btn-default" href="javascript:history.back()">
             <i class="fa fa-chevron-left"></i> 返回
         </a>
@@ -69,6 +71,34 @@
     }
 
     $(function () {
+
+        $("#btn-type-change").click(function () {
+            $(".node-value-type").each(function (k, v) {
+                var self = $(v);
+                var value = self.attr("data-value");
+                if (!value) return;
+
+                var units = self.attr("data-type-units").split(',');
+                var ratio = parseInt(self.attr("data-type-ratio"));
+                var unit = $(".unit", v).text();
+                var currentIndex = 0;
+                for (var i = 0; i < units.length; i++) {
+                    if (units[i] == unit) {
+                        currentIndex = i;
+                        break;
+                    }
+                }
+                var targetIndex = currentIndex + 1;
+                if (targetIndex >= units.length)
+                {
+                    targetIndex -= units.length;
+                }
+                var targetValue = parseFloat( targetIndex == 0 ? value : (value / ratio * targetIndex));
+                $(".value", self).text(targetValue.toFixed(2));
+                $(".unit", self).text(units[targetIndex]);
+            });
+        });
+
         $("#ddl-form").change(function () {
             var formId = $(this).val();
             $.request("/node/getlist?formId=" + formId, function (json) {

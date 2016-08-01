@@ -17,18 +17,6 @@ namespace LoowooTech.Land.Zhoushan.Models
 
         public string Name { get; set; }
 
-        [Column("ValueTypes")]
-        public string ValueTypes { get; set; }
-
-        [NotMapped]
-        public int[] NodeValueTypes
-        {
-            get
-            {
-                return (ValueTypes ?? string.Empty).Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries).Select(str => int.Parse(str)).ToArray();
-            }
-        }
-
         private string _importTemplate;
 
         public string ImportTemplate

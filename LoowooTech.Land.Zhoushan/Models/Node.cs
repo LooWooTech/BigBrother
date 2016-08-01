@@ -30,6 +30,18 @@ namespace LoowooTech.Land.Zhoushan.Models
 
         public string Group { get; set; }
 
+        [Column("ValueTypes")]
+        public string ValueTypes { get; set; }
+
+        [NotMapped]
+        public int[] NodeValueTypes
+        {
+            get
+            {
+                return (ValueTypes ?? string.Empty).Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries).Select(str => int.Parse(str)).ToArray();
+            }
+        }
+
         [NotMapped]
         public int Level { get; set; }
 
@@ -50,6 +62,18 @@ namespace LoowooTech.Land.Zhoushan.Models
             {
                 child.Level = Level + 1;
                 child.GetChildren(list);
+            }
+        }
+
+        public void Validate()
+        {
+            if (string.IsNullOrEmpty(Name))
+            {
+                throw new ArgumentException("没有填写分类名称");
+            }
+            if (ValueTypes == null || ValueTypes.Length == 0)
+            {
+                throw new ArgumentException("没有选择数据类型");
             }
         }
     }

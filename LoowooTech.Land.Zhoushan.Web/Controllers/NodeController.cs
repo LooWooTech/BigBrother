@@ -50,6 +50,7 @@ namespace LoowooTech.Land.Zhoushan.Web.Controllers
                 node = new Node { FormID = parent.FormID, ParentID = parent.ID };
             }
             ViewBag.Model = node ?? new Node { FormID = form.ID };
+            ViewBag.ValueTypes = Core.FormManager.GetNodeValueTypes();
             return View();
         }
 
@@ -57,6 +58,7 @@ namespace LoowooTech.Land.Zhoushan.Web.Controllers
         [HttpPost]
         public ActionResult Edit(Node model)
         {
+            model.Validate();
             Core.FormManager.SaveNode(model);
             return JsonSuccessResult();
         }
@@ -68,13 +70,13 @@ namespace LoowooTech.Land.Zhoushan.Web.Controllers
             return JsonSuccessResult();
         }
 
-        public ActionResult ValueTypeDropdown(string ids, int typeId = 0, int formId = 0)
+        public ActionResult ValueTypeDropdown(string ids, int typeId = 0, int nodeId = 0)
         {
             int[] valueTypeIds = null;
-            if (formId > 0)
+            if (nodeId > 0)
             {
-                var form = Core.FormManager.GetForm(formId);
-                valueTypeIds = form.NodeValueTypes;
+                var node = Core.FormManager.GetNode(nodeId);
+                valueTypeIds = node.NodeValueTypes;
             }
             else
             {
@@ -110,7 +112,7 @@ namespace LoowooTech.Land.Zhoushan.Web.Controllers
             }
             ViewBag.Form = form;
             ViewBag.Nodes = Core.FormManager.GetNodeRoots(formId);
-            ViewBag.ValueTypes = Core.FormManager.GetNodeValueTypes(form.NodeValueTypes);
+            ViewBag.ValueTypes = Core.FormManager.GetNodeValueTypes();
             return View();
         }
 

@@ -2,7 +2,7 @@
     Node model = ViewBag.Model;
     var isAdd = model.ID == 0;
     ViewBag.Title = isAdd ? "添加分类" : "修改分类";
-
+    List<NodeValueType> types = ViewBag.ValueTypes;
 }
 <form id="form-node" action="/node/edit?id=@(model.ID)" method="post" class="form-horizontal">
     <div class="modal-header">
@@ -23,6 +23,15 @@
             <div class="col-lg-8">
                 <input type="text" name="Group" class="form-control" value="@(model.Group)" />
                 <span class="help-block">给分类分组使用，体现于统计表</span>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="Type" class="control-label col-lg-3">数据类型</label>
+            <div class="col-lg-8 checkbox">
+                @foreach (var item in types)
+                {
+                    <label class="col-lg-6"><input type="checkbox" name="ValueTypes" value="@(item.ID)" @(model.NodeValueTypes.Contains(item.ID) ? "checked" : null) />@(item.Name + "(" + item.Unit + ")")</label>
+                }
             </div>
         </div>
     </div>

@@ -46,7 +46,6 @@ namespace LoowooTech.Land.Zhoushan.Web.Controllers
         {
             var form = Core.FormManager.GetForm(id) ?? new Form();
             ViewBag.Form = form;
-            ViewBag.ValueTypes = Core.FormManager.GetNodeValueTypes();
             return View();
         }
 

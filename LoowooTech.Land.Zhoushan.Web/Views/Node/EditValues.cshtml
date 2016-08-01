@@ -1,7 +1,6 @@
 ﻿@{
     Form form = ViewBag.Form;
     List<Node> root = ViewBag.Nodes;
-    List<NodeValueType> types = ViewBag.ValueTypes;
 }
 <h3 class="page-header">
     @(form.Name)-记录管理
@@ -32,10 +31,9 @@
             <th>
                 分类
             </th>
-            @foreach (var item in types)
-            {
-                <th>@(item.Name)(@(item.Unit))</th>
-            }
+            <td>
+                数值
+            </td>
         </tr>
     </thead>
     @foreach (var node in root)

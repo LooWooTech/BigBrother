@@ -11,10 +11,13 @@
     <link rel="stylesheet" href="~/Content/bootstrap.min.css" />
     <link rel="stylesheet" href="~/Content/font-awesome.min.css" />
     <link rel="stylesheet" href="~/Content/site.css" />
+    <link rel="stylesheet" href="~/Content/jquery.datetimepicker.css" />
+
     <script src="~/Scripts/jquery-1.9.1.min.js"></script>
     <script src="~/Scripts/bootstrap.min.js"></script>
     <script src="~/Scripts/json2.min.js"></script>
     <script src="~/Scripts/Chart.min.js"></script>
+    <script src="~/Scripts/jquery.datetimepicker.js"></script>
 
     <script src="~/Scripts/common.js"></script>
     <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
@@ -65,6 +68,7 @@
                             <li><a href="/area/">地区管理</a></li>
                             <li class="divider"></li>
                             <li><a href="/valuetype/">单位类型管理</a></li>
+                            <li><a href="/Season/">季度填报时间管理</a></li>
                             @if (role == UserRole.Administrator)
                             {
                                 <li class="divider"></li>

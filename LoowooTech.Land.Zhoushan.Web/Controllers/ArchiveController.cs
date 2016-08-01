@@ -1,14 +1,13 @@
 ﻿using LoowooTech.Land.Zhoushan.Common;
 using LoowooTech.Land.Zhoushan.Models;
 using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Web;
 using System.Web.Mvc;
 
 namespace LoowooTech.Land.Zhoushan.Web.Controllers
 {
+    [UserRoleFilter(UserRole.Advanced)]
     public class ArchiveController : ControllerBase
     {
         // GET: Archive
@@ -24,7 +23,7 @@ namespace LoowooTech.Land.Zhoushan.Web.Controllers
             ViewBag.Dossier = Core.DossierManager.GetDossier(id);
             return View();
         }
-
+       
         [HttpPost]
         public ActionResult Import(Dossier dossier,string[] filePath,string[] fileName)
         {

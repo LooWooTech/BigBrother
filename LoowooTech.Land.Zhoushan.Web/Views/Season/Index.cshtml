@@ -1,0 +1,33 @@
+﻿@{ 
+    List<Season> list = ViewBag.List;
+}
+
+<h2 class="panel-heading">
+    季度填报时间管理<a href="/Season/Edit" class="btn btn-success" data-toggle="modal" data-target="#modal"><i class="glyphicon glyphicon-edit"></i>填报</a>
+</h2>
+
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>季度</th>
+            <th>开始时间</th>
+            <th>截至时间</th>
+            <th style="width:90px;">操作</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach(var item in list)
+        {
+            <tr>
+                <td>@(item.Quarter.GetDescription())</td>
+                <td>@(item.StartTime.ToLongDateString())</td>
+                <td>@(item.EndTime.ToLongDateString())</td>
+                <td style="width:80px;">
+                    <a href="/Season/Edit/?id=@(item.ID)" class="btn btn-primary btn-xs" data-toggle="modal" data-target="#modal" title="编辑"><i class="fa fa-edit"></i></a>
+                    <a href="/Season/Delete/?id=@(item.ID)" class="btn btn-danger btn-xs" title="删除" data-target="#delete"><i class="fa fa-trash-o"></i></a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

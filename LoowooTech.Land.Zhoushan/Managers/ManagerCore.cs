@@ -34,5 +34,6 @@ namespace LoowooTech.Land.Zhoushan.Managers
 
         public TemplateManager TemplateManager { get; private set; }
         public DossierManager DossierManager { get; private set; }
+        public SeasonManager SeasonManager { get; private set; }
     }
 }

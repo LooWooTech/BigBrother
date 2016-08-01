@@ -13,22 +13,22 @@
         <small>快捷查看各个表单历年来各季度统计结果</small>
     </blockquote>
 </div>
+<div class="col-lg-6">
+    <blockquote>
+        <p><i class="fa fa-mail-forward fa-2x text-info"></i>&nbsp;<a href="/excel/export" data-toggle="modal" data-target="#modal">报表导出</a></p>
+        <small>选择具体的表单和日期，导出相应的报表</small>
+    </blockquote>
+</div>
 
-@if (role > UserRole.City)
+<div class="col-lg-6">
+    <blockquote>
+        <p><i class="fa fa-download fa-2x text-info"></i>&nbsp;<a href="#">数据导入</a></p>
+        <small>可以<a href="/form/write" data-toggle="modal" data-target="#modal">手动录入表单</a>数据，也可以<a href="/excel/import" data-toggle="modal" data-target="#modal">导入Excel数据</a>。</small>
+    </blockquote>
+</div>
+
+@if (role >= UserRole.Advanced)
 {
-    <div class="col-lg-6">
-        <blockquote>
-            <p><i class="fa fa-mail-forward fa-2x text-info"></i>&nbsp;<a href="/excel/export" data-toggle="modal" data-target="#modal">报表导出</a></p>
-            <small>选择具体的表单和日期，导出相应的报表</small>
-        </blockquote>
-    </div>
-
-    <div class="col-lg-6">
-        <blockquote>
-            <p><i class="fa fa-download fa-2x text-info"></i>&nbsp;<a href="#">数据导入</a></p>
-            <small>可以<a href="/form/write" data-toggle="modal" data-target="#modal">手动录入表单</a>数据，也可以<a href="/excel/import" data-toggle="modal" data-target="#modal">导入Excel数据</a>。</small>
-        </blockquote>
-    </div>
     <div class="col-lg-6">
         <blockquote>
             <p><i class="fa fa-gear fa-2x text-info"></i>&nbsp;<a href="#">系统维护</a></p>

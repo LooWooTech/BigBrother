@@ -245,7 +245,7 @@ namespace LoowooTech.Land.Zhoushan.Managers
 
             double val = 0;
             double.TryParse(field.Value, out val);
-            entity.Value = val;
+            entity.RawValue = val;
         }
 
     }

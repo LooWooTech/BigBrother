@@ -190,7 +190,7 @@ namespace LoowooTech.Land.Zhoushan.Managers
                         );
                         if (compareItem != null)
                         {
-                            item.CompareValue = compareItem.Value;
+                            item.CompareValue = compareItem.RawValue;
                         }
                     }
                 }

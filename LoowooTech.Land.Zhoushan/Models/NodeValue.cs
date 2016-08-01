@@ -22,7 +22,21 @@ namespace LoowooTech.Land.Zhoushan.Models
 
         public int NodeID { get; set; }
 
-        public double Value { get; set; }
+        private double _value;
+        public double Value
+        {
+            get
+            {
+                return _value == 0 ? RawValue : _value;
+            }
+            set
+            {
+                _value = value;
+            }
+        }
+
+        [Column("raw_value")]
+        public double RawValue { get; set; }
 
         /// <summary>
         /// 值类型（面积、金额、件数）
@@ -60,8 +74,8 @@ namespace LoowooTech.Land.Zhoushan.Models
         {
             get
             {
-                var val = Value - CompareValue;
-                if(CompareValue == 0)
+                var val = (RawValue == 0 ? Value : RawValue) - CompareValue;
+                if (CompareValue == 0)
                 {
                     if (val == 0) return 0;
                     return val > 0 ? 100 : -100;

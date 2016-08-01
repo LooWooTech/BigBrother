@@ -63,5 +63,22 @@ namespace LoowooTech.Land.Zhoushan.Managers
             }
         }
 
+        public bool Exist(int year,Quarter quarter)
+        {
+            using (var db = GetDbContext())
+            {
+                var entry = db.Seasons.FirstOrDefault(e => e.Year == year && e.Quarter == quarter&&e.Delete==false);
+                return entry != null;
+            }
+        }
+
+        public int[] GetYears()
+        {
+            using (var db = GetDbContext())
+            {
+                return db.Seasons.Where(e => e.Delete == false).GroupBy(e=>e.Year).Select(e => e.Key).ToArray();
+            }
+        }
+
     }
 }

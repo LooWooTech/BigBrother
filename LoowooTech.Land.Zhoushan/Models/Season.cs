@@ -18,6 +18,7 @@ namespace LoowooTech.Land.Zhoushan.Models
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int ID { get; set; }
+        public int Year { get; set; }
         public Quarter Quarter { get; set; }
         public DateTime StartTime { get; set; }
         public DateTime EndTime { get; set; }

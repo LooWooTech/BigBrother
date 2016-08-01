@@ -1,0 +1,52 @@
+﻿@{ 
+    int[] Years = ViewBag.Years;
+}
+
+<div class="alert alert-warning" role="alert">
+    <span>正在统计，请稍等...</span>
+</div>
+
+<form class="form-inline" method="get" action="" id="form-Statistic">
+    <div class="input-group">
+        <span class="input-group-addon">选择条件</span>
+        <div class="input-group-btn">
+            <select name="Year" class="form-control">
+                @foreach(var year in Years)
+                {
+                    <option value="@(year)">@(year)</option>
+                }
+            </select>
+            @Html.Partial("_QuarterDropdown")
+            <button type="submit" class="btn btn-primary"><i class="fa fa-bar-chart-o"></i>统计</button>
+            &nbsp;<a class="btn btn-default" href="javascript:history.back()">
+                <i class="fa fa-chevron-left"></i> 返回
+            </a>
+        </div>
+    </div>
+</form>
+<div class="row col-md-12" style="margin-top:20px;" id="panel-node">
+
+</div>
+
+
+<script>
+    $(".alert-warning").hide();
+
+    var colors = ["#FF6384", "#4BC0C0", "#FFCE56", "#E7E9ED", "#36A2EB", "#F38630", "#E0E4CC", "#69D2E7", "#F7464A", "#E2EAE9", "#D4CCC5", "#949FB1", "#4D5360"];
+    function getChartColors(len) {
+        if (len >= colors.length) {
+            return colors;
+        }
+        return colors.slice(0, len);
+    }
+    $(function () {
+        $("#form-Statistic").submit(function () {
+            $(".alert-warning").show();
+            var data = $(this).serialize();
+            
+            $("#panel-node").load("/Season/NodeChart?" + data, function () {
+                $(".alert-warning").hide();
+            });
+        });
+    });
+</script>

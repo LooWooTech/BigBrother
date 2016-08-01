@@ -1,0 +1,43 @@
+﻿@{ 
+    List<NodeValue> NodeValues = ViewBag.NodeValues;
+    var nodeIDs = NodeValues.GroupBy(e => e.NodeID).Select(e => e.Key).ToArray();
+}
+
+@foreach(var nodeid in nodeIDs)
+{
+    var dict = NodeValues.Where(e => e.NodeID == nodeid).GroupBy(e => e.Area).ToDictionary(e => e.Key??new Area(), e => e.ToList());
+    var labels = dict.Select(e => e.Key.Name).ToArray();
+    var data = dict.Select(e => e.Value.Count).ToArray();
+    <div class="col-md-4">
+        <div class="row">
+            <canvas id="chart-@(nodeid)"></canvas>
+        </div>
+    </div>
+    <script>
+        $(function () {
+            var labels=@Html.Raw(labels.ToJson())||[];
+            var data=@Html.Raw(data.ToJson())||[];
+            var len=labels.length-data.length;
+            for(var i=0;i<len;i++){
+                data.push(0);
+            }
+            var ctx=document.getElementById("chart-@(nodeid)");
+            var myChart=new Char(ctx,{
+                type:'doughnut',
+                data:{
+                    labels:labels,
+                    datasets:[{
+                        data:data,
+                        backgroundColor:getChartColors(data,len)
+                    }]
+                }
+            });
+        });
+    </script>
+}
+
+<div class="row">
+    <h4>统计</h4>
+    <canvas id="chart"></canvas>
+</div>
+

@@ -13,6 +13,12 @@
         </div>
         <input type="hidden" name="ID" value="@(season!=null?season.ID:0)" />
         <div class="form-group">
+            <label class="control-label col-md-3">选择年度</label>
+            <div class="col-md-8">
+                @(season!=null?Html.Partial("_YearDropdown"):Html.Partial("_YearDropdown"))
+            </div>
+        </div>
+        <div class="form-group">
             <label class="control-label col-md-3">选择季度</label>
             <div class="col-md-8">
                 @(season!=null?Html.Partial("_QuarterDropdown",season.Quarter):Html.Partial("_QuarterDropdown"))

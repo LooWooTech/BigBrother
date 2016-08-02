@@ -10,12 +10,7 @@
     <div class="input-group">
         <span class="input-group-addon">选择条件</span>
         <div class="input-group-btn">
-            <select name="Year" class="form-control">
-                @foreach(var year in Years)
-                {
-                    <option value="@(year)">@(year)</option>
-                }
-            </select>
+            @Html.Partial("_YearDropdown")
             @Html.Partial("_QuarterDropdown")
             <button type="submit" class="btn btn-primary"><i class="fa fa-bar-chart-o"></i>统计</button>
             &nbsp;<a class="btn btn-default" href="javascript:history.back()">
@@ -39,6 +34,12 @@
         }
         return colors.slice(0, len);
     }
+    function getChartColor(i) {
+        if (i >= colors.length) {
+            return colors[i % colors.length];
+        }
+        return colors[i];
+    }
     $(function () {
         $("#form-Statistic").submit(function () {
             $(".alert-warning").show();
@@ -47,6 +48,7 @@
             $("#panel-node").load("/Season/NodeChart?" + data, function () {
                 $(".alert-warning").hide();
             });
+            return false;
         });
     });
 </script>

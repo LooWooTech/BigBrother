@@ -54,7 +54,8 @@ namespace LoowooTech.Land.Zhoushan.Web.Controllers
         {
             parameter.GetArea = true;
             parameter.GetNode = true;
-            ViewBag.NodeValues = Core.FormManager.GetNodeValues(parameter);
+            parameter.AreaID = null;
+            ViewBag.NodeValues = Core.FormManager.GetNodeValues(parameter).Where(e => e.AreaID != 0&&e.Area!=null).ToList();
             return View();
         }
     }

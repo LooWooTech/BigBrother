@@ -1,7 +1,55 @@
 ﻿@{ 
     List<NodeValue> NodeValues = ViewBag.NodeValues;
-    var nodeIDs = NodeValues.GroupBy(e => e.NodeID).Select(e => e.Key).ToArray();
+    var nodeDict = NodeValues.GroupBy(e => e.NodeID).ToDictionary(e => e.Key, e => e.Select(k=>k.Node).FirstOrDefault());
+    var nodeIDs = nodeDict.Select(e => e.Key).ToArray();
+    var areas = NodeValues.GroupBy(e => e.AreaID).OrderBy(e => e.Key).ToDictionary(e => e.Key, e => e.Select(k => k.Area).FirstOrDefault());
 }
+<div class="row">
+    <div class="col-md-6">
+        <canvas id="All"></canvas>
+    </div>
+</div>
+<script>
+    $(function(){
+        var ctxall=document.getElementById("All");
+        var myChartall=new Chart(ctxall,{
+            type:'line',
+            data:{
+                labels:@(Html.Raw(areas.Select(e=>e.Value.Name).ToJson())),
+                datasets:[
+                @for(var i=0;i<nodeIDs.Count();i++)
+                {
+                    var list = NodeValues.Where(e => e.NodeID == nodeIDs[i]).ToList();
+                    var data = new List<int>();
+                    foreach(var entry in areas)
+                    {
+                        data.Add(list.Where(e => e.AreaID == entry.Key).Count());
+                    }
+                    if (i > 0)
+                    {
+                         @:, 
+                    }
+
+                    <text>
+                    {
+                        label:"@(nodeDict[nodeIDs[i]].Name)",
+                        data:@(Html.Raw(data.ToJson())),
+                        borderColor:getChartColor(@(nodeIDs[i])),
+                        fill:false,
+                        lineTension:0.1
+                    }
+                    </text>
+                }
+                ]
+            },
+            options:{
+                scales:{
+                    height:200
+                }
+            }
+        });
+    });
+</script>
 
 @foreach(var nodeid in nodeIDs)
 {
@@ -9,9 +57,27 @@
     var labels = dict.Select(e => e.Key.Name).ToArray();
     var data = dict.Select(e => e.Value.Count).ToArray();
     <div class="col-md-4">
+        <h4>@(nodeDict[nodeid]==null?"":nodeDict[nodeid].Name)</h4>
         <div class="row">
             <canvas id="chart-@(nodeid)"></canvas>
         </div>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>区域</th>
+                    <th>填报情况</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var entry in dict)
+                {
+                    <tr>
+                        <td>@(entry.Key.Name)</td>
+                        <td>@(entry.Value.Count)</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
     </div>
     <script>
         $(function () {
@@ -22,22 +88,16 @@
                 data.push(0);
             }
             var ctx=document.getElementById("chart-@(nodeid)");
-            var myChart=new Char(ctx,{
+            var myChart=new Chart(ctx,{
                 type:'doughnut',
                 data:{
                     labels:labels,
                     datasets:[{
                         data:data,
-                        backgroundColor:getChartColors(data,len)
+                        backgroundColor:getChartColors(data.length)
                     }]
                 }
             });
         });
     </script>
 }
-
-<div class="row">
-    <h4>统计</h4>
-    <canvas id="chart"></canvas>
-</div>
-

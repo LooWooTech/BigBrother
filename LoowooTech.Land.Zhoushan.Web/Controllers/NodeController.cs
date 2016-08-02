@@ -101,6 +101,12 @@ namespace LoowooTech.Land.Zhoushan.Web.Controllers
             return View();
         }
 
+        public ActionResult CanEdit(int year, Quarter quarter)
+        {
+            var result = CurrentIdentity.Role >= UserRole.Advanced || Core.SeasonManager.Exist(year, quarter);
+            return Content(result ? "1" : "0");
+        }
+
         [UserRoleFilter(UserRole.Branch)]
         [HttpGet]
         public ActionResult EditValues(int formId)
@@ -116,14 +122,12 @@ namespace LoowooTech.Land.Zhoushan.Web.Controllers
             return View();
         }
 
-        public ActionResult SaveValues(int formId, string data)
+        public ActionResult SaveValues(int formId, int year, Quarter quarter, int areaId, string data)
         {
-            var form = Core.FormManager.GetForm(formId);
-
             var values = data.ToObject<List<NodeValue>>();
 
             Core.FormManager.SaveNodeValues(values);
-
+            Core.FormManager.ComputeSumValue(formId, year, quarter);
             return JsonSuccessResult();
         }
 

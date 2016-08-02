@@ -237,7 +237,63 @@ namespace LoowooTech.Land.Zhoushan.Managers
             {
                 SaveNodeValue(val);
             }
+            //计算合计
         }
+
+        /// <summary>
+        /// 计算表单分类的各种合计
+        /// </summary>
+        public void ComputeSumValue(int formId, int year, Quarter quarter)
+        {
+            var nodes = Core.FormManager.GetFormNodes(formId);
+            var data = Core.FormManager.GetNodeValues(new NodeValueParameter
+            {
+                FormID = formId,
+                Year = year,
+                Quarter = quarter,
+            });
+
+            var rootArea = new Area
+            {
+                Children = Core.AreaManager.GetAreas(0),
+                Name = "舟山市",
+            };
+
+            foreach (var node in nodes)
+            {
+                foreach (var typeId in node.NodeValueTypes)
+                {
+                    GetNodeAreaSumValue(node, year, quarter, typeId, rootArea, data);
+                }
+            }
+        }
+
+        private double GetNodeAreaSumValue(Node node, int year, Quarter quarter, int typeId, Area area, List<NodeValue> data)
+        {
+            if (area.Children.Count == 0)
+            {
+                var val = data.FirstOrDefault(e => e.AreaID == area.ID && e.NodeID == node.ID && e.TypeID == typeId);
+                return val == null ? 0 : val.RawValue;
+            }
+
+            double result = 0;
+            foreach (var child in area.Children)
+            {
+                result += GetNodeAreaSumValue(node, year, quarter, typeId, area, data);
+            }
+            var entity = new NodeValue
+            {
+                AreaID = area.ID,
+                NodeID = node.ID,
+                TypeID = typeId,
+                Quarter = quarter,
+                Year = year,
+                RawValue = result
+            };
+            Core.FormManager.SaveNodeValue(entity);
+            return result;
+        }
+
 
         public void DeleteNodeValue(int id)
         {

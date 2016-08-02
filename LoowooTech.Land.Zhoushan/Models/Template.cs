@@ -267,6 +267,7 @@ namespace LoowooTech.Land.Zhoushan.Models
         /// 指定是同比还是环比
         /// </summary>
         Rate,
+        Unit,//单位
         Hidden
     }
 }

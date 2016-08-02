@@ -43,6 +43,8 @@
 </table>
 <script>
     $(function () {
+        //判断当前用户权限，是否可以编辑
+
         $("#form-filter").submit(function () {
             var data = $(this).serialize();
             var action = $(this).attr("action");
@@ -52,6 +54,18 @@
                 $.each(json.data, function (k, v) {
                     updateNodeValue(v);
                 });
+            });
+            var year = $("#form-filter select[name='Year']").val();
+            var quarter = $("#form-filter select[name='Quarter']").val();
+            $.request("/node/canedit?year=" + year + "&quarter=" + quarter, function (result) {
+                if (!result) {
+                    $("#btn-submit").hide();
+                    $(".node-value").attr("disabled", true);
+                }
+                else {
+                    $("#btn-submit").show();
+                    $(".node-value").removeAttr("disabled");
+                }
             });
             return false;
         });
@@ -84,7 +98,7 @@
                     return;
                 }
                 data.push({
-                    ID: control.attr("ValueID") || 0,
+                    ID: control.attr("valueId") || 0,
                     Year: year,
                     Quarter: quarter,
                     AreaID: area,
@@ -96,7 +110,7 @@
             });
 
             var json = JSON.stringify(data);
-            $.request("/node/SaveValues?formId=@(form.ID)", "data=" + encodeURIComponent(json), function () {
+            $.request("/node/SaveValues?formId=@(form.ID)&year=" + year + "&quarter=" + quarter + "&areaId=" + area, "data=" + encodeURIComponent(json), function () {
                 alert("保存成功");
             });
         });

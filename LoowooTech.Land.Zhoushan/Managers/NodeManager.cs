@@ -29,6 +29,11 @@ namespace LoowooTech.Land.Zhoushan.Managers
             return GetNodes().Where(e => e.ParentID == parentId).ToList();
         }
 
+        public List<Node> GetFormNodes(int formId)
+        {
+            return GetNodes().Where(e => e.FormID == formId).ToList();
+        }
+
         private void ClearNodeCache()
         {
             Cache.Remove(NodeCacheKey);

@@ -139,7 +139,7 @@ namespace LoowooTech.Land.Zhoushan.Managers
                 field.SetParameter(FieldType.Quarter, (int)quarter);
             }
 
-            var result = new NodeValueParameter { GetArea = false, GetNode = false, GetValueType = false };
+            var result = new NodeValueParameter { GetArea = false, GetNode = true, GetValueType = false };
 
             foreach (var parameter in field.Parameters)
             {
@@ -185,37 +185,6 @@ namespace LoowooTech.Land.Zhoushan.Managers
             return result;
         }
 
-        //public static NodeValue GetEntity(this Field field, IQueryable<NodeValue> query, int year, Quarter quarter)
-        //{
-        //    field.SetParameter(FieldType.Area, 0);
-        //    field.SetParameter(FieldType.Year, year);
-        //    field.SetParameter(FieldType.Quarter, (int)quarter);
-
-        //    foreach (var parameter in field.Parameters)
-        //    {
-        //        switch (parameter.Type)
-        //        {
-        //            case FieldType.Area:
-        //                query = query.Where(e => e.AreaID == parameter.Value);
-        //                break;
-        //            case FieldType.Node:
-        //                query = query.Where(e => e.NodeID == parameter.Value);
-        //                break;
-        //            case FieldType.Quarter:
-        //                query = query.Where(e => e.Quarter == (Quarter)parameter.Value);
-        //                break;
-        //            case FieldType.Type:
-        //            case FieldType.Value:
-        //                query = query.Where(e => e.TypeID == parameter.Value);
-        //                break;
-        //            case FieldType.Year:
-        //                query = query.Where(e => e.Year == parameter.Value);
-        //                break;
-        //        }
-        //    }
-        //    return query.FirstOrDefault();
-        //}
-
         public static void SetEntity(this Field field, NodeValue entity, int year = 0, Quarter quarter = 0)
         {
             foreach (var parameter in field.Parameters)
@@ -243,9 +212,18 @@ namespace LoowooTech.Land.Zhoushan.Managers
             if (entity.Year == 0) entity.Year = year;
             if (entity.Quarter == 0) entity.Quarter = quarter;
 
+            //如果导入的时候指定了单位的索引编号（亩,公顷，如果有{Unit=1}，则指定的导入的单位是公顷），则值需要乘以type.Ratio 即1000）
+            var ratio = 1;
+            if (field.Parameters.Any(e => e.Type == FieldType.Unit))
+            {
+                var type = ManagerCore.Instance.FormManager.GetNodeValueType(entity.TypeID);
+                ratio *= type.Ratio;
+            }
+
+
             double val = 0;
             double.TryParse(field.Value, out val);
-            entity.RawValue = val;
+            entity.RawValue = val* ratio;
         }
 
     }

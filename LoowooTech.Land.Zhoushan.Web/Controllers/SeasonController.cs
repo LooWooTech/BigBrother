@@ -58,5 +58,21 @@ namespace LoowooTech.Land.Zhoushan.Web.Controllers
             ViewBag.NodeValues = Core.FormManager.GetNodeValues(parameter).Where(e => e.AreaID != 0&&e.Area!=null).ToList();
             return View();
         }
+
+        public ActionResult Table(NodeValueParameter parameter)
+        {
+            parameter.GetArea = true;
+            parameter.GetNode = true;
+            parameter.AreaID = null;
+            parameter.Quarter = 0;
+            var nodeValues = Core.FormManager.GetNodeValues(parameter).Where(e => e.AreaID != 0 && e.Area != null).ToList();
+            var dict= nodeValues.GroupBy(e => e.Area).ToDictionary(e => e.Key, e => e.GroupBy(k=>k.Quarter).ToDictionary(k=>k.Key,k=>k.GroupBy(m=>m.Node.FormID).ToDictionary(m=>m.Key,m=>m.ToList())));
+            ViewBag.Dict = dict;
+            var forms = Core.FormManager.GetForms();
+            var areas = Core.AreaManager.GetAreas();
+            ViewBag.Areas = areas;
+            ViewBag.Forms = forms;
+            return View();
+        }
     }
 }

@@ -244,6 +244,7 @@
     <Content Include="Views\Season\Edit.cshtml" />
     <Content Include="Views\Season\Statistic.cshtml" />
     <Content Include="Views\Season\NodeChart.cshtml" />
+    <Content Include="Views\Season\Table.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

@@ -2,7 +2,7 @@
     int[] Years = ViewBag.Years;
 }
 
-<div class="alert alert-warning" role="alert">
+<div class="alert alert-warning" role="alert" id="statistic">
     <span>正在统计，请稍等...</span>
 </div>
 
@@ -19,13 +19,20 @@
         </div>
     </div>
 </form>
-<div class="row col-md-12" style="margin-top:20px;" id="panel-node">
+
+
+<div class="row col-md-12" style="margin-top:20px;" id="panel-table" >
+
 
 </div>
 
+<div class="row col-md-12" id="panel-node">
+
+
+</div>
 
 <script>
-    $(".alert-warning").hide();
+    $("#statistic").hide();
 
     var colors = ["#FF6384", "#4BC0C0", "#FFCE56", "#E7E9ED", "#36A2EB", "#F38630", "#E0E4CC", "#69D2E7", "#F7464A", "#E2EAE9", "#D4CCC5", "#949FB1", "#4D5360"];
     function getChartColors(len) {
@@ -42,11 +49,25 @@
     }
     $(function () {
         $("#form-Statistic").submit(function () {
-            $(".alert-warning").show();
+            $("#statistic").show();
             var data = $(this).serialize();
-            
+            var nodeFlag = false;
+            var tableFlag = false;
+
+            function CheckLoad() {
+                if (nodeFlag && tableFlag) {
+                    $("#statistic").hide();
+                }
+            }
+
             $("#panel-node").load("/Season/NodeChart?" + data, function () {
-                $(".alert-warning").hide();
+                nodeFlag = true;
+                CheckLoad();
+            });
+
+            $("#panel-table").load("/Season/Table?" + data, function () {
+                tableFlag = true;
+                CheckLoad();
             });
             return false;
         });

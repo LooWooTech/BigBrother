@@ -48,5 +48,7 @@ namespace LoowooTech.Land.Zhoushan.Models
                 _exportTemplate = value;
             }
         }
+        [NotMapped]
+        public List<Node> Nodes { get; set; }
     }
 }

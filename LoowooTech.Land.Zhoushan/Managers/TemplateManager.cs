@@ -25,7 +25,7 @@ namespace LoowooTech.Land.Zhoushan.Managers
             {
                 foreach (var field in template.Fields)
                 {
-                    if (!field.IsValueField) continue;
+                    if (!field.HasPrameter(FieldType.Value)) continue;
                     var parameter = field.GetNodeValueParameter(year, quarter);
                     var entity = Core.FormManager.GetNodeValues(parameter).FirstOrDefault();
                     if (entity == null)
@@ -53,12 +53,11 @@ namespace LoowooTech.Land.Zhoushan.Managers
             {
                 var result = new List<ExcelCell>();
                 var areas = Core.AreaManager.GetAreas();
-
                 foreach (var field in template.Fields)
                 {
                     if (field.Parameters.Count > 0)
                     {
-                        if (field.IsHiddenField)
+                        if (field.HasPrameter(FieldType.Hidden))
                         {
                             field.Value = string.Empty;
                             result.Add(field.Cell);
@@ -68,6 +67,9 @@ namespace LoowooTech.Land.Zhoushan.Managers
                         var firstParameter = field.Parameters[0];
                         switch (firstParameter.Type)
                         {
+                            case FieldType.Unit:
+                                field.Value = "";
+                                break;
                             case FieldType.Form:
                                 field.Value = form.Name;
                                 break;
@@ -83,26 +85,39 @@ namespace LoowooTech.Land.Zhoushan.Managers
                                 field.Value = ((int)quarter).ToString();
                                 break;
                             case FieldType.Type:
-                                var valueType = Core.FormManager.GetNodeValueType(firstParameter.Value);
-                                field.Value = valueType == null ? "未知类型" : valueType.Name;
+                                {
+                                    var valueType = Core.FormManager.GetNodeValueType(firstParameter.Value);
+                                    field.Value = valueType == null ? "未知类型" : valueType.Name;
+                                }
                                 break;
                             case FieldType.Year:
                                 field.Value = firstParameter.Value == 0 ? year.ToString() : firstParameter.Value.ToString();
                                 break;
                             case FieldType.Value:
                             case FieldType.RateValue:
+                                double value = 0;
+                                List<NodeValue> values = null;
                                 var parameter = field.GetNodeValueParameter(year, quarter);
                                 if (firstParameter.Type == FieldType.Value)
                                 {
-                                    var entities = Core.FormManager.GetNodeValues(parameter);
-                                    field.Value = entities.Select(e => e.Value).DefaultIfEmpty(0).Sum().ToString("f2");
+                                    values = Core.FormManager.GetNodeValues(parameter);
+                                    value = values.Select(e => e.Value).DefaultIfEmpty(0).Sum();
                                 }
                                 else
                                 {
                                     parameter.RateType = RateType.YearOnYear;
-                                    var entities = Core.FormManager.GetNodeValues(parameter);
-                                    field.Value = entities.Select(e => e.RateValue).DefaultIfEmpty(0).Sum().ToString("f2");
+                                    values = Core.FormManager.GetNodeValues(parameter);
+                                    value = values.Select(e => e.RateValue).DefaultIfEmpty(0).Sum();
                                 }
+                                double ratio = 1;
+                                if (field.HasPrameter(FieldType.Unit))
+                                {
+                                    var typeId = values.Count == 0 ? 1 : values.FirstOrDefault().TypeID;
+                                    var index = field.Parameters.First(e => e.Type == FieldType.Unit).Value;
+                                    var valueType = Core.FormManager.GetNodeValueType(typeId);
+                                    ratio = 1.0 / (index == 0 ? 1 : (int)Math.Pow(valueType.Ratio, index));
+                                }
+                                field.Value = (value * ratio).ToString("f2");
                                 break;
                             case FieldType.Quarters:
                                 var quarters = new int[firstParameter.Value == 0 ? (int)quarter : firstParameter.Value];
@@ -214,7 +229,7 @@ namespace LoowooTech.Land.Zhoushan.Managers
 
             //如果导入的时候指定了单位的索引编号（亩,公顷，如果有{Unit=1}，则指定的导入的单位是公顷），则值需要乘以type.Ratio 即1000）
             var ratio = 1;
-            if (field.Parameters.Any(e => e.Type == FieldType.Unit))
+            if (field.HasPrameter(FieldType.Unit))
             {
                 var type = ManagerCore.Instance.FormManager.GetNodeValueType(entity.TypeID);
                 ratio *= type.Ratio;
@@ -223,7 +238,7 @@ namespace LoowooTech.Land.Zhoushan.Managers
 
             double val = 0;
             double.TryParse(field.Value, out val);
-            entity.RawValue = val* ratio;
+            entity.RawValue = val * ratio;
         }
 
     }

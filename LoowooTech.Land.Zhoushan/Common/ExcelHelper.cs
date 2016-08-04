@@ -1,5 +1,6 @@
 ﻿using NPOI.HSSF.UserModel;
 using NPOI.SS.UserModel;
+using NPOI.XSSF.UserModel;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -149,7 +150,7 @@ namespace LoowooTech.Land.Zhoushan.Common
             return list;
         }
 
-        public static Stream WriteData(string filePath, List<ExcelCell> data, int sheetIndex = 0)
+        public static IWorkbook GetWorkbook(string filePath, List<ExcelCell> data, int sheetIndex)
         {
             var workbook = WorkbookFactory.Create(filePath);
             var sheet = workbook.GetSheetAt(sheetIndex);
@@ -159,9 +160,7 @@ namespace LoowooTech.Land.Zhoushan.Common
                 var cell = row.GetCell(item.Column);
                 cell.SetCellValue(item.Value.ToString());
             }
-            var result = new MemoryStream();
-            workbook.Write(result);
-            return result;
+            return workbook;
         }
     }
 }

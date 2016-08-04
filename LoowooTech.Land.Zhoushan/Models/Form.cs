@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -22,30 +23,46 @@ namespace LoowooTech.Land.Zhoushan.Models
         /// </summary>
         public bool ExcludeSubArea { get; set; }
 
-        private string _importTemplate;
+        public string ImportTemplate { get; set; }
 
-        public string ImportTemplate
+        public string ExportTemplate { get; set; }
+
+        public string GetImportTemplate()
         {
-            get
+            if (string.IsNullOrEmpty(ImportTemplate))
             {
-                return _importTemplate = _importTemplate ?? Name;
+                return Name;
             }
-            set
-            {
-                _importTemplate = value;
-            }
+            var tempaltes = ImportTemplate.Replace("\r", "").Split('\n');
+            return tempaltes[0];
         }
 
-        private string _exportTemplate;
-        public string ExportTemplate
+        public string GetExportTemplate(Quarter[] quarters)
         {
-            get
+            if (string.IsNullOrEmpty(ExportTemplate))
             {
-                return _exportTemplate = _exportTemplate ?? Name;
+                return Name;
             }
-            set
+
+            var tempaltes = ExportTemplate.Replace("\r", "").Split('\n');
+
+            if (quarters.Length > 1)
             {
-                _exportTemplate = value;
+                var templatePath = ExportTemplate.Replace("\r", "").Split('\n').FirstOrDefault(e => e.Contains("多季度"));
+                if (string.IsNullOrEmpty(templatePath))
+                {
+                    return tempaltes[0];
+                }
+                return templatePath;
+            }
+            else
+            {
+                var templatePath = ExportTemplate.Replace("\r", "").Split('\n').FirstOrDefault(e => e.Contains("单季度"));
+                if (string.IsNullOrEmpty(templatePath))
+                {
+                    return tempaltes[0];
+                }
+                return templatePath;
             }
         }
         [NotMapped]

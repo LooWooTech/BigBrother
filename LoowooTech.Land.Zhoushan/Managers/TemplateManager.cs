@@ -229,12 +229,13 @@ namespace LoowooTech.Land.Zhoushan.Managers
 
             //如果导入的时候指定了单位的索引编号（亩,公顷，如果有{Unit=1}，则指定的导入的单位是公顷），则值需要乘以type.Ratio 即1000）
             var ratio = 1;
+
             if (field.HasPrameter(FieldType.Unit))
             {
-                var type = ManagerCore.Instance.FormManager.GetNodeValueType(entity.TypeID);
-                ratio *= type.Ratio;
+                var index = field.Parameters.First(e => e.Type == FieldType.Unit).Value;
+                var valueType = ManagerCore.Instance.FormManager.GetNodeValueType(entity.TypeID);
+                ratio =  (int)Math.Pow(valueType.Ratio, index);
             }
-
 
             double val = 0;
             double.TryParse(field.Value, out val);

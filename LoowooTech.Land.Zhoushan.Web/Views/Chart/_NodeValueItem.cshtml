@@ -8,7 +8,7 @@
 {
     rowIndex++;
     var type = valueTypes.FirstOrDefault(e => e.ID == g.Key);
-    var sumValue = g.Sum(e => e.Value);
+    var sumValue = g.Sum(e => e.RawValue);
     var sumRate = g.Sum(e => e.RateValue);
     <div class="col-lg-3 @(rowIndex>1?"col-lg-offset-6":null)">
         <span class="node-value-type" data-value="@(sumValue)" data-type-units="@(type.Units)" data-type-ratio="@(type.Ratio)">

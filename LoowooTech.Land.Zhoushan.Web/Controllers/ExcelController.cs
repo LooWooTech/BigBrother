@@ -101,7 +101,7 @@ namespace LoowooTech.Land.Zhoushan.Web.Controllers
             if (formId == 0)
             {
 
-                fileName = year + "年" + GetQuartersDescription(qs) + "统计报表.xlsx";
+                fileName = year + "年" + GetQuartersDescription(qs) + "统计报表.xls";
                 stream = Core.ExcelManager.ExportAllForms(year, qs);
             }
             else
@@ -113,7 +113,7 @@ namespace LoowooTech.Land.Zhoushan.Web.Controllers
                 }
 
                 stream = Core.ExcelManager.ExportForm(form, year, qs);
-                fileName = form.Name + "-" + year + "-" + GetQuartersDescription(qs) + ".xlsx";
+                fileName = form.Name + "-" + year + "-" + GetQuartersDescription(qs) + ".xls";
             }
             Response.ContentType = "application/vnd.ms-excel;charset=UTF-8";
             Response.AddHeader("Content-Disposition", string.Format("attachment;filename={0}", HttpUtility.UrlEncode(fileName)));

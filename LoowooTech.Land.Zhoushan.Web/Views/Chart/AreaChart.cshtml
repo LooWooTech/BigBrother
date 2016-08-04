@@ -53,7 +53,7 @@
                     foreach (var areaId in areas.OrderBy(e => e.ID).Select(e=>e.ID))
                     {
                         var values = nodeValues.Where(e => e.TypeID == valueType.ID && e.AreaID == areaId);
-                        data.Add(values.Select(e => e.Value).DefaultIfEmpty(0).Sum().ToString("f2").TrimEnd('0').TrimEnd('.'));
+                        data.Add(values.Select(e => e.RawValue).DefaultIfEmpty(0).Sum().ToString("f2").TrimEnd('0').TrimEnd('.'));
                     }
                     if (i > 0) {
                         @:,

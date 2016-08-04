@@ -1,0 +1,38 @@
+﻿@{ 
+    var areas = ViewBag.Areas;
+    List<Form> forms = ViewBag.Forms;
+    var dict = ViewBag.Dict;
+    Dictionary<Area, Dictionary<Quarter, Dictionary<int, List<NodeValue>>>> value = dict;
+}
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>区域</th>
+            @foreach(Quarter quarter in Enum.GetValues(typeof(Quarter)))
+            {
+                <th>@(quarter.GetDescription())</th>
+            }
+        </tr>
+    </thead>
+    <tbody>
+        @foreach(var entry in value)
+        {
+            <tr>
+                <td>@(entry.Key.Name)</td>
+                @foreach (Quarter quarter in Enum.GetValues(typeof(Quarter)))
+                {
+                    if (entry.Value.ContainsKey(quarter))
+                    {
+                        <td>@(entry.Value[quarter].Count)/@(forms.Count)</td>
+                    }
+                    else
+                    {
+                        <td>0/@(forms.Count)</td>
+                    }
+
+                }
+            </tr>
+        }
+    </tbody>
+</table>

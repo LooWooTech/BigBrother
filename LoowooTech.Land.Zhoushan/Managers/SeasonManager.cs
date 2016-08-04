@@ -80,5 +80,22 @@ namespace LoowooTech.Land.Zhoushan.Managers
             }
         }
 
+        public void Statistic(Dictionary<Area,Dictionary<Quarter,List<NodeValue>>> dict)
+        {
+           
+            foreach(var one in dict)
+            {
+                foreach(var two in one.Value)
+                {
+
+                    var item= two.Value.GroupBy(e => e.Node.FormID).ToDictionary(e => e.Key, e => e.ToList());
+                    foreach(var three in two.Value)
+                    {
+                        
+                    }
+                }
+            }
+        }
+
     }
 }

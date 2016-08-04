@@ -71,10 +71,10 @@ namespace LoowooTech.Land.Zhoushan.Models
             {
                 throw new ArgumentException("没有填写分类名称");
             }
-            if (ValueTypes == null || ValueTypes.Length == 0)
-            {
-                throw new ArgumentException("没有选择数据类型");
-            }
+            //if (ValueTypes == null || ValueTypes.Length == 0)
+            //{
+            //    throw new ArgumentException("没有选择数据类型");
+            //}
         }
     }
 }

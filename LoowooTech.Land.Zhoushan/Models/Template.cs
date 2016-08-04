@@ -14,7 +14,7 @@ namespace LoowooTech.Land.Zhoushan.Models
         public Template(string formName)
         {
             Fields = new List<Field>();
-            var filePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Templates", formName);
+            var filePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Templates", formName + ".xls");
             var cells = ExcelHelper.ReadData(filePath);
             foreach (var cell in cells)
             {
@@ -103,7 +103,7 @@ namespace LoowooTech.Land.Zhoushan.Models
 
         public void UpdateParameters(List<Field> fields)
         {
-            if (!HasPrameter(FieldType.Value) && !HasPrameter(FieldType.Rate))
+            if (!HasPrameter(FieldType.Value) && !HasPrameter(FieldType.RateValue))
             {
                 return;
             }
@@ -114,7 +114,7 @@ namespace LoowooTech.Land.Zhoushan.Models
             foreach (var f in upFields)
             {
                 //如果是第一次碰到值列，跳过，如是第二次碰到，则停止搜寻
-                if (f.HasPrameter(FieldType.Value) || f.HasPrameter(FieldType.Rate))
+                if (f.HasPrameter(FieldType.Value) || f.HasPrameter(FieldType.RateValue))
                 {
                     if (hasFind)
                         break;
@@ -134,7 +134,7 @@ namespace LoowooTech.Land.Zhoushan.Models
             var leftFields = fields.Where(e => e.Cell.Column < Cell.Column && e.IncludRow(Cell.Row)).OrderByDescending(e => e.Cell.Column);
             foreach (var f in leftFields)
             {
-                if (f.HasPrameter(FieldType.Value) || f.HasPrameter(FieldType.Rate))
+                if (f.HasPrameter(FieldType.Value) || f.HasPrameter(FieldType.RateValue))
                 {
                     if (hasFind)
                         break;
@@ -176,7 +176,7 @@ namespace LoowooTech.Land.Zhoushan.Models
                     if (p.Value == 0 && p1.Value > 0)
                         p.Value = p1.Value;
                 }
-                else if(p.Type != FieldType.Hidden)
+                else if (p.Type != FieldType.Hidden)
                 {
                     Parameters.Add(p);
                 }

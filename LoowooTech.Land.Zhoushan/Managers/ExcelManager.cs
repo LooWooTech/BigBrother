@@ -1,5 +1,6 @@
 ﻿using LoowooTech.Land.Zhoushan.Common;
 using LoowooTech.Land.Zhoushan.Models;
+using NPOI.HSSF.UserModel;
 using NPOI.SS.UserModel;
 using NPOI.XSSF.UserModel;
 using System;
@@ -15,12 +16,13 @@ namespace LoowooTech.Land.Zhoushan.Managers
     {
         public Stream ExportAllForms(int year, Quarter[] quarters)
         {
-            XSSFWorkbook book = new XSSFWorkbook();
+            var book = new HSSFWorkbook();
             var forms = Core.FormManager.GetForms();
             foreach (var form in forms)
             {
-                var formExcel = GetFormExcel(form, year, quarters);
-                book.Add(formExcel.GetSheetAt(0));
+                var formExcel = (HSSFWorkbook)GetFormExcel(form, year, quarters);
+                var sheet = (HSSFSheet)formExcel.CloneSheet(0);
+                sheet.CopyTo(book, form.Name, true, true);
             }
             return GetExcelStream(book);
         }

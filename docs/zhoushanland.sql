@@ -1,25 +1,30 @@
 -- --------------------------------------------------------
--- 主机:                           127.0.0.1
--- 服务器版本:                        5.6.26 - MySQL Community Server (GPL)
--- 服务器操作系统:                      Win64
+-- 主机:                           10.22.102.90
+-- 服务器版本:                        5.1.73-community - MySQL Community Server (GPL)
+-- 服务器操作系统:                      Win32
 -- HeidiSQL 版本:                  9.3.0.4984
 -- --------------------------------------------------------
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
-/*!40101 SET NAMES utf8mb4 */;
+/*!40101 SET NAMES utf8 */;
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 
+-- 导出 zhoushanland 的数据库结构
+CREATE DATABASE IF NOT EXISTS `zhoushanland` /*!40100 DEFAULT CHARACTER SET utf8 */;
+USE `zhoushanland`;
+
+
 -- 导出  表 zhoushanland.area 结构
-DROP TABLE IF EXISTS `area`;
 CREATE TABLE IF NOT EXISTS `area` (
   `ID` int(11) NOT NULL AUTO_INCREMENT,
   `Name` varchar(50) NOT NULL DEFAULT '0',
   `ParentID` int(11) NOT NULL DEFAULT '0',
   PRIMARY KEY (`ID`)
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8;
 
--- 正在导出表  zhoushanland.area 的数据：~6 rows (大约)
+-- 正在导出表  zhoushanland.area 的数据：~10 rows (大约)
+DELETE FROM `area`;
 /*!40000 ALTER TABLE `area` DISABLE KEYS */;
 INSERT INTO `area` (`ID`, `Name`, `ParentID`) VALUES
 	(1, '市本级', 0),
@@ -27,12 +32,15 @@ INSERT INTO `area` (`ID`, `Name`, `ParentID`) VALUES
 	(3, '定海区', 0),
 	(4, '岱山县', 0),
 	(5, '普陀区', 0),
-	(6, '嵊泗县', 0);
+	(6, '嵊泗县', 0),
+	(9, '产业集聚区', 1),
+	(10, '金塘', 3),
+	(11, '六横', 5),
+	(12, '朱家尖', 5);
 /*!40000 ALTER TABLE `area` ENABLE KEYS */;
 
 
 -- 导出  表 zhoushanland.dossier 结构
-DROP TABLE IF EXISTS `dossier`;
 CREATE TABLE IF NOT EXISTS `dossier` (
   `ID` int(11) NOT NULL AUTO_INCREMENT,
   `Year` int(11) NOT NULL,
@@ -43,13 +51,14 @@ CREATE TABLE IF NOT EXISTS `dossier` (
 ) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8;
 
 -- 正在导出表  zhoushanland.dossier 的数据：~10 rows (大约)
+DELETE FROM `dossier`;
 /*!40000 ALTER TABLE `dossier` DISABLE KEYS */;
 INSERT INTO `dossier` (`ID`, `Year`, `Quarter`, `Remark`, `UploadTime`) VALUES
 	(1, 2016, 1, 'uploads/QL_20160725_0007.pdf', '2016-07-29 13:38:14'),
 	(2, 2016, 2, 'uploads/QL_20160725_0007.pdf', '2016-07-27 11:22:58'),
 	(3, 2016, 3, 'uploads/QL_20160725_0007.pdf', '2016-07-27 11:27:07'),
-	(4, 2015, 1, 'uploads/QL_20160725_0008.pdf', '2016-07-27 12:46:35'),
-	(5, 2014, 1, 'uploads/QL_20160725_0008636052294120621473.pdf', '2016-07-27 15:17:01'),
+	(4, 2015, 1, '第一季度', '2016-08-01 16:34:10'),
+	(5, 2014, 1, '年度统计册子', '2016-08-01 16:33:33'),
 	(6, 2015, 2, 'uploads/QL_20160725_0008636052294359612835.pdf', '2016-07-27 15:17:17'),
 	(7, 2016, 4, 'uploads/SKM_C364e16072710310_0001636052294514076858.pdf', '2016-07-27 15:17:37'),
 	(8, 2013, 1, NULL, '2016-07-29 10:22:53'),
@@ -59,16 +68,16 @@ INSERT INTO `dossier` (`ID`, `Year`, `Quarter`, `Remark`, `UploadTime`) VALUES
 
 
 -- 导出  表 zhoushanland.dossierfile 结构
-DROP TABLE IF EXISTS `dossierfile`;
 CREATE TABLE IF NOT EXISTS `dossierfile` (
   `ID` int(11) NOT NULL AUTO_INCREMENT,
   `FileName` varchar(255) NOT NULL,
   `FilePath` varchar(1023) NOT NULL,
   `DossierID` int(11) NOT NULL,
   PRIMARY KEY (`ID`)
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8;
 
--- 正在导出表  zhoushanland.dossierfile 的数据：~6 rows (大约)
+-- 正在导出表  zhoushanland.dossierfile 的数据：~8 rows (大约)
+DELETE FROM `dossierfile`;
 /*!40000 ALTER TABLE `dossierfile` DISABLE KEYS */;
 INSERT INTO `dossierfile` (`ID`, `FileName`, `FilePath`, `DossierID`) VALUES
 	(1, 'QL_20160725_0007.pdf', 'uploads/QL_20160725_0007636053858312597793.pdf', 9),
@@ -76,12 +85,13 @@ INSERT INTO `dossierfile` (`ID`, `FileName`, `FilePath`, `DossierID`) VALUES
 	(3, 'SKM_C364e16072710310_0001.pdf', 'uploads/SKM_C364e16072710310_0001636053858373893285.pdf', 9),
 	(4, 'SKM_C364e16072710310_0003.pdf', 'uploads/SKM_C364e16072710310_0003636053858404059122.pdf', 9),
 	(5, 'QL_20160725_0007.pdf', 'uploads/QL_20160725_0007636053962884252665.pdf', 1),
-	(6, 'SKM_C364e16072710310_0004.pdf', 'uploads/SKM_C364e16072710310_0004636053963259065437.pdf', 10);
+	(6, 'SKM_C364e16072710310_0004.pdf', 'uploads/SKM_C364e16072710310_0004636053963259065437.pdf', 10),
+	(7, '2014年度数据册子.doc', 'uploads/2014年度数据册子636056660126596791.doc', 5),
+	(8, '2015年第一季度数据册子.doc', 'uploads/2015年第一季度数据册子636056660493232278.doc', 4);
 /*!40000 ALTER TABLE `dossierfile` ENABLE KEYS */;
 
 
 -- 导出  表 zhoushanland.form 结构
-DROP TABLE IF EXISTS `form`;
 CREATE TABLE IF NOT EXISTS `form` (
   `ID` int(11) NOT NULL AUTO_INCREMENT,
   `Name` varchar(255) NOT NULL,
@@ -89,36 +99,39 @@ CREATE TABLE IF NOT EXISTS `form` (
   `ExportTemplate` varchar(512) DEFAULT NULL,
   `ExcludeSubArea` bit(1) NOT NULL,
   PRIMARY KEY (`ID`)
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8;
 
--- 正在导出表  zhoushanland.form 的数据：~7 rows (大约)
+-- 正在导出表  zhoushanland.form 的数据：~8 rows (大约)
+DELETE FROM `form`;
 /*!40000 ALTER TABLE `form` DISABLE KEYS */;
 INSERT INTO `form` (`ID`, `Name`, `ImportTemplate`, `ExportTemplate`, `ExcludeSubArea`) VALUES
 	(1, '建设用地审批', NULL, '建设用地审批\r\n建设用地审批批准累计-导出', b'0'),
-	(2, '14土地供应', '14土地供应-导入', '14土地供应-单季度导出\r\n14土地供应-多季度导出', b'0'),
-	(3, '15土地供应', '15土地供应-导入', '15土地供应-单季度导出\r\n15土地供应-多季度导出', b'0'),
-	(4, '土地违法案件查处', '土地违法案件查处-导入', '土地违法案件查处-单季度导出\r\n土地违法案件查处-多季度导出', b'0'),
-	(5, '政府储备土地情况', NULL, NULL, b'0'),
-	(6, '采矿权出让及许可证发放', '采矿权出让及许可证发放-导入', '采矿权出让及许可证发放-单季度导出\r\n采矿权出让及许可证发放-多季度导出', b'0'),
-	(7, '集体建设用地使用情况', '集体建设用地使用情况钻取', '集体建设用地使用情况钻取', b'0');
+	(2, '建设用地供应', '14土地供应-导入', '14土地供应-单季度导出\r\n14土地供应-多季度导出', b'1'),
+	(3, '土地储备', '15土地供应-导入', '15土地供应-单季度导出\r\n15土地供应-多季度导出', b'1'),
+	(4, '土地征收', '土地违法案件查处-导入', '土地违法案件查处-单季度导出\r\n土地违法案件查处-多季度导出', b'1'),
+	(5, '土地登记', NULL, NULL, b'1'),
+	(6, '矿业权市场', '采矿权出让及许可证发放-导入', '采矿权出让及许可证发放-单季度导出\r\n采矿权出让及许可证发放-多季度导出', b'1'),
+	(7, '信访', '集体建设用地使用情况钻取', '集体建设用地使用情况钻取', b'1'),
+	(8, '建设用地预审', '建设用地预审情况', '建设用地预审情况', b'1'),
+	(9, '国土资源违法案件', '土地违法案件查处情况', '土地违法案件查处情况', b'1');
 /*!40000 ALTER TABLE `form` ENABLE KEYS */;
 
 
 -- 导出  表 zhoushanland.node 结构
-DROP TABLE IF EXISTS `node`;
 CREATE TABLE IF NOT EXISTS `node` (
   `ID` int(11) NOT NULL AUTO_INCREMENT,
   `FormID` int(11) NOT NULL DEFAULT '0',
   `ParentID` int(11) NOT NULL DEFAULT '0',
   `Name` varchar(50) NOT NULL DEFAULT '0',
   `Group` varchar(50) DEFAULT NULL,
-  `ValueTypes` varchar(50) NOT NULL DEFAULT '0',
+  `ValueTypes` varchar(50) DEFAULT '0',
   PRIMARY KEY (`ID`),
   KEY `FormID` (`FormID`),
   KEY `ParentID` (`ParentID`)
-) ENGINE=InnoDB AUTO_INCREMENT=87 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=147 DEFAULT CHARSET=utf8;
 
--- 正在导出表  zhoushanland.node 的数据：~74 rows (大约)
+-- 正在导出表  zhoushanland.node 的数据：~71 rows (大约)
+DELETE FROM `node`;
 /*!40000 ALTER TABLE `node` DISABLE KEYS */;
 INSERT INTO `node` (`ID`, `FormID`, `ParentID`, `Name`, `Group`, `ValueTypes`) VALUES
 	(1, 1, 0, '批准建设用地面积', NULL, '1'),
@@ -129,77 +142,97 @@ INSERT INTO `node` (`ID`, `FormID`, `ParentID`, `Name`, `Group`, `ValueTypes`) V
 	(7, 1, 1, '城市分批次建设用地', NULL, '1'),
 	(8, 1, 1, '单独选址建设用地', NULL, '1'),
 	(9, 1, 8, '能源用地', NULL, '1'),
-	(10, 1, 8, '交通运输用地', NULL, '1'),
-	(11, 1, 8, '水利设施用地', NULL, '1'),
+	(10, 1, 8, '交通用地', NULL, '1'),
+	(11, 1, 8, '水利用地', NULL, '1'),
 	(12, 1, 8, '其他用地', NULL, '1'),
 	(13, 2, 0, '建设用地供应总量', NULL, '0'),
 	(14, 2, 13, '新增建设用地', NULL, '0'),
-	(15, 2, 13, '房地产用地', NULL, '0'),
-	(16, 2, 13, '工矿仓储用地', NULL, '0'),
+	(15, 2, 13, '房地产用地', '用地类型', '1'),
+	(16, 2, 13, '工业仓储用地', '用地类型', '1'),
 	(17, 2, 15, '商服用地', NULL, '0'),
-	(18, 2, 15, '住宅用地', NULL, '0'),
-	(19, 3, 0, '划拨面积	', NULL, '0'),
-	(20, 3, 0, '出让面积	', NULL, '0'),
-	(21, 3, 20, '招拍挂出让', NULL, '0'),
-	(24, 3, 0, '出让成交价款（万元）', NULL, '0'),
-	(25, 3, 24, '招拍挂价款（万元）', NULL, '0'),
-	(30, 1, 1, '国务院批准', '批准机构', '1'),
-	(31, 1, 30, '当年受理当年批准', NULL, '1'),
-	(32, 1, 30, '历年受理当年批准', NULL, '1'),
-	(34, 1, 1, '省政府批准', '批准机构', '1'),
-	(35, 1, 34, '当年受理当年批准', NULL, '1'),
-	(36, 1, 34, '历年受理当年批准', NULL, '1'),
-	(37, 4, 0, '本期发现土地违法（件）', '本期案件', '0'),
-	(38, 4, 0, '本期土地违法立案（件）', '本期案件', '0'),
-	(39, 4, 38, '涉及土地面积', NULL, '0'),
-	(40, 4, 39, '耕地', NULL, '0'),
-	(43, 4, 0, '本期土地违法结案（件）', '本期案件', '0'),
-	(44, 4, 0, '收回土地面积', NULL, '0'),
-	(45, 4, 0, '罚没款（万元）', NULL, '0'),
-	(47, 5, 0, '报告期内新增政府储备土地', NULL, '0'),
-	(48, 5, 47, '依法收回的国有土地', NULL, '0'),
-	(49, 5, 48, '无偿收回', NULL, '0'),
-	(50, 5, 48, '有偿收回', NULL, '0'),
-	(51, 5, 47, '收购的土地', NULL, '0'),
-	(52, 5, 47, '行使优先购买权取得的土地', NULL, '0'),
-	(54, 5, 47, '依法征收的土地', NULL, '0'),
-	(55, 5, 47, '其他依法取得的土地', NULL, '0'),
-	(56, 5, 0, '报告期内土地开发费用支出', NULL, '0'),
-	(57, 5, 0, '报告期内政府储备土地供应', NULL, '0'),
-	(58, 5, 0, '报告期末政府储备土地面积', NULL, '0'),
-	(59, 5, 0, '报告期初政府储备土地面积', NULL, '0'),
-	(60, 5, 57, '出让面积', NULL, '0'),
-	(61, 5, 60, '协议面积', NULL, '0'),
-	(62, 5, 60, '招标面积', NULL, '0'),
-	(63, 5, 60, '拍卖面积', NULL, '0'),
-	(64, 5, 60, '挂牌面积', NULL, '0'),
-	(65, 5, 57, '租赁面积', NULL, '0'),
-	(66, 5, 57, '其他面积', NULL, '0'),
-	(67, 2, 18, '普通商品房用地', NULL, '0'),
-	(68, 4, 37, '涉及土地面积', NULL, '0'),
+	(18, 2, 15, '普通商品房用地', NULL, '1'),
+	(19, 3, 0, '新增土地储备宗数', NULL, '4'),
+	(20, 3, 0, '新增土地储备面积', NULL, '1'),
+	(21, 3, 20, '回收土地', NULL, '1'),
+	(24, 3, 0, '期内支出（万元）', NULL, '5'),
+	(25, 3, 24, '补偿款', NULL, '5'),
+	(37, 4, 0, '土地征收面积', NULL, '1'),
+	(38, 4, 0, '征收费用（万元）', NULL, '5'),
+	(43, 4, 0, '安置农业人口（人）', NULL, '7'),
+	(47, 5, 0, '期末情况', NULL, NULL),
+	(48, 5, 47, '土地抵押登记宗数（宗）', NULL, '4'),
+	(51, 5, 47, '土地抵押面积', NULL, '1'),
+	(52, 5, 47, '抵押贷款金额（亿元）', NULL, '5'),
+	(56, 5, 0, '期内增加', NULL, NULL),
+	(57, 5, 0, '期内减少', NULL, NULL),
+	(58, 5, 0, '国有土地使用权', NULL, '4'),
+	(59, 5, 0, '集体土地所有权', NULL, '4'),
+	(68, 4, 37, '农用地', NULL, '1'),
 	(69, 4, 68, '耕地', NULL, '0'),
-	(70, 4, 43, '涉及土地面积', NULL, '0'),
-	(71, 4, 70, '耕地', NULL, '0'),
-	(72, 6, 0, '采矿许可证总数', NULL, '0'),
+	(72, 6, 0, '采矿权许可证数', NULL, '6'),
 	(73, 6, 72, '新立', NULL, '0'),
 	(74, 6, 72, '撤销', NULL, '0'),
 	(75, 6, 0, '采矿权出让', NULL, '0'),
 	(76, 6, 75, '采矿权出让个数', NULL, '0'),
-	(77, 6, 75, '应缴纳采矿权出让价款（万元）', NULL, '0'),
-	(78, 6, 0, '采矿权转让', NULL, '0'),
-	(79, 6, 78, '采矿权转让个数', NULL, '0'),
-	(80, 6, 78, '采矿权转让价款（万元）', NULL, '0'),
-	(81, 7, 0, '乡镇企业用地', NULL, '0'),
-	(82, 7, 0, '乡镇（村）公共设施和公益事业用地', NULL, '0'),
-	(83, 7, 0, '宅基地', NULL, '0'),
-	(84, 7, 81, '新增', NULL, '0'),
-	(85, 7, 82, '新增', NULL, '0'),
-	(86, 7, 83, '新增', NULL, '0');
+	(77, 6, 75, '缴纳采矿权出让价款（万元）', NULL, '5'),
+	(87, 2, 13, '其他用地', '用地类型', '1'),
+	(88, 2, 13, '划拨面积', '供地方式', '1'),
+	(89, 2, 13, '出让面积', '供地方式', '1'),
+	(90, 2, 89, '招拍挂出让面积', NULL, '1'),
+	(91, 2, 0, '出让金（万元）', NULL, '5'),
+	(92, 3, 20, '收购土地', NULL, '1'),
+	(93, 3, 20, '其他', NULL, '1'),
+	(94, 3, 24, '开发费', NULL, '5'),
+	(95, 3, 0, '结算土地收储成本', NULL, '5'),
+	(96, 3, 0, '报告期末土地储备面积', NULL, '1'),
+	(97, 5, 56, '土地抵押登记宗数（宗）', NULL, '4'),
+	(98, 5, 56, '土地抵押登记面积', NULL, '1'),
+	(99, 5, 56, '抵押贷款金额（亿元）', NULL, '5'),
+	(100, 5, 57, '土地抵押登记宗数（宗）', NULL, '4'),
+	(101, 5, 57, '土地抵押登记面积', NULL, '1'),
+	(102, 5, 57, '抵押贷款金额（亿元）', NULL, '5'),
+	(103, 5, 0, '集体土地使用权', NULL, '4'),
+	(104, 5, 0, '宅基地使用权', NULL, '4'),
+	(105, 8, 0, '预审件数（件）', NULL, '3'),
+	(106, 8, 0, '预审面积', NULL, '1'),
+	(107, 8, 106, '耕地', NULL, '1'),
+	(108, 8, 106, '能源用地', NULL, '1'),
+	(109, 8, 106, '交通用地', NULL, '1'),
+	(110, 8, 106, '水利用地', NULL, NULL),
+	(111, 8, 106, '其他用地', NULL, '1'),
+	(112, 9, 0, '土地违法案件（件）', NULL, '3'),
+	(113, 9, 112, '涉及土地面积', NULL, '1'),
+	(114, 9, 113, '耕地', NULL, '1'),
+	(115, 9, 0, '土地违法结案（件）', NULL, '3'),
+	(116, 9, 115, '收回土地面积', NULL, '1'),
+	(117, 9, 116, '耕地', NULL, '1'),
+	(118, 9, 115, '拆除建筑面积（平方米）', NULL, '1'),
+	(119, 9, 115, '没收建筑面积（平方米）', NULL, '1'),
+	(120, 9, 115, '罚没款（万元）', NULL, '5'),
+	(121, 9, 0, '矿产违法案件（件）', NULL, '3'),
+	(122, 9, 121, '立案（件）', NULL, '3'),
+	(123, 9, 121, '结案（件）', NULL, '3'),
+	(124, 9, 121, '罚没款（万元）', NULL, '5'),
+	(131, 6, 0, '采矿权出让', NULL, NULL),
+	(132, 6, 131, '采矿权出让个数', NULL, '6'),
+	(133, 6, 131, '缴纳采矿权出让价款（万元）', NULL, '5'),
+	(134, 6, 0, '宗数', NULL, '4'),
+	(135, 6, 134, '新立', NULL, '4'),
+	(136, 6, 134, '注销', NULL, '4'),
+	(137, 6, 0, '三费合计', NULL, '5'),
+	(138, 6, 0, '出让金', NULL, '5'),
+	(139, 6, 0, '治理备用金', NULL, '5'),
+	(140, 6, 0, '资源补偿费', NULL, '5'),
+	(141, 7, 0, '本期来信（件）', NULL, '3'),
+	(142, 7, 0, '本期来访（批次/人次）', NULL, NULL),
+	(143, 8, 0, '预审件数（件）', NULL, '3'),
+	(144, 8, 0, '预审面积', NULL, '1'),
+	(145, 3, 0, '期内新增面积', NULL, '1'),
+	(146, 3, 0, '期末面积', NULL, '1');
 /*!40000 ALTER TABLE `node` ENABLE KEYS */;
 
 
 -- 导出  表 zhoushanland.node_value 结构
-DROP TABLE IF EXISTS `node_value`;
 CREATE TABLE IF NOT EXISTS `node_value` (
   `ID` int(11) NOT NULL AUTO_INCREMENT,
   `NodeID` int(11) NOT NULL,
@@ -214,7 +247,8 @@ CREATE TABLE IF NOT EXISTS `node_value` (
   KEY `NodeID` (`NodeID`)
 ) ENGINE=InnoDB AUTO_INCREMENT=713 DEFAULT CHARSET=utf8;
 
--- 正在导出表  zhoushanland.node_value 的数据：~712 rows (大约)
+-- 正在导出表  zhoushanland.node_value 的数据：~685 rows (大约)
+DELETE FROM `node_value`;
 /*!40000 ALTER TABLE `node_value` DISABLE KEYS */;
 INSERT INTO `node_value` (`ID`, `NodeID`, `Value`, `Raw_Value`, `Quarter`, `AreaID`, `TypeID`, `Year`, `UpdateTime`) VALUES
 	(1, 59, 613.4809, 613.4809, 1, 0, 1, 2012, '2016-06-06 20:27:24'),
@@ -503,23 +537,23 @@ INSERT INTO `node_value` (`ID`, `NodeID`, `Value`, `Raw_Value`, `Quarter`, `Area
 	(284, 11, 0, 0, 4, 0, 1, 2015, '2016-06-16 09:00:58'),
 	(285, 9, 0, 0, 4, 0, 1, 2015, '2016-06-16 09:00:58'),
 	(286, 12, 0, 0, 4, 0, 1, 2015, '2016-06-16 09:00:58'),
-	(287, 1, 0, 0, 1, 0, 1, 2016, '2016-06-16 09:01:07'),
-	(288, 3, 0, 0, 1, 0, 1, 2016, '2016-06-16 09:01:07'),
-	(289, 4, 0, 0, 1, 0, 1, 2016, '2016-06-16 09:01:07'),
-	(290, 5, 0, 0, 1, 0, 1, 2016, '2016-06-16 09:01:07'),
-	(291, 6, 0, 0, 1, 0, 1, 2016, '2016-06-16 09:01:07'),
-	(292, 30, 0, 0, 1, 0, 1, 2016, '2016-06-16 09:01:07'),
-	(293, 31, 0, 0, 1, 0, 1, 2016, '2016-06-16 09:01:07'),
-	(294, 32, 0, 0, 1, 0, 1, 2016, '2016-06-16 09:01:07'),
-	(295, 34, 0, 0, 1, 0, 1, 2016, '2016-06-16 09:01:07'),
-	(296, 35, 0, 0, 1, 0, 1, 2016, '2016-06-16 09:01:07'),
-	(297, 36, 0, 0, 1, 0, 1, 2016, '2016-06-16 09:01:07'),
-	(298, 7, 0, 0, 1, 0, 1, 2016, '2016-06-16 09:01:07'),
-	(299, 8, 0, 0, 1, 0, 1, 2016, '2016-06-16 09:01:07'),
-	(300, 10, 0, 0, 1, 0, 1, 2016, '2016-06-16 09:01:07'),
-	(301, 11, 0, 0, 1, 0, 1, 2016, '2016-06-16 09:01:07'),
-	(302, 9, 0, 0, 1, 0, 1, 2016, '2016-06-16 09:01:07'),
-	(303, 12, 0, 0, 1, 0, 1, 2016, '2016-06-16 09:01:07'),
+	(287, 1, 0, 0, 1, 0, 1, 2016, '2016-08-01 17:33:50'),
+	(288, 3, 0, 0, 1, 0, 1, 2016, '2016-08-01 17:33:50'),
+	(289, 4, 0, 0, 1, 0, 1, 2016, '2016-08-01 17:33:50'),
+	(290, 5, 0, 0, 1, 0, 1, 2016, '2016-08-01 17:33:50'),
+	(291, 6, 0, 0, 1, 0, 1, 2016, '2016-08-01 17:33:50'),
+	(292, 30, 0, 0, 1, 0, 1, 2016, '2016-08-01 17:33:50'),
+	(293, 31, 0, 0, 1, 0, 1, 2016, '2016-08-01 17:33:50'),
+	(294, 32, 0, 0, 1, 0, 1, 2016, '2016-08-01 17:33:50'),
+	(295, 34, 0, 0, 1, 0, 1, 2016, '2016-08-01 17:33:50'),
+	(296, 35, 0, 0, 1, 0, 1, 2016, '2016-08-01 17:33:50'),
+	(297, 36, 0, 0, 1, 0, 1, 2016, '2016-08-01 17:33:50'),
+	(298, 7, 0, 0, 1, 0, 1, 2016, '2016-08-01 17:33:50'),
+	(299, 8, 0, 0, 1, 0, 1, 2016, '2016-08-01 17:33:50'),
+	(300, 10, 0, 0, 1, 0, 1, 2016, '2016-08-01 17:33:50'),
+	(301, 11, 0, 0, 1, 0, 1, 2016, '2016-08-01 17:33:50'),
+	(302, 9, 0, 0, 1, 0, 1, 2016, '2016-08-01 17:33:50'),
+	(303, 12, 0, 0, 1, 0, 1, 2016, '2016-08-01 17:33:50'),
 	(304, 1, 0, 0, 1, 1, 1, 2014, '2016-06-16 09:50:37'),
 	(305, 1, 14.1015, 14.1015, 1, 3, 1, 2014, '2016-06-16 09:50:37'),
 	(306, 1, 0, 0, 1, 5, 1, 2014, '2016-06-16 09:50:37'),
@@ -933,7 +967,6 @@ INSERT INTO `node_value` (`ID`, `NodeID`, `Value`, `Raw_Value`, `Quarter`, `Area
 
 
 -- 导出  表 zhoushanland.season 结构
-DROP TABLE IF EXISTS `season`;
 CREATE TABLE IF NOT EXISTS `season` (
   `ID` int(11) NOT NULL AUTO_INCREMENT,
   `Quarter` int(11) NOT NULL DEFAULT '0',
@@ -941,21 +974,22 @@ CREATE TABLE IF NOT EXISTS `season` (
   `EndTime` datetime NOT NULL,
   `SetTime` datetime NOT NULL,
   `Delete` bit(3) NOT NULL DEFAULT b'0',
+  `Year` int(11) NOT NULL DEFAULT '0',
   PRIMARY KEY (`ID`)
 ) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
 
 -- 正在导出表  zhoushanland.season 的数据：~4 rows (大约)
+DELETE FROM `season`;
 /*!40000 ALTER TABLE `season` DISABLE KEYS */;
-INSERT INTO `season` (`ID`, `Quarter`, `StartTime`, `EndTime`, `SetTime`, `Delete`) VALUES
-	(1, 1, '2016-01-01 00:00:00', '2016-03-01 00:00:00', '2016-07-30 21:14:23', b'001'),
-	(2, 2, '2016-03-01 00:00:00', '2016-04-29 00:00:00', '2016-07-30 19:47:52', b'000'),
-	(3, 3, '2016-06-01 00:00:00', '2016-08-30 00:00:00', '2016-07-30 20:10:07', b'000'),
-	(4, 4, '2016-11-02 00:00:00', '2016-12-30 00:00:00', '2016-07-30 20:10:21', b'000');
+INSERT INTO `season` (`ID`, `Quarter`, `StartTime`, `EndTime`, `SetTime`, `Delete`, `Year`) VALUES
+	(1, 1, '2016-01-01 00:00:00', '2016-03-01 00:00:00', '2016-07-30 21:14:23', b'001', 0),
+	(2, 2, '2016-03-01 00:00:00', '2016-04-29 00:00:00', '2016-08-01 15:34:41', b'000', 2016),
+	(3, 3, '2016-06-01 00:00:00', '2016-08-30 00:00:00', '2016-08-01 15:34:47', b'000', 2016),
+	(4, 4, '2016-11-02 00:00:00', '2016-12-30 00:00:00', '2016-08-01 15:34:51', b'000', 2016);
 /*!40000 ALTER TABLE `season` ENABLE KEYS */;
 
 
 -- 导出  表 zhoushanland.user 结构
-DROP TABLE IF EXISTS `user`;
 CREATE TABLE IF NOT EXISTS `user` (
   `ID` int(11) NOT NULL AUTO_INCREMENT,
   `Username` varchar(50) NOT NULL,
@@ -970,6 +1004,7 @@ CREATE TABLE IF NOT EXISTS `user` (
 ) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8;
 
 -- 正在导出表  zhoushanland.user 的数据：~6 rows (大约)
+DELETE FROM `user`;
 /*!40000 ALTER TABLE `user` DISABLE KEYS */;
 INSERT INTO `user` (`ID`, `Username`, `Password`, `Role`, `Name`, `Deleted`, `LastLoginTime`, `AreaID`) VALUES
 	(1, 'admin', '202cb962ac59075b964b07152d234b70', 4, 'admin', b'0', NULL, NULL),
@@ -982,23 +1017,24 @@ INSERT INTO `user` (`ID`, `Username`, `Password`, `Role`, `Name`, `Deleted`, `La
 
 
 -- 导出  表 zhoushanland.value_type 结构
-DROP TABLE IF EXISTS `value_type`;
 CREATE TABLE IF NOT EXISTS `value_type` (
   `ID` int(11) NOT NULL AUTO_INCREMENT,
   `Name` varchar(50) NOT NULL DEFAULT '0',
   `Units` varchar(255) NOT NULL,
   `Ratio` int(11) NOT NULL,
   PRIMARY KEY (`ID`)
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8;
 
--- 正在导出表  zhoushanland.value_type 的数据：~5 rows (大约)
+-- 正在导出表  zhoushanland.value_type 的数据：~6 rows (大约)
+DELETE FROM `value_type`;
 /*!40000 ALTER TABLE `value_type` DISABLE KEYS */;
 INSERT INTO `value_type` (`ID`, `Name`, `Units`, `Ratio`) VALUES
 	(1, '面积', '亩,公顷', 1000),
 	(3, '件数', '件', 0),
 	(4, '宗数', '宗', 0),
 	(5, '费用', '元,万元,亿元', 10000),
-	(6, '个数', '个', 0);
+	(6, '个数', '个', 0),
+	(7, '人数', '人', 0);
 /*!40000 ALTER TABLE `value_type` ENABLE KEYS */;
 /*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;
 /*!40014 SET FOREIGN_KEY_CHECKS=IF(@OLD_FOREIGN_KEY_CHECKS IS NULL, 1, @OLD_FOREIGN_KEY_CHECKS) */;

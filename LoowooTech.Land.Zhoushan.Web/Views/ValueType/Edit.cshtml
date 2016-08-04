@@ -10,15 +10,22 @@
     </div>
     <div class="modal-body">
         <div class="form-group">
-            <label for="Brand" class="control-label col-lg-3">类型名称</label>
+            <label class="control-label col-lg-3">类型名称</label>
             <div class="col-lg-8">
                 <input type="text" name="name" class="form-control" value="@(model.Name)" />
             </div>
         </div>
         <div class="form-group">
-            <label for="Brand" class="control-label col-lg-3">类型单位</label>
+            <label class="control-label col-lg-3">换算倍数</label>
             <div class="col-lg-8">
-                <input type="text" name="unit" class="form-control" value="@(model.Unit)" />
+                <input type="text" name="name" class="form-control" value="@(model.Ratio)" />
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="control-label col-lg-3">单位</label>
+            <div class="col-lg-8">
+                <input type="text" name="unit" class="form-control" value="@(model.Units)" />
+                <span class="help-block">单位请从小到大排列，用英文逗号,隔开。例如 亩,公顷</span>
             </div>
         </div>
     </div>

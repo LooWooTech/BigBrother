@@ -2,6 +2,7 @@
     Form form = ViewBag.Form;
     List<Node> root = ViewBag.Nodes;
 }
+<div id="loading" class="alert alert-warning">加载完毕</div>
 <h3 class="page-header">
     @(form.Name)-记录管理
 </h3>
@@ -13,7 +14,7 @@
             @Html.Partial("_YearDropdown")
             @Html.Partial("_QuarterDropdown")
             @Html.Action("Dropdown", "Area")
-            <button type="submit" class="btn btn-primary" id="btn-load"><i class="fa fa-circle-o-notch"></i> 加载</button>
+            <button type="submit" class="btn btn-primary" id="btn-load"><i class="fa fa-circle-o-notch"></i> 加载已有数据</button>
         </div>
 
         &nbsp;<button id="btn-submit" class="btn btn-success">
@@ -46,6 +47,7 @@
         //判断当前用户权限，是否可以编辑
 
         $("#form-filter").submit(function () {
+            $("#loading").text("正在加载").show();
             var data = $(this).serialize();
             var action = $(this).attr("action");
 
@@ -66,6 +68,10 @@
                     $("#btn-submit").show();
                     $(".node-value").removeAttr("disabled");
                 }
+                $("#loading").text("加载完毕");
+                setTimeout(function () {
+                    $("#loading").hide();
+                }, 1000);
             });
             return false;
         });

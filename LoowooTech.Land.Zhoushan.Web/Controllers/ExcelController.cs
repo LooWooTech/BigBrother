@@ -28,7 +28,7 @@ namespace LoowooTech.Land.Zhoushan.Web.Controllers
         }
 
         [HttpPost]
-        public ActionResult Import(int formId, int year, Quarter quarter, string filePath, string templateName)
+        public ActionResult Import(int formId, int year, Quarter quarter, string filePath)
         {
             var form = Core.FormManager.GetForm(formId);
             if (form == null)
@@ -36,12 +36,9 @@ namespace LoowooTech.Land.Zhoushan.Web.Controllers
                 throw new ArgumentException("没有找到该表单");
             }
 
-            //Core.FormManager.DeleteNodeValues(formId, year, quarter);
-
-            var template = new Template(templateName);
+            var template = new Template(form.GetImportTemplate());
 
             var excelData = ExcelHelper.ReadData(filePath);
-
 
             Core.TemplateManager.WriteExcelDataToDb(year, quarter, excelData, template);
 
@@ -77,26 +74,51 @@ namespace LoowooTech.Land.Zhoushan.Web.Controllers
             return View();
         }
 
-        [HttpPost]
-        public void Export(int formId, int year, Quarter quarter, string templateName)
+        private string GetQuartersDescription(Quarter[] quarters)
         {
-            var form = Core.FormManager.GetForm(formId);
-            if (form == null)
+            switch (quarters.Length)
             {
-                throw new ArgumentException("请选择一个报表");
+                case 1:
+                default:
+                    return quarters[0].GetDescription();
+                case 2:
+                    return "上半年";
+                case 3:
+                    return "前三季度";
+                case 4:
+                    return "全年";
             }
-            var template = new Template(templateName);
 
-            var excelData = Core.TemplateManager.WriteDbDataToExcel(form, year, quarter, template);
+        }
 
-            using (var stream = ExcelHelper.WriteData(template.FilePath, excelData))
+        [HttpPost]
+        public void Export(int formId, int year, string quarters)
+        {
+            Quarter[] qs = quarters.Split(',').Select(str => (Quarter)int.Parse(str)).ToArray();
+
+            string fileName = null;
+            Stream stream = null;
+            if (formId == 0)
             {
-                var fileName = form.Name + "-" + year + "-" + (int)quarter + ".xlsx";
-                Response.ContentType = "application/vnd.ms-excel;charset=UTF-8";
-                Response.AddHeader("Content-Disposition", string.Format("attachment;filename={0}", HttpUtility.UrlEncode(fileName)));
-                Response.BinaryWrite(((MemoryStream)stream).GetBuffer());
-                Response.End();
+
+                fileName = year + "年" + GetQuartersDescription(qs) + "统计报表.xlsx";
+                stream = Core.ExcelManager.ExportAllForms(year, qs);
             }
+            else
+            {
+                var form = Core.FormManager.GetForm(formId);
+                if (form == null)
+                {
+                    throw new ArgumentException("请选择一个报表");
+                }
+
+                stream = Core.ExcelManager.ExportForm(form, year, qs);
+                fileName = form.Name + "-" + year + "-" + GetQuartersDescription(qs) + ".xlsx";
+            }
+            Response.ContentType = "application/vnd.ms-excel;charset=UTF-8";
+            Response.AddHeader("Content-Disposition", string.Format("attachment;filename={0}", HttpUtility.UrlEncode(fileName)));
+            Response.BinaryWrite(((MemoryStream)stream).GetBuffer());
+            stream.Close();
         }
     }
 }

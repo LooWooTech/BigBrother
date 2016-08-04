@@ -12,7 +12,7 @@ namespace LoowooTech.Land.Zhoushan.Models
     {
         public NodeValueParameter()
         {
-            Quarter = (Quarter)DateTime.Now.GetQuarter();
+            Quarter = (Quarter)(DateTime.Now.GetQuarter() - 1);
             AreaID = 0;
             GetArea = true;
             GetValueType = true;

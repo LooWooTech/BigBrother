@@ -11,31 +11,31 @@
     <div class="modal-body">
         <input type="hidden" name="NodeID" value="@(model.NodeID)" />
         <div class="form-group">
-            <label for="Type" class="control-label col-lg-3">选择年度</label>
+            <label class="control-label col-lg-3">选择年度</label>
             <div class="col-lg-8">
                 @Html.Partial("_YearDropdown", model.Year)
             </div>
         </div>
         <div class="form-group">
-            <label for="Type" class="control-label col-lg-3">选择季度</label>
+            <label class="control-label col-lg-3">选择季度</label>
             <div class="col-lg-8">
                 @Html.Partial("_QuarterDropdown", model.Quarter)
             </div>
         </div>
         <div class="form-group">
-            <label for="Type" class="control-label col-lg-3">选择地区</label>
+            <label class="control-label col-lg-3">选择地区</label>
             <div class="col-lg-8">
                 @Html.Action("Dropdown", "Area", new { model.AreaID })
             </div>
         </div>
         <div class="form-group">
-            <label for="Type" class="control-label col-lg-3">选择类型</label>
+            <label class="control-label col-lg-3">选择类型</label>
             <div class="col-lg-8">
                 @Html.Action("ValueTypeDropdown", "Node", new { model.TypeID, nodeId = node.ID })
             </div>
         </div>
         <div class="form-group">
-            <label for="Type" class="control-label col-lg-3">记录</label>
+            <label class="control-label col-lg-3">记录</label>
             <div class="col-lg-8">
                 <input type="text" name="Value" class="form-control" value="@(model.Value)" />
             </div>

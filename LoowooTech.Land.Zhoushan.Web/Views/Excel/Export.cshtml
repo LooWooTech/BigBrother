@@ -12,66 +12,39 @@
         @if (form == null)
         {
             <div class="form-group">
-                <label for="Type" class="control-label col-lg-3">选择表单</label>
+                <label class="control-label col-lg-3">选择表单</label>
                 <div class="col-lg-8">
                     <select class="form-control" name="formId" id="formId">
-                        <option value="0">选择表单</option>
+                        <option value="0">全部表单</option>
                         @foreach (var item in forms)
                         {
-                            <option value="@(item.ID)" data-template="@(item.ExportTemplate.Replace("\n","|"))">@(item.Name)</option>
+                            <option value="@(item.ID)">@(item.Name)</option>
                         }
                     </select>
                 </div>
             </div>
-            <div class="form-group">
-                <label for="Type" class="control-label col-lg-3">选择模板</label>
-                <div class="col-lg-8">
-                    <select class="form-control" name="templateName" id="template-name"></select>
-                </div>
-            </div>
-            <script>
-                $(function () {
-                    $("#formId").change(function () {
-                        var templates = $("#formId option:selected").attr("data-template").split('|');
-
-                        var html = "";
-                        $(templates).each(function (k, v) {
-                            html += "<option>"+v+"</option>"
-                        });
-                        $("#template-name").html(html);
-                    });
-                });
-            </script>
         }
         else
         {
             <input type="hidden" name="FormId" value="@(form.ID)" />
-            <div class="form-group">
-                <label for="Type" class="control-label col-lg-3">选择模板</label>
-                <div class="col-lg-8">
-                    <select class="form-control" name="templateName">
-                        @foreach (var name in (form.ImportTemplate.Split('\n')))
-                        {
-                            <option>@(name)</option>
-                        }
-                    </select>
-                </div>
-            </div>
         }
         <div class="form-group">
-            <label for="Type" class="control-label col-lg-3">选择年份</label>
+            <label class="control-label col-lg-3">选择年份</label>
             <div class="col-lg-8">
                 @Html.Partial("_YearDropdown")
             </div>
         </div>
         <div class="form-group">
-            <label for="Type" class="control-label col-lg-3">选择季度</label>
+            <label class="control-label col-lg-3">选择季度</label>
             <div class="col-lg-8">
                 <select name="Quarters" class="form-control">
                     <option value="1">第一季度</option>
-                    <option value="2">第二季度/上半年</option>
-                    <option value="3">第三季度/前三季度</option>
-                    <option value="4">第四季度/全年</option>
+                    <option value="2">第二季度</option>
+                    <option value="3">第三季度</option>
+                    <option value="4">第四季度</option>
+                    <option value="1,2">上半年</option>
+                    <option value="1,2,3">前三季度</option>
+                    <option value="1,2,3,4">全年</option>
                 </select>
                 <span class="help-block">
                     如果需要导出累计数据，请选择多季度导出模板。
@@ -79,7 +52,7 @@
             </div>
         </div>
         <div class="form-group">
-            <label for="Type" class="control-label col-lg-3">选择地区</label>
+            <label class="control-label col-lg-3">选择地区</label>
             <div class="col-lg-8">
                 @Html.Action("Dropdown","Area")
                 <span class="help-block">

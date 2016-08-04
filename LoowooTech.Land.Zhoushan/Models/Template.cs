@@ -14,7 +14,7 @@ namespace LoowooTech.Land.Zhoushan.Models
         public Template(string formName)
         {
             Fields = new List<Field>();
-            var filePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Templates", formName + ".xlsx");
+            var filePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Templates", formName);
             var cells = ExcelHelper.ReadData(filePath);
             foreach (var cell in cells)
             {
@@ -103,7 +103,7 @@ namespace LoowooTech.Land.Zhoushan.Models
 
         public void UpdateParameters(List<Field> fields)
         {
-            if (!IsValueField && !IsRateField)
+            if (!HasPrameter(FieldType.Value) && !HasPrameter(FieldType.Rate))
             {
                 return;
             }
@@ -114,7 +114,7 @@ namespace LoowooTech.Land.Zhoushan.Models
             foreach (var f in upFields)
             {
                 //如果是第一次碰到值列，跳过，如是第二次碰到，则停止搜寻
-                if (f.IsValueField || f.IsRateField)
+                if (f.HasPrameter(FieldType.Value) || f.HasPrameter(FieldType.Rate))
                 {
                     if (hasFind)
                         break;
@@ -134,7 +134,7 @@ namespace LoowooTech.Land.Zhoushan.Models
             var leftFields = fields.Where(e => e.Cell.Column < Cell.Column && e.IncludRow(Cell.Row)).OrderByDescending(e => e.Cell.Column);
             foreach (var f in leftFields)
             {
-                if (f.IsValueField || f.IsRateField)
+                if (f.HasPrameter(FieldType.Value) || f.HasPrameter(FieldType.Rate))
                 {
                     if (hasFind)
                         break;
@@ -183,28 +183,9 @@ namespace LoowooTech.Land.Zhoushan.Models
             }
         }
 
-        public bool IsValueField
+        public bool HasPrameter(FieldType type)
         {
-            get
-            {
-                return Parameters.Any(e => e.Type == FieldType.Value);
-            }
-        }
-
-        public bool IsRateField
-        {
-            get
-            {
-                return Parameters.Any(e => e.Type == FieldType.RateValue);
-            }
-        }
-
-        public bool IsHiddenField
-        {
-            get
-            {
-                return Parameters.Any(e => e.Type == FieldType.Hidden);
-            }
+            return Parameters.Any(e => e.Type == type);
         }
 
         /// <summary>

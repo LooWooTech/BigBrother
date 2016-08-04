@@ -15,7 +15,6 @@
         <span class="input-group-addon">选择条件</span>
         <div class="input-group-btn">
             <select id="ddl-form" name="formId" class="form-control">
-                <option value="0">选择报表</option>
                 @if (forms != null)
                 {
                     foreach (var f in forms)
@@ -32,6 +31,7 @@
                     <option value="@((int)val)" @(val == parameter.Quarter ? "selected" : null)>@(val.GetDescription())</option>
                 }
                 <option value="1,2" @(string.Join(",", parameter.Quarters) == "1,2" ? "selected" : null)>上半年</option>
+                <option value="1,2,3" @(string.Join(",", parameter.Quarters) == "1,2,3" ? "selected" : null)>前三季度</option>
                 <option value="1,2,3,4" @(string.Join(",", parameter.Quarters) == "1,2,3,4" ? "selected" : null)>全年</option>
             </select>
             @Html.Action("Dropdown", "Area", new { AreaID = parameter.AreaID })
@@ -89,11 +89,10 @@
                     }
                 }
                 var targetIndex = currentIndex + 1;
-                if (targetIndex >= units.length)
-                {
+                if (targetIndex >= units.length) {
                     targetIndex -= units.length;
                 }
-                var targetValue = parseFloat( targetIndex == 0 ? value : (value / ratio * targetIndex));
+                var targetValue = parseFloat(targetIndex == 0 ? value : (value / ratio * targetIndex));
                 $(".value", self).text(targetValue.toFixed(2));
                 $(".unit", self).text(units[targetIndex]);
             });
@@ -102,7 +101,7 @@
         $("#ddl-form").change(function () {
             var formId = $(this).val();
             $.request("/node/getlist?formId=" + formId, function (json) {
-                $("#ddl-node").html(json.data.length > 1?'<option value="0">请选择分类</option>':'');
+                $("#ddl-node").html(json.data.length > 1 ? '<option value="0">请选择分类</option>' : '');
                 $.each(json.data, function (k, v) {
                     appendNode(v);
                 });
@@ -124,6 +123,8 @@
                 }
             }
         });
+
+        $("#ddl-form").trigger("change");
 
         $("#form-filter").submit(function () {
             var data = $(this).serialize();
@@ -162,5 +163,9 @@
             });
             return false;
         });
+
+        setTimeout(function () {
+            $("#form-filter").submit();
+        }, 500);
     });
 </script>

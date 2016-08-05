@@ -74,23 +74,6 @@ namespace LoowooTech.Land.Zhoushan.Web.Controllers
             return View();
         }
 
-        private string GetQuartersDescription(Quarter[] quarters)
-        {
-            switch (quarters.Length)
-            {
-                case 1:
-                default:
-                    return quarters[0].GetDescription();
-                case 2:
-                    return "上半年";
-                case 3:
-                    return "前三季度";
-                case 4:
-                    return "全年";
-            }
-
-        }
-
         [HttpPost]
         public void Export(int formId, int year, string quarters)
         {
@@ -101,7 +84,7 @@ namespace LoowooTech.Land.Zhoushan.Web.Controllers
             if (formId == 0)
             {
 
-                fileName = year + "年" + GetQuartersDescription(qs) + "统计报表.xls";
+                fileName = year + "年" + Core.TemplateManager.GetQuartersDescription(qs) + "统计报表.xls";
                 stream = Core.ExcelManager.ExportAllForms(year, qs);
             }
             else
@@ -113,7 +96,7 @@ namespace LoowooTech.Land.Zhoushan.Web.Controllers
                 }
 
                 stream = Core.ExcelManager.ExportForm(form, year, qs);
-                fileName = form.Name + "-" + year + "-" + GetQuartersDescription(qs) + ".xls";
+                fileName = form.Name + "-" + year + "-" + Core.TemplateManager.GetQuartersDescription(qs) + ".xls";
             }
             Response.ContentType = "application/vnd.ms-excel;charset=UTF-8";
             Response.AddHeader("Content-Disposition", string.Format("attachment;filename={0}", HttpUtility.UrlEncode(fileName)));

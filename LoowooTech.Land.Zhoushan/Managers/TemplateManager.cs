@@ -26,7 +26,7 @@ namespace LoowooTech.Land.Zhoushan.Managers
                 foreach (var field in template.Fields)
                 {
                     if (!field.HasPrameter(FieldType.Value)) continue;
-                    var parameter = field.GetNodeValueParameter(year, quarter);
+                    var parameter = field.GetNodeValueParameter(year, new[] { quarter });
                     var entity = Core.FormManager.GetNodeValues(parameter).FirstOrDefault();
                     if (entity == null)
                     {
@@ -44,10 +44,27 @@ namespace LoowooTech.Land.Zhoushan.Managers
             }
         }
 
+        public string GetQuartersDescription(Quarter[] quarters)
+        {
+            switch (quarters.Length)
+            {
+                case 1:
+                default:
+                    return quarters[0].GetDescription();
+                case 2:
+                    return "上半年";
+                case 3:
+                    return "前三季度";
+                case 4:
+                    return "全年";
+            }
+
+        }
+
         /// <summary>
         /// 导出
         /// </summary>
-        public List<ExcelCell> WriteDbDataToExcel(Form form, int year, Quarter quarter, Template template)
+        public List<ExcelCell> WriteDbDataToExcel(Form form, int year, Quarter[] quarters, Template template)
         {
             using (var db = GetDbContext())
             {
@@ -82,7 +99,8 @@ namespace LoowooTech.Land.Zhoushan.Managers
                                 field.Value = node == null ? "未知分类" : node.Name;
                                 break;
                             case FieldType.Quarter:
-                                field.Value = ((int)quarter).ToString();
+                            case FieldType.Quarters:
+                                field.Value = GetQuartersDescription(quarters);
                                 break;
                             case FieldType.Type:
                                 {
@@ -97,7 +115,7 @@ namespace LoowooTech.Land.Zhoushan.Managers
                             case FieldType.RateValue:
                                 double value = 0;
                                 List<NodeValue> values = null;
-                                var parameter = field.GetNodeValueParameter(year, quarter);
+                                var parameter = field.GetNodeValueParameter(year, quarters);
                                 if (firstParameter.Type == FieldType.Value)
                                 {
                                     values = Core.FormManager.GetNodeValues(parameter);
@@ -119,14 +137,6 @@ namespace LoowooTech.Land.Zhoushan.Managers
                                 }
                                 field.Value = (value * ratio).ToString("f2");
                                 break;
-                            case FieldType.Quarters:
-                                var quarters = new int[firstParameter.Value == 0 ? (int)quarter : firstParameter.Value];
-                                for (var i = 1; i <= quarters.Length; i++)
-                                {
-                                    quarters[i - 1] = i;
-                                }
-                                field.Value = string.Join("-", quarters);
-                                break;
                         }
                     }
                     result.Add(field.Cell);
@@ -140,18 +150,18 @@ namespace LoowooTech.Land.Zhoushan.Managers
 
     internal static class FieldExtension
     {
-        public static NodeValueParameter GetNodeValueParameter(this Field field, int year, Quarter quarter)
+        public static NodeValueParameter GetNodeValueParameter(this Field field, int year, Quarter[] quarters)
         {
 
             field.SetParameter(FieldType.Year, year);
             //如果当前字段是多季度累计
             if (field.Parameters.Any(e => e.Type == FieldType.Quarters))
             {
-                field.SetParameter(FieldType.Quarters, (int)quarter);
+                field.SetParameter(FieldType.Quarters, (int)quarters.Max());
             }
             else
             {
-                field.SetParameter(FieldType.Quarter, (int)quarter);
+                field.SetParameter(FieldType.Quarter, (int)quarters[0]);
             }
 
             var result = new NodeValueParameter { GetArea = false, GetNode = true, GetValueType = false };
@@ -174,11 +184,6 @@ namespace LoowooTech.Land.Zhoushan.Managers
                         break;
                     case FieldType.Quarters:
                         {
-                            var quarters = new Quarter[parameter.Value];
-                            for (var i = 1; i <= parameter.Value; i++)
-                            {
-                                quarters[i - 1] = (Quarter)i;
-                            }
                             result.Quarters = quarters;
                         }
                         break;
@@ -234,7 +239,7 @@ namespace LoowooTech.Land.Zhoushan.Managers
             {
                 var index = field.Parameters.First(e => e.Type == FieldType.Unit).Value;
                 var valueType = ManagerCore.Instance.FormManager.GetNodeValueType(entity.TypeID);
-                ratio =  (int)Math.Pow(valueType.Ratio, index);
+                ratio = (int)Math.Pow(valueType.Ratio, index);
             }
 
             double val = 0;

@@ -38,8 +38,7 @@ namespace LoowooTech.Land.Zhoushan.Managers
         {
             var templateName = form.GetExportTemplate(quarters);
             var template = new Template(templateName);
-            var maxQuarter = quarters[quarters.Length - 1];
-            var excelData = Core.TemplateManager.WriteDbDataToExcel(form, year, maxQuarter, template);
+            var excelData = Core.TemplateManager.WriteDbDataToExcel(form, year, quarters, template);
             return ExcelHelper.GetWorkbook(template.FilePath, excelData, 0);
         }
 

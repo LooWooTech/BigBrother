@@ -32,6 +32,10 @@ namespace LoowooTech.Land.Zhoushan.Models
             set
             {
                 _value = value;
+                if (value > 0 && RawValue == 0)
+                {
+                    RawValue = value;
+                }
             }
         }
 

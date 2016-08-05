@@ -47,6 +47,20 @@ namespace LoowooTech.Land.Zhoushan.Managers
             }
         }
 
+        public bool CanDelete(int id)
+        {
+            var season = GetSeason(id);
+            if (season == null)
+            {
+                return false;
+            }
+            using (var db = GetDbContext())
+            {
+                var list = db.NodeValues.Where(e => e.Year == season.Year && e.Quarter == season.Quarter).ToList();
+                return list.Count == 0;
+            }
+        }
+
         public bool Delete(int id)
         {
             if (id == 0) return false;
@@ -78,6 +92,20 @@ namespace LoowooTech.Land.Zhoushan.Managers
             {
                 return db.Seasons.Where(e => e.Delete == false).GroupBy(e=>e.Year).Select(e => e.Key).ToArray();
             }
+        }
+
+        public Season GetCurrentSeason()
+        {
+            using (var db = GetDbContext())
+            {
+                var season = db.Seasons.Where(e => e.Delete==false && e.StartTime <= DateTime.Now && e.EndTime >= DateTime.Now).FirstOrDefault();
+                return season;
+            }
+        }
+        public Season GetNearSeason()
+        {
+            var list = GetSeasons();
+            return list.OrderBy(e => e.TimeSpan).FirstOrDefault();
         }
 
         public void Statistic(Dictionary<Area,Dictionary<Quarter,List<NodeValue>>> dict)

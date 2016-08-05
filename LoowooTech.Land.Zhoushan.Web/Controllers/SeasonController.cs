@@ -41,6 +41,10 @@ namespace LoowooTech.Land.Zhoushan.Web.Controllers
 
         public ActionResult Delete(int id)
         {
+            if (!Core.SeasonManager.CanDelete(id))
+            {
+                return JsonErrorResult(string.Format("不能删除当前填报设置，系统中已经存在相关数据记录！"));
+            }
             return Core.SeasonManager.Delete(id) ? JsonSuccessResult() : JsonErrorResult("删除失败！当前季度填报记录系统中未找到或者已经删除成功！");
         }
 

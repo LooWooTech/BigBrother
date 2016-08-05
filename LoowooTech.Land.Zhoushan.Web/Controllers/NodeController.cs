@@ -119,6 +119,8 @@ namespace LoowooTech.Land.Zhoushan.Web.Controllers
             ViewBag.Form = form;
             ViewBag.Nodes = Core.FormManager.GetNodeRoots(formId);
             ViewBag.ValueTypes = Core.FormManager.GetNodeValueTypes();
+            ViewBag.Season = Core.SeasonManager.GetCurrentSeason();
+            ViewBag.NearSeason = Core.SeasonManager.GetNearSeason();
             return View();
         }
 

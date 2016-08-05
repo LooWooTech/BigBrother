@@ -1,10 +1,16 @@
 ﻿@{
     Form form = ViewBag.Form;
     List<Node> root = ViewBag.Nodes;
+    Season season = ViewBag.Season;
+    Season nearSeason = ViewBag.NearSeason;
 }
-<div class="alert alert-warning" role="alert">
-    <span>警告框</span>
-</div>
+
+@if (season != null)
+{
+    <div class="alert alert-warning" role="alert">
+        <span>@("当前系统正在填报：" + season.Description) </span>
+    </div>
+}
 
 <div id="loading" class="alert alert-warning">加载完毕</div>
 <h3 class="page-header">
@@ -15,8 +21,9 @@
     <div class="input-group">
         <span class="input-group-addon">选择条件</span>
         <div class="input-group-btn">
-            @Html.Partial("_YearDropdown")
-            @Html.Partial("_QuarterDropdown")
+            @(season!=null?Html.Partial("_YearDropdown",season.Year):Html.Partial("_YearDropdown"))
+            @(season!=null?Html.Partial("_QuarterDropdown",season.Quarter):Html.Partial("_QuarterDropdown"))
+
             @Html.Action("Dropdown", "Area")
             <button type="submit" class="btn btn-primary" id="btn-load"><i class="fa fa-circle-o-notch"></i> 加载已有数据</button>
         </div>

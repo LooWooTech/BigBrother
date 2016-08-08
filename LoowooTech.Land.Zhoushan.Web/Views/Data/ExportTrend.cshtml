@@ -1,0 +1,33 @@
+﻿@{
+    ViewBag.Title = "导出资源形势";
+}
+<form id="form-import" action="/data/exporttrend" method="post" class="form-horizontal" target="_blank">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title"><i class="fa fa-upload"></i> @(ViewBag.Title)</h4>
+    </div>
+    <div class="modal-body">
+        <div class="form-group">
+            <label class="control-label col-lg-3">选择年份</label>
+            <div class="col-lg-8">
+                @Html.Partial("_YearDropdown")
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="control-label col-lg-3">选择季度</label>
+            <div class="col-lg-8">
+                <select name="Quarters" class="form-control">
+                    <option value="1">第一季度</option>
+                    <option value="1,2">上半年</option>
+                    <option value="1,2,3">前三季度</option>
+                    <option value="1,2,3,4">全年</option>
+                </select>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <div class="col-lg-8 col-lg-offset-3">
+            <button type="submit" id="" class="btn btn-primary"><i class="glyphicon glyphicon-ok"></i> 确定</button>
+        </div>
+    </div>
+</form>

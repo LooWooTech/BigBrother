@@ -245,6 +245,7 @@
     <Content Include="templates\建设用地审批.xls" />
     <Content Include="Views\Data\ExportStatistic.cshtml" />
     <Content Include="Views\Data\ExportTrend.cshtml" />
+    <Content Include="templates\资源形势模板.docx" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

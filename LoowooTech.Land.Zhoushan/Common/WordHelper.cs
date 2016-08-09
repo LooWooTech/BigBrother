@@ -10,18 +10,21 @@ namespace LoowooTech.Land.Zhoushan.Common
 {
     public static class WordHelper
     {
-        public static XWPFDocument CreateDoc()
+        public static XWPFDocument CreateDoc(string templatePath)
         {
-            return new XWPFDocument();
+            using (var fs = new FileStream(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, templatePath), FileMode.Open))
+            {
+                return new XWPFDocument(fs);
+            }
         }
 
-        public static void WriteTitle(this XWPFDocument doc, string title, int fontSize = 24)
+        public static void WriteTitle(this XWPFDocument doc, string title, string styleId = null, ParagraphAlignment alignment = ParagraphAlignment.CENTER)
         {
             var p = doc.CreateParagraph();
-            p.Alignment = ParagraphAlignment.CENTER;
+            p.Alignment = alignment;
             var r = p.CreateRun();
-            r.FontSize = fontSize;
             r.SetText(title);
+            p.Style = styleId;
         }
 
         public static void WriteContent(this XWPFDocument doc, string content)
@@ -29,7 +32,7 @@ namespace LoowooTech.Land.Zhoushan.Common
             var p = doc.CreateParagraph();
             var r = p.CreateRun();
             r.FontSize = 16;
-            r.SetText(content);
+            r.SetText("\t\t" + content);
         }
 
         public static Stream GetStream(this XWPFDocument doc)

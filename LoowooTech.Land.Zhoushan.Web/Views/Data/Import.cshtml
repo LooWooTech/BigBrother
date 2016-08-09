@@ -3,7 +3,7 @@
     Form form = ViewBag.Form;
     List<Form> forms = ViewBag.Forms;
 }
-<form id="form-import" action="/excel/import" method="post" class="form-horizontal">
+<form id="form-import" action="/data/import" method="post" class="form-horizontal">
     <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
         <h4 class="modal-title"><i class="fa fa-download"></i> @(ViewBag.Title)</h4>
@@ -57,7 +57,7 @@
 </form>
 <script>
     $(function () {
-        $("#file1").setUpload("/excel/upload", function (json) {
+        $("#file1").setUpload("/data/upload", function (json) {
             $("#hide-file").val(json.data.filePath);
             $("#span-file").text(json.data.filePath);
         });
@@ -68,7 +68,7 @@
                 return;
             }
             var data = $(this).serialize();
-            $.request("/excel/import", data, function () {
+            $.request("/data/import", data, function () {
                 alert("导入成功");
             });
             return false;

@@ -50,8 +50,8 @@ namespace LoowooTech.Land.Zhoushan.Managers
 
         public Stream ExportTrend(int year, Quarter[] quarters)
         {
-            var doc = WordHelper.CreateDoc();
-            doc.WriteTitle(year + "年" + Core.TemplateManager.GetQuartersDescription(quarters) + "国土资源主要指标走势", 24);
+            var doc = WordHelper.CreateDoc("templates/资源形势模板.docx");
+            doc.WriteTitle(year + "年" + Core.TemplateManager.GetQuartersDescription(quarters) + "国土资源主要指标走势", "2");
             foreach (var form in Core.FormManager.GetForms())
             {
                 var parameter = new NodeValueParameter
@@ -65,14 +65,14 @@ namespace LoowooTech.Land.Zhoushan.Managers
                 };
                 var values = Core.FormManager.GetNodeValues(parameter);
                 var nodes = Core.FormManager.GetRootNodes(form.ID);
-                doc.WriteTitle(form.Name, 20);
+                doc.WriteTitle(form.Name, "3", NPOI.XWPF.UserModel.ParagraphAlignment.LEFT);
                 var sb = new StringBuilder();
                 foreach (var node in nodes)
                 {
                     var nodeContent = GenerateContent(node, values);
                     if (nodeContent.Length > 0)
                     {
-                        sb.Append(nodeContent.Trim('，').Replace("，，", "，") + "。");
+                        sb.Append(nodeContent.Trim('；').Replace("，，", "，") + "。");
                     }
                 }
 
@@ -87,29 +87,42 @@ namespace LoowooTech.Land.Zhoushan.Managers
         {
             var sb = new StringBuilder();
             var vals = values.Where(e => e.NodeID == node.ID);
-            if (vals.Count() == 0)
+            if (vals.Count() == 0 && node.NodeValueTypes.Length > 0)
             {
                 return sb.ToString();
             }
-            sb.Append(node.Name);
+
+            var unit = new StringBuilder();
             foreach (var val in vals)
             {
-                if (val.Value == 0) continue;
-
-                sb.Append(val.Type.Name);
-                sb.Append(val.RawValue.ToString("f2").TrimEnd('0').TrimEnd('.'));
-                sb.Append(val.Type.Unit);
-                sb.Append("，同比");
-                sb.Append(val.RateValue > 0 ? "增加" : "减少");
-                sb.Append(val.RateValue);
-                sb.Append("%；");
+                if (val.RawValue == 0 && val.RateValue == 0)
+                {
+                    continue;
+                }
+                unit.Append(val.Type.Name);
+                unit.Append(val.RawValue.ToString("f2").TrimEnd('0').TrimEnd('.'));
+                unit.Append(val.Type.Unit);
+                unit.Append("，同比");
+                unit.Append(val.RateValue > 0 ? "增加" : "减少");
+                unit.Append(val.RateValue);
+                unit.Append("%；");
+            }
+            if (unit.Length > 0)
+            {
+                sb.Append(node.Name);
+                sb.Append(unit.ToString());
             }
             if (node.Children.Count > 0)//todo
             {
-                sb.Append("其中");
+                var children = new StringBuilder();
                 foreach (var child in node.Children)
                 {
-                    sb.Append(GenerateContent(child, values));
+                    children.Append(GenerateContent(child, values));
+                }
+                if (children.Length > 0)
+                {
+                    sb.Append("其中");
+                    sb.Append(children.ToString());
                 }
             }
             return sb.ToString();

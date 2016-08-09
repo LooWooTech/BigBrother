@@ -97,9 +97,10 @@
     <Compile Include="Common\QueryableExtensions.cs" />
     <Compile Include="Common\ServiceFactory.cs" />
     <Compile Include="Common\TimeExtensions.cs" />
+    <Compile Include="Common\WordHelper.cs" />
     <Compile Include="Managers\AreaManager.cs" />
     <Compile Include="Managers\DossierManager.cs" />
-    <Compile Include="Managers\ExcelManager.cs" />
+    <Compile Include="Managers\ExportManager.cs" />
     <Compile Include="Managers\FormManager.cs" />
     <Compile Include="Managers\ManagerBase.cs" />
     <Compile Include="Managers\ManagerCore.cs" />

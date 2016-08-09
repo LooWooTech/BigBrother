@@ -10,7 +10,7 @@ using System.Web.Mvc;
 namespace LoowooTech.Land.Zhoushan.Web.Controllers
 {
     [UserRoleFilter(UserRole.Branch)]
-    public class ExcelController : ControllerBase
+    public class DataController : ControllerBase
     {
         [HttpGet]
         public ActionResult Import(int formId = 0)
@@ -60,7 +60,7 @@ namespace LoowooTech.Land.Zhoushan.Web.Controllers
         }
 
         [HttpGet]
-        public ActionResult Export(int formId = 0)
+        public ActionResult ExportStatistic(int formId = 0)
         {
             var form = Core.FormManager.GetForm(formId);
             if (form != null)
@@ -75,7 +75,7 @@ namespace LoowooTech.Land.Zhoushan.Web.Controllers
         }
 
         [HttpPost]
-        public void Export(int formId, int year, string quarters)
+        public void ExportStatistic(int formId, int year, string quarters, string type)
         {
             Quarter[] qs = quarters.Split(',').Select(str => (Quarter)int.Parse(str)).ToArray();
 
@@ -85,7 +85,7 @@ namespace LoowooTech.Land.Zhoushan.Web.Controllers
             {
 
                 fileName = year + "年" + Core.TemplateManager.GetQuartersDescription(qs) + "统计报表.xls";
-                stream = Core.ExcelManager.ExportAllForms(year, qs);
+                stream = Core.ExportManager.ExportStatistics(year, qs);
             }
             else
             {
@@ -95,7 +95,7 @@ namespace LoowooTech.Land.Zhoushan.Web.Controllers
                     throw new ArgumentException("请选择一个报表");
                 }
 
-                stream = Core.ExcelManager.ExportForm(form, year, qs);
+                stream = Core.ExportManager.ExportFormStatistic(form, year, qs);
                 fileName = form.Name + "-" + year + "-" + Core.TemplateManager.GetQuartersDescription(qs) + ".xls";
             }
             Response.ContentType = "application/vnd.ms-excel;charset=UTF-8";
@@ -103,5 +103,30 @@ namespace LoowooTech.Land.Zhoushan.Web.Controllers
             Response.BinaryWrite(((MemoryStream)stream).GetBuffer());
             stream.Close();
         }
+
+        [HttpGet]
+        public ActionResult ExportTrend()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public void ExportTrend(int year,string quarters)
+        {
+            //导出word
+            var qs = quarters.Split(',').Select(str => (Quarter)int.Parse(str)).ToArray();
+            var stream = Core.ExportManager.ExportTrend(year, qs);
+
+            var fileName = year + "年" + Core.TemplateManager.GetQuartersDescription(qs) + "国土资源形势.doc";
+            Response.ContentType = "application/vnd.openxmlformats-officedocument.wordprocessingml.document";
+            Response.AddHeader("Content-Disposition", string.Format("attachment;filename={0}", HttpUtility.UrlEncode(fileName)));
+            Response.BinaryWrite(((MemoryStream)stream).GetBuffer());
+            stream.Close();
+
+            //导出excel（word的配图）
+
+            //打包zip
+        }
+
     }
 }

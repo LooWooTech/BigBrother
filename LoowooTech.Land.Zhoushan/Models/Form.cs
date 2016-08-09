@@ -65,7 +65,6 @@ namespace LoowooTech.Land.Zhoushan.Models
                 return templatePath;
             }
         }
-        [NotMapped]
-        public List<Node> Nodes { get; set; }
+
     }
 }

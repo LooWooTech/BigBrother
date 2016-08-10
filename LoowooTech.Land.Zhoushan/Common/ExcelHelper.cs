@@ -92,7 +92,7 @@ namespace LoowooTech.Land.Zhoushan.Common
         }
     }
 
-    public class ExcelHelper
+    public static class ExcelHelper
     {
         private static ExcelCell ConvertToExcelCell(ICell cell)
         {
@@ -117,18 +117,26 @@ namespace LoowooTech.Land.Zhoushan.Common
             return result;
         }
 
-        public static List<ExcelCell> ReadData(string filePath, int sheetIndex = 0)
+        public static IWorkbook GetWorkbook(string filePath)
         {
             using (var fs = new FileStream(filePath, FileMode.Open, FileAccess.Read))
             {
-                return ReadData(fs, sheetIndex);
+                return WorkbookFactory.Create(fs);
             }
         }
 
-        public static List<ExcelCell> ReadData(Stream stream, int sheetIndex = 0)
+        public static ISheet GetSheet(string filePath, int sheetIndex = 0)
         {
-            var workbook = WorkbookFactory.Create(stream);
-            var sheet = workbook.GetSheetAt(sheetIndex);
+            return GetWorkbook(filePath).GetSheetAt(sheetIndex);
+        }
+
+        public static List<ExcelCell> ReadData(string filePath, int sheetIndex = 0)
+        {
+            return ReadData(GetSheet(filePath, sheetIndex));
+        }
+
+        public static List<ExcelCell> ReadData(this ISheet sheet)
+        {
             var list = new List<ExcelCell>();
             for (var i = sheet.FirstRowNum; i <= sheet.LastRowNum; i++)
             {
@@ -136,7 +144,7 @@ namespace LoowooTech.Land.Zhoushan.Common
                 if (row == null) continue;
                 foreach (var cell in row.Cells)
                 {
-                    if (cell.CellType == CellType.Blank)
+                    if (cell.CellType == CellType.Blank || cell.CellType == CellType.Formula)
                     {
                         continue;
                     }
@@ -145,22 +153,25 @@ namespace LoowooTech.Land.Zhoushan.Common
                     list.Add(excelCell);
                 }
             }
-            stream.Close();
-            stream.Dispose();
             return list;
         }
 
-        public static IWorkbook GetWorkbook(string filePath, List<ExcelCell> data, int sheetIndex)
+        public static void WriteData(this ISheet sheet, List<ExcelCell> data)
         {
-            var workbook = WorkbookFactory.Create(filePath);
-            var sheet = workbook.GetSheetAt(sheetIndex);
             foreach (var item in data)
             {
                 var row = sheet.GetRow(item.Row);
                 var cell = row.GetCell(item.Column);
-                cell.SetCellValue(item.Value.ToString());
+                if (item.Value is double || item.Value is int)
+                {
+                    cell.SetCellType(CellType.Numeric);
+                    cell.SetCellValue((double)item.Value);
+                }
+                else
+                {
+                    cell.SetCellValue(item.Value.ToString());
+                }
             }
-            return workbook;
         }
     }
 }

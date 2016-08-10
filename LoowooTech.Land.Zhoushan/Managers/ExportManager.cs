@@ -37,9 +37,11 @@ namespace LoowooTech.Land.Zhoushan.Managers
         public IWorkbook GetFormExcel(Form form, int year, Quarter[] quarters)
         {
             var templateName = form.GetExportTemplate(quarters);
-            var template = new Template(templateName);
+            var sheet = ExcelHelper.GetSheet(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "templates", templateName + ".xls"));
+            var template = new Template(sheet);
             var excelData = Core.TemplateManager.WriteDbDataToExcel(form, year, quarters, template);
-            return ExcelHelper.GetWorkbook(template.FilePath, excelData, 0);
+            sheet.WriteData(excelData);
+            return sheet.Workbook;
         }
 
         public Stream ExportFormStatistic(Form form, int year, Quarter[] quarters)
@@ -81,6 +83,20 @@ namespace LoowooTech.Land.Zhoushan.Managers
             }
 
             return doc.GetStream();
+        }
+
+        public Stream ExportTrendCharts(int year, Quarter[] quarters)
+        {
+            var templatePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "templates", "资源形势图表模板.xlsx");
+            var sheet = ExcelHelper.GetSheet(templatePath);
+            for (var i = 0; i < sheet.Workbook.NumberOfSheets; i++)
+            {
+                sheet = sheet.Workbook.GetSheetAt(i);
+                var template = new Template(sheet);
+                var data = Core.TemplateManager.WriteDbDataToExcel(null, year, quarters, template);
+                sheet.WriteData(data);
+            }
+            return GetExcelStream(sheet.Workbook);
         }
 
         private string GenerateContent(Node node, IEnumerable<NodeValue> values)

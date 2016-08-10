@@ -1,4 +1,5 @@
 ﻿using LoowooTech.Land.Zhoushan.Common;
+using NPOI.SS.UserModel;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -11,21 +12,17 @@ namespace LoowooTech.Land.Zhoushan.Models
 {
     public class Template
     {
-        public Template(string formName)
+        public Template(ISheet sheet)
         {
             Fields = new List<Field>();
-            var filePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Templates", formName + ".xls");
-            var cells = ExcelHelper.ReadData(filePath);
+            var cells = sheet.ReadData();
             foreach (var cell in cells)
             {
                 if (cell.Value == null)
                     continue;
                 AddFields(cell);
             }
-            FilePath = filePath;
         }
-
-        public string FilePath { get; private set; }
 
         public List<Field> Fields { get; private set; }
 
@@ -41,7 +38,7 @@ namespace LoowooTech.Land.Zhoushan.Models
                 var cell = list.FirstOrDefault(e => e.Row == field.Cell.Row && e.Column == field.Cell.Column);
                 if (cell != null)
                 {
-                    field.Value = cell.Value.ToString();
+                    field.Value = cell.Value;
                 }
             }
         }
@@ -52,7 +49,20 @@ namespace LoowooTech.Land.Zhoushan.Models
             {
                 foreach (var field in Fields.Where(e => e.Cell.Row == cell.Row && e.Cell.Column == cell.Column))
                 {
-                    cell.Value = field.Parameters.Count > 0 ? field.GetReplacedValue() : cell.Value;
+                    if (field.Parameters.Count > 0)
+                    {
+                        if (field.Template != cell.Value.ToString())
+                        {
+                            if (field.Value != null)
+                            {
+                                cell.Value = cell.Value.ToString().Replace(field.Template, field.Value.ToString());
+                            }
+                        }
+                        else
+                        {
+                            cell.Value = field.Value;
+                        }
+                    }
                 }
             }
         }
@@ -88,18 +98,13 @@ namespace LoowooTech.Land.Zhoushan.Models
             }
         }
 
-        public string Value { get; set; }
+        public object Value { get; set; }
 
         public string Template { get; set; }
 
         public ExcelCell Cell { get; set; }
 
         public List<FieldParameter> Parameters { get; set; }
-
-        public string GetReplacedValue()
-        {
-            return Cell.Value.ToString().Replace(Template, Value.TrimEnd('0').TrimEnd('.'));
-        }
 
         public void UpdateParameters(List<Field> fields)
         {
@@ -243,6 +248,7 @@ namespace LoowooTech.Land.Zhoushan.Models
         Area,
         Value,
         Year,
+        LastYear,
         RateValue,
         /// <summary>
         /// 指定是同比还是环比

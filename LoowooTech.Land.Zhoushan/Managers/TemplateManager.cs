@@ -88,6 +88,7 @@ namespace LoowooTech.Land.Zhoushan.Managers
                                 field.Value = "";
                                 break;
                             case FieldType.Form:
+                                form = form ?? Core.FormManager.GetForm(firstParameter.Value);
                                 field.Value = form.Name;
                                 break;
                             case FieldType.Area:
@@ -109,7 +110,10 @@ namespace LoowooTech.Land.Zhoushan.Managers
                                 }
                                 break;
                             case FieldType.Year:
-                                field.Value = firstParameter.Value == 0 ? year.ToString() : firstParameter.Value.ToString();
+                                field.Value = firstParameter.Value == 0 ? year: firstParameter.Value;
+                                break;
+                            case FieldType.LastYear:
+                                field.Value = year - 1;
                                 break;
                             case FieldType.Value:
                             case FieldType.RateValue:
@@ -135,7 +139,7 @@ namespace LoowooTech.Land.Zhoushan.Managers
                                     var valueType = Core.FormManager.GetNodeValueType(typeId);
                                     ratio = 1.0 / (index == 0 ? 1 : (int)Math.Pow(valueType.Ratio, index));
                                 }
-                                field.Value = (value * ratio).ToString("f2");
+                                field.Value = value * ratio;
                                 break;
                         }
                     }
@@ -196,6 +200,13 @@ namespace LoowooTech.Land.Zhoushan.Managers
                         {
                             result.Year = parameter.Value;
                         }
+                        else
+                        {
+                            result.Year = year;
+                        }
+                        break;
+                    case FieldType.LastYear:
+                        result.Years = new[] { year, year - 1 };
                         break;
                     case FieldType.Rate:
                         result.RateType = (RateType)parameter.Value;
@@ -243,7 +254,7 @@ namespace LoowooTech.Land.Zhoushan.Managers
             }
 
             double val = 0;
-            double.TryParse(field.Value, out val);
+            double.TryParse(field.Value.ToString(), out val);
             entity.RawValue = val * ratio;
         }
 

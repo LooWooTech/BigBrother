@@ -12,12 +12,5 @@ namespace LoowooTech.Land.Zhoushan.Common.Tests
     [TestClass()]
     public class ExcelHelperTests
     {
-        [TestMethod()]
-        public void ReadDataTest()
-        {
-            var filePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "test1.xls");
-            var list = ExcelHelper.ReadData(filePath);
-
-        }
     }
 }

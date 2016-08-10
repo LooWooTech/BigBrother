@@ -3,6 +3,7 @@ using LoowooTech.Land.Zhoushan.Models;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.IO.Compression;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -36,7 +37,9 @@ namespace LoowooTech.Land.Zhoushan.Web.Controllers
                 throw new ArgumentException("没有找到该表单");
             }
 
-            var template = new Template(form.GetImportTemplate());
+            var sheet = ExcelHelper.GetSheet(Request.MapPath("/templates/" + form.GetImportTemplate() + ".xls"));
+
+            var template = new Template(sheet);
 
             var excelData = ExcelHelper.ReadData(filePath);
 
@@ -54,7 +57,7 @@ namespace LoowooTech.Land.Zhoushan.Web.Controllers
             }
             var file = Request.Files[0];
             var filePath = "uploads/" + file.FileName;
-            var savePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, filePath);
+            var savePath = Request.MapPath(filePath);
             Request.Files[0].SaveAs(savePath);
             return JsonSuccessResult(new { filePath });
         }
@@ -111,21 +114,37 @@ namespace LoowooTech.Land.Zhoushan.Web.Controllers
         }
 
         [HttpPost]
-        public void ExportTrend(int year,string quarters)
+        public void ExportTrend(int year, string quarters)
         {
-            //导出word
             var qs = quarters.Split(',').Select(str => (Quarter)int.Parse(str)).ToArray();
-            var stream = Core.ExportManager.ExportTrend(year, qs);
+            var name = year + "年" + Core.TemplateManager.GetQuartersDescription(qs) + "国土资源形势";
 
-            var fileName = year + "年" + Core.TemplateManager.GetQuartersDescription(qs) + "国土资源形势.doc";
-            Response.ContentType = "application/vnd.openxmlformats-officedocument.wordprocessingml.document";
-            Response.AddHeader("Content-Disposition", string.Format("attachment;filename={0}", HttpUtility.UrlEncode(fileName)));
-            Response.BinaryWrite(((MemoryStream)stream).GetBuffer());
-            stream.Close();
+            //导出word
+            var docStream = Core.ExportManager.ExportTrend(year, qs);
 
             //导出excel（word的配图）
+            var excelStream = Core.ExportManager.ExportTrendCharts(year, qs);
 
-            //打包zip
+            using (var ms = new MemoryStream())
+            {
+                using (var zip = new ZipArchive(ms, ZipArchiveMode.Create))
+                {
+                    var doc = zip.CreateEntry(name + ".docx");
+                    using (var sw = doc.Open())
+                    {
+                        sw.Write(((MemoryStream)docStream).GetBuffer(), 0, (int)docStream.Length);
+                    }
+
+                    var excel = zip.CreateEntry(name + "-图表.xlsx");
+                    using (var sw = excel.Open())
+                    {
+                        sw.Write(((MemoryStream)excelStream).GetBuffer(), 0, (int)excelStream.Length);
+                    }
+                }
+                Response.ContentType = "application/zip";
+                Response.AddHeader("Content-Disposition", string.Format("attachment;filename={0}", HttpUtility.UrlEncode(name + ".zip")));
+                Response.BinaryWrite(ms.GetBuffer());
+            }
         }
 
     }

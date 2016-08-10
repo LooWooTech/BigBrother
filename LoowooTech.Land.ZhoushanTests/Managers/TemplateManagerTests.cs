@@ -15,8 +15,6 @@ namespace LoowooTech.Land.Zhoushan.Managers.Tests
         [TestMethod()]
         public void GetTemplateTest()
         {
-            var form = ManagerCore.Instance.FormManager.GetForm(1);
-            var template = new Template(form.Name);
         }
     }
 }

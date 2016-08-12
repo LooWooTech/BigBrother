@@ -10,6 +10,9 @@
     <td>
         @(model.Group)
     </td>
+    @*<td>
+        @(model.ValueTypes)
+    </td>*@
     <td>
         <a href="/node/values?nodeId=@(model.ID)" class="btn btn-default btn-xs"><i class="fa fa-database"></i> 数据记录</a>
         <a href="/node/editvalue?nodeId=@(model.ID)" class="btn btn-info btn-xs" data-toggle="modal" data-target="#modal"><i class="fa fa-plus"></i> 添加数据</a>

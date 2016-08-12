@@ -254,7 +254,13 @@ namespace LoowooTech.Land.Zhoushan.Managers
             }
 
             double val = 0;
-            double.TryParse(field.Value.ToString(), out val);
+            if (field.Value != null)
+            {
+                if (!double.TryParse(field.Value.ToString(), out val))
+                {
+
+                }
+            }
             entity.RawValue = val * ratio;
         }
 

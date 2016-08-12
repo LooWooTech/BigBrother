@@ -57,7 +57,7 @@ namespace LoowooTech.Land.Zhoushan.Web.Controllers
             }
             var file = Request.Files[0];
             var filePath = "uploads/" + file.FileName;
-            var savePath = Request.MapPath(filePath);
+            var savePath = Request.MapPath("/" + filePath);
             Request.Files[0].SaveAs(savePath);
             return JsonSuccessResult(new { filePath });
         }

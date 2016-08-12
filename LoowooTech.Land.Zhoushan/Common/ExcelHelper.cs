@@ -172,6 +172,14 @@ namespace LoowooTech.Land.Zhoushan.Common
                     cell.SetCellValue(item.Value.ToString());
                 }
             }
+            if (sheet.Workbook is XSSFWorkbook)
+            {
+                XSSFFormulaEvaluator.EvaluateAllFormulaCells(sheet.Workbook);
+            }
+            else
+            {
+                HSSFFormulaEvaluator.EvaluateAllFormulaCells(sheet.Workbook);
+            }
         }
     }
 }

@@ -8,6 +8,11 @@
 {
     rowIndex++;
     var type = valueTypes.FirstOrDefault(e => e.ID == g.Key);
+    if (type == null)
+    {
+        <div class="col-lg-6 @(rowIndex>1?"col-lg-offset-6":null)"></div>
+        continue;
+    }
     var sumValue = g.Sum(e => e.RawValue);
     var sumRate = g.Sum(e => e.RateValue);
     <div class="col-lg-3 @(rowIndex>1?"col-lg-offset-6":null)">

@@ -66,7 +66,7 @@ namespace LoowooTech.Land.Zhoushan.Web.Controllers
             if (parameter.NodeID > 0)
             {
                 var node = Core.FormManager.GetNode(parameter.NodeID);
-                var childNodes = Core.FormManager.GetNodeChildren(formId);
+                var childNodes = Core.FormManager.GetNodeChildren(parameter.NodeID);
                 var nodeIds = childNodes.Select(e => e.ID).ToList();
                 nodeIds.Insert(0, node.ID);
                 parameter.NodeIds = nodeIds.ToArray();

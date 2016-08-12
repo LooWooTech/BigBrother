@@ -38,18 +38,19 @@
 {
     index++;
     var groupNodes = kv.Value;
-  <div class="col-lg-5">
+    if (groupNodes.Count == 0) { continue; }
+     <div class="col-lg-5">
         <div class="col-lg-12">
             <canvas id="chart-quarter-@(index)"></canvas>
         </div>
         <script>
-        $(function(){
-            var ctx = document.getElementById("chart-quarter-@(index)");
-            var myChart = new Chart(ctx, {
-                type: 'line',
-                data: {
-                    labels: @(Html.Raw(labels.ToJson())),
-                    datasets:[
+            $(function(){
+                var ctx = document.getElementById("chart-quarter-@(index)");
+                var myChart = new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        labels: @(Html.Raw(labels.ToJson())),
+                        datasets:[
                     @for (var i=0;i< groupNodes.Count;i++)
                     {
                         var node = groupNodes[i];
@@ -58,12 +59,12 @@
                         {
                             continue;
                         }
-                        var nodeTypeId = vals.FirstOrDefault().Type.ID;
-                        if (nodeTypeId != typeId)
+                        var firstVal = vals.FirstOrDefault();
+                        if (firstVal.Type == null)
                         {
-
+                            continue;
                         }
-                        vals = vals.Where(e => e.TypeID == nodeTypeId);
+                        vals = vals.Where(e => e.TypeID == firstVal.Type.ID);
 
                         var data = new List<string>();
                         foreach (var year in parameter.Years.OrderBy(e => e))
@@ -89,29 +90,29 @@
                             }
                         }
 
-                        if (i > 0)
+                        <text>
+                            {
+                                label: "@(node.Name)",
+                                data:@(Html.Raw(data.ToJson())),
+                                borderColor: getChartColor(@(i)),
+                                fill: false,
+                                lineTension: 0.1
+                            }
+                            </text>
+                        if (i <groupNodes.Count-1)
                         {
                             @:,
                         }
 
-                        <text>
-                        {
-                            label: "@(node.Name)",
-                            data:@(Html.Raw(data.ToJson())),
-                            borderColor: getChartColor(@(i)),
-                            fill: false,
-                            lineTension: 0.1
-                        }
-                        </text>
                     }
-                    ]
-                },
-                options:{scales: {
-                    height:200
-                }
-                }
+                        ]
+                    },
+                    options:{scales: {
+                        height:200
+                    }
+                    }
+                });
             });
-        });
         </script>
     </div>
 }

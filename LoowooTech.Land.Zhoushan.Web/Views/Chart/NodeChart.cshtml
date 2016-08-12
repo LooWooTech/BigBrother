@@ -27,10 +27,14 @@
             continue;
         }
         var children = kv.Value.Where(e => e.NodeValueTypes.Length > 0);
+        var labels = children.OrderBy(e => e.ID).Select(e => e.Name).ToArray();
+        if (labels.Length < 2)
+        {
+            continue ;
+        }
         var nodeIds = children.Select(e => e.ID).ToArray();
         var values = childValues.Where(e => nodeIds.Contains(e.NodeID)).ToList();
         var typeIds = values.GroupBy(e => e.TypeID).Select(g => g.Key).ToArray();
-        var labels = children.OrderBy(e => e.ID).Select(e => e.Name).ToArray();
         <div class="row">
             <h4>@(group)</h4>
             <canvas id="chart-childnode-@(index)"></canvas>
@@ -52,32 +56,17 @@
                                 var val = values.Where(e => e.NodeID == nodeId && e.TypeID == typeIds[i]).Select(e => e.RawValue).DefaultIfEmpty(0).Sum().ToString("f2").TrimEnd('0').TrimEnd('.');
                                 data.Add(val);
                             }
-                            if (i > 0) {
-                            @:,
-                        }
                         <text>
                             {
                                 label: "@(valueType.Name)",
                                 data:@(Html.Raw(data.ToJson())),
-                                backgroundColor: [
-                                    'rgba(255, 99, 132, 0.2)',
-                                    'rgba(54, 162, 235, 0.2)',
-                                    'rgba(255, 206, 86, 0.2)',
-                                    'rgba(75, 192, 192, 0.2)',
-                                    'rgba(153, 102, 255, 0.2)',
-                                    'rgba(255, 159, 64, 0.2)'
-                                ],
-                                borderColor: [
-                                    'rgba(255,99,132,1)',
-                                    'rgba(54, 162, 235, 1)',
-                                    'rgba(255, 206, 86, 1)',
-                                    'rgba(75, 192, 192, 1)',
-                                    'rgba(153, 102, 255, 1)',
-                                    'rgba(255, 159, 64, 1)'
-                                ],
+                                backgroundColor: getChartColor(@(i)),
                                 borderWidth: 1
                             }
                       </text>
+                            if (i < typeIds.Length -1) {
+                            @:,
+                        }
                         }
                         ]
                     },options:{

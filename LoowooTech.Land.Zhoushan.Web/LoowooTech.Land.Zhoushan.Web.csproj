@@ -216,7 +216,6 @@
     <Content Include="Views\User\EditPassword.cshtml" />
     <Content Include="Views\Data\Import.cshtml" />
     <Content Include="Views\Form\Charts.cshtml" />
-    <Content Include="templates\政府储备土地情况.xlsx" />
     <Content Include="Views\Node\EditValues.cshtml" />
     <Content Include="Views\Node\_NodeValueListItem.cshtml" />
     <Content Include="Views\Form\Write.cshtml" />

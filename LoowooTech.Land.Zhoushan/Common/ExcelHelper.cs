@@ -164,8 +164,8 @@ namespace LoowooTech.Land.Zhoushan.Common
                 var cell = row.GetCell(item.Column);
                 if (item.Value is double || item.Value is int)
                 {
-                    cell.SetCellType(CellType.Numeric);
                     cell.SetCellValue((double)item.Value);
+                    cell.SetCellType(CellType.Numeric);
                 }
                 else
                 {

@@ -115,7 +115,11 @@ namespace LoowooTech.Land.Zhoushan.Managers
                 {
                     continue;
                 }
-                unit.Append(val.Type.Name);
+                if (!node.Name.EndsWith(val.Type.Name))
+                {
+                    unit.Append(val.Type.Name);
+                }
+
                 unit.Append(val.RawValue.ToString("f2").TrimEnd('0').TrimEnd('.'));
                 unit.Append(val.Type.Unit);
                 unit.Append("，同比");

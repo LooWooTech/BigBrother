@@ -3,6 +3,10 @@
     ViewBag.Title = "统计图";
     NodeValueParameter parameter = ViewBag.Parameter;
     int[] years = ViewBag.Years;
+    if (parameter.Quarter == 0 && parameter.Quarters == null)
+    {
+        parameter.Quarters = new Quarter[] { Quarter.First, Quarter.Second, Quarter.Third, Quarter.Fourth };
+    }
 }
 <h2 class="page-header">
     @(ViewBag.Title)
@@ -48,10 +52,10 @@
 <div id="panel-node" class="row col-lg-12" style="margin-top:20px;">
 
 </div>
-<div id="panel-quarter" class="row col-lg-12">
+<div id="panel-area" class="row col-lg-12">
 
 </div>
-<div id="panel-area" class="row col-lg-12">
+<div id="panel-quarter" class="row col-lg-12">
 
 </div>
 <script>

@@ -39,19 +39,19 @@
         <div class="navbar-collapse collapse" id="navbar-main">
             <ul class="nav navbar-nav">
                 <li><a href="/"><i class="fa fa-home"></i> 首页</a></li>
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-pencil-square-o"></i> 数据录入 <span class="caret"></span></a>
+                    <ul class="dropdown-menu" role="menu">
+                        <li><a href="/form/write" data-toggle="modal" data-target="#modal">录入数据</a></li>
+                        <li><a href="/data/import" data-toggle="modal" data-target="#modal">导入数据</a></li>
+                    </ul>
+                </li>
                 <li><a href="/chart/"><i class="fa fa-pie-chart"></i> 统计图表</a></li>
                 <li class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-share"></i> 数据导出 <span class="caret"></span></a> 
                     <ul class="dropdown-menu" role="menu">
                         <li><a href="/data/exportstatistic" data-toggle="modal" data-target="#modal">统计报表</a></li>
                         <li><a href="/data/exporttrend" data-toggle="modal" data-target="#modal">国土资源形势</a></li>
-                    </ul>
-                </li>
-                <li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-pencil-square-o"></i> 数据录入 <span class="caret"></span></a>
-                    <ul class="dropdown-menu" role="menu">
-                        <li><a href="/form/write" data-toggle="modal" data-target="#modal">录入数据</a></li>
-                        <li><a href="/data/import" data-toggle="modal" data-target="#modal">导入数据</a></li>
                     </ul>
                 </li>
             

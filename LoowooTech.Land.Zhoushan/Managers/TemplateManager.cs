@@ -101,7 +101,15 @@ namespace LoowooTech.Land.Zhoushan.Managers
                                 break;
                             case FieldType.Quarter:
                             case FieldType.Quarters:
-                                field.Value = GetQuartersDescription(quarters);
+                                //如果模板没有指定季度，则按照传参
+                                if (firstParameter.Value == 0)
+                                {
+                                    field.Value = GetQuartersDescription(quarters);
+                                }
+                                else
+                                {
+                                    field.Value = GetQuartersDescription(new[] { (Quarter)firstParameter.Value });
+                                }
                                 break;
                             case FieldType.Type:
                                 {
@@ -110,7 +118,7 @@ namespace LoowooTech.Land.Zhoushan.Managers
                                 }
                                 break;
                             case FieldType.Year:
-                                field.Value = firstParameter.Value == 0 ? year: firstParameter.Value;
+                                field.Value = firstParameter.Value == 0 ? year : firstParameter.Value;
                                 break;
                             case FieldType.LastYear:
                                 field.Value = year - 1;
@@ -156,20 +164,7 @@ namespace LoowooTech.Land.Zhoushan.Managers
     {
         public static NodeValueParameter GetNodeValueParameter(this Field field, int year, Quarter[] quarters)
         {
-
-            field.SetParameter(FieldType.Year, year);
-            //如果当前字段是多季度累计
-            if (field.Parameters.Any(e => e.Type == FieldType.Quarters))
-            {
-                field.SetParameter(FieldType.Quarters, (int)quarters.Max());
-            }
-            else
-            {
-                field.SetParameter(FieldType.Quarter, (int)quarters[0]);
-            }
-
             var result = new NodeValueParameter { GetArea = false, GetNode = true, GetValueType = false };
-
             foreach (var parameter in field.Parameters)
             {
                 switch (parameter.Type)
@@ -185,11 +180,13 @@ namespace LoowooTech.Land.Zhoushan.Managers
                         {
                             result.Quarter = (Quarter)parameter.Value;
                         }
+                        else
+                        {
+                            result.Quarter = quarters.Max();
+                        }
                         break;
                     case FieldType.Quarters:
-                        {
-                            result.Quarters = quarters;
-                        }
+                        result.Quarters = quarters;
                         break;
                     case FieldType.Type:
                     case FieldType.Value:
@@ -206,12 +203,16 @@ namespace LoowooTech.Land.Zhoushan.Managers
                         }
                         break;
                     case FieldType.LastYear:
-                        result.Years = new[] { year, year - 1 };
+                        result.Year = year - 1;
                         break;
                     case FieldType.Rate:
                         result.RateType = (RateType)parameter.Value;
                         break;
                 }
+            }
+            if (result.Year == 0 && (result.Years == null || result.Years.Length == 0))
+            {
+                result.Year = year;
             }
             return result;
         }

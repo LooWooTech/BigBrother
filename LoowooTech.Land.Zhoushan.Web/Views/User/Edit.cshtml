@@ -15,7 +15,7 @@
             <label class="control-label col-lg-3">用户角色</label>
             <div class="col-lg-8">
                 <select name="Role" class="form-control">
-                    <option value="@(UserRole.Branch)" @(model.Role==UserRole.Branch?"selected":null)>@(UserRole.Branch.GetDescription())</option>
+                    <option value="@(UserRole.Branch)" @(model.Role == UserRole.Branch ? "selected" : null)>@(UserRole.Branch.GetDescription())</option>
                     <option value="@(UserRole.City)" @(model.Role == UserRole.City ? "selected" : null)>@(UserRole.City.GetDescription())</option>
                     <option value="@(UserRole.Advanced)" @(model.Role == UserRole.Advanced ? "selected" : null)>@(UserRole.Advanced.GetDescription())</option>
                     <option value="@(UserRole.Administrator)" @(model.Role == UserRole.Administrator ? "selected" : null)>@(UserRole.Administrator.GetDescription())</option>
@@ -46,18 +46,15 @@
         </div>
         <div class="form-group">
             <label for="Area" class="control-label col-lg-3">区域选择</label>
-            <div class="col-lg-8">
-                @foreach(var area in Areas)
+            <div class="col-lg-8 checkbox">
+                @foreach (var area in Areas)
                 {
-                    if (area.Name == "市本级")
-                    {
-                        continue;
-                    }
-                    <label class="checkbox-inline">
-                        <input type="checkbox" name="AreaIDS" value="@(area.ID)" @(model.Role==UserRole.Branch&&!string.IsNullOrEmpty(model.AreaIDS)&&StringArrayHelper.GetIntArray(model.AreaIDS).Contains(area.ID)?"checked=checked":"") />@(area.Name)
+                    var isChecked = model.AreaIds.Contains(area.ID);
+                    <label>
+                        <input type="checkbox" name="AreaIds" value="@(area.ID)"  @(isChecked? "checked" : "") />@(area.Name)
                     </label>
                 }
-                <span class="help-block">分局用户，请选择区域！</span>
+                <span class="help-block">分局用户，请选择区域</span>
             </div>
         </div>
     </div>

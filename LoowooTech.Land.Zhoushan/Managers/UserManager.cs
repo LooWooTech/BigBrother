@@ -66,16 +66,7 @@ namespace LoowooTech.Land.Zhoushan.Managers
 
         public void Save(User model)
         {
-            if (model.Role == UserRole.City)
-            {
-                var area = Core.AreaManager.GetArea(System.Configuration.ConfigurationManager.AppSettings["CITY"]);
-                if (area == null)
-                {
-                    throw new ArgumentException("未找到市本级相关区域记录");
-                }
-                model.AreaIds = new[] { area.ID };
-            }
-            else if (model.Role == UserRole.Branch)
+            if (model.Role < UserRole.Advanced)
             {
                 if (string.IsNullOrEmpty(model.AreaIdsValue))
                 {
@@ -86,6 +77,7 @@ namespace LoowooTech.Land.Zhoushan.Managers
             {
                 model.AreaIds = null;
             }
+
             using (var db = GetDbContext())
             {
                 if (model.ID > 0)

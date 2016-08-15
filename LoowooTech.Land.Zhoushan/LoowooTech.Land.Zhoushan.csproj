@@ -96,6 +96,7 @@
     <Compile Include="Common\JsonExtension.cs" />
     <Compile Include="Common\QueryableExtensions.cs" />
     <Compile Include="Common\ServiceFactory.cs" />
+    <Compile Include="Common\StringArrayHelper.cs" />
     <Compile Include="Common\TimeExtensions.cs" />
     <Compile Include="Common\WordHelper.cs" />
     <Compile Include="Managers\AreaManager.cs" />

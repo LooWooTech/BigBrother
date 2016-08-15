@@ -13,7 +13,7 @@ namespace LoowooTech.Land.Zhoushan.Web.Controllers
         // GET: Archive
         public ActionResult Index()
         {
-            var dict = Core.DossierManager.GetDossiers().GroupBy(e => e.Year).ToDictionary(e => e.Key, e => e.OrderBy(k=>k.Quarter).ToList());
+            var dict = Core.DossierManager.GetDossiers().GroupBy(e => e.Year).OrderByDescending(e=>e.Key).ToDictionary(e => e.Key, e => e.OrderBy(k=>k.Quarter).ToList());
             ViewBag.Dict = dict;
             return View();
         }
@@ -64,6 +64,18 @@ namespace LoowooTech.Land.Zhoushan.Web.Controllers
             ViewBag.List = Core.DossierManager.GetDossiers(parameter);
             ViewBag.Parameter = parameter;
             return View();
+        }
+
+        public ActionResult Delete(int id)
+        {
+            var dossier = Core.DossierManager.GetDossier(id);
+            if (dossier == null)
+            {
+                return JsonErrorResult("系统中未找到相关档案信息！");
+            }
+            Core.DossierManager.Delete(id);
+            return JsonSuccessResult();
+
         }
 
 

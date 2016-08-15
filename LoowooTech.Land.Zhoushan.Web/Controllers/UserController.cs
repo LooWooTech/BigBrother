@@ -97,6 +97,7 @@ namespace LoowooTech.Land.Zhoushan.Web.Controllers
         [HttpPost]
         public ActionResult Edit(User model)
         {
+            
             Core.UserManager.Save(model);
             return JsonSuccessResult();
         }

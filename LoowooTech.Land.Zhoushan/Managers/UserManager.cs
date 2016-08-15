@@ -27,11 +27,11 @@ namespace LoowooTech.Land.Zhoushan.Managers
             {
                 foreach (var user in list)
                 {
-                    if (user.AreaID.HasValue)
+                    if (!string.IsNullOrEmpty(user.AreaIDS))
                     {
                         if (user.Role == UserRole.City || user.Role == UserRole.Branch)
                         {
-                            user.Area = Core.AreaManager.GetArea(user.AreaID.Value);
+                            user.Areas = Core.AreaManager.GetAreas(StringArrayHelper.GetIntArray(user.AreaIDS));
                         }
                     }
                 }
@@ -54,9 +54,9 @@ namespace LoowooTech.Land.Zhoushan.Managers
                 {
                     throw new ArgumentException("密码错误");
                 }
-                if (user.AreaID.HasValue)
+                if (!string.IsNullOrEmpty(user.AreaIDS))
                 {
-                    user.Area = Core.AreaManager.GetArea(user.AreaID.Value);
+                    user.Areas = Core.AreaManager.GetAreas(StringArrayHelper.GetIntArray(user.AreaIDS));
                 }
             }
             return user;
@@ -71,9 +71,9 @@ namespace LoowooTech.Land.Zhoushan.Managers
                 user= db.Users.FirstOrDefault(e => e.ID == id);
                
             }
-            if (user != null && user.Role==UserRole.Branch&&user.AreaID.HasValue)
+            if (user != null && user.Role==UserRole.Branch&&!string.IsNullOrEmpty(user.AreaIDS))
             {
-                user.Area = Core.AreaManager.GetArea(user.AreaID.Value);
+                user.Areas = Core.AreaManager.GetAreas(StringArrayHelper.GetIntArray(user.AreaIDS));
             }
             return user;
         }
@@ -87,14 +87,14 @@ namespace LoowooTech.Land.Zhoushan.Managers
                 {
                     throw new ArgumentException("未找到市本级相关区域记录");
                 }
-                model.AreaID = area.ID;
+                model.AreaIDS = area.ID.ToString();
             }else if (model.Role == UserRole.Branch)
             {
 
             }
             else
             {
-                model.AreaID = null;
+                model.AreaIDS = null;
             }
             using (var db = GetDbContext())
             {
@@ -114,7 +114,7 @@ namespace LoowooTech.Land.Zhoushan.Managers
                         }
                         entity.Name = model.Name;
                         entity.Role = model.Role;
-                        entity.AreaID = model.AreaID;
+                        entity.AreaIDS = model.AreaIDS;
                     }
                 }
                 else

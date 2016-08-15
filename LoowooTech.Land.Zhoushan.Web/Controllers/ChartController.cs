@@ -21,15 +21,8 @@ namespace LoowooTech.Land.Zhoushan.Web.Controllers
             return View();
         }
 
-        public ActionResult NodeChart(NodeValueParameter parameter)
+        public ActionResult NodeChart([NodeValueParameterBinder]NodeValueParameter parameter)
         {
-            parameter.Quarters = Request.QueryString["quarters"].Split(',').Select(str => (Quarter)int.Parse(str)).ToArray();
-            if (parameter.Quarters.Length < 2)
-            {
-                parameter.Quarter = parameter.Quarters[0];
-                parameter.Quarters = null;
-            }
-
             ViewBag.Form = Core.FormManager.GetForm(parameter.FormID);
             ViewBag.ValueTypes = Core.FormManager.GetNodeValueTypes();
 
@@ -56,11 +49,10 @@ namespace LoowooTech.Land.Zhoushan.Web.Controllers
             return View();
         }
 
-        public ActionResult QuarterChart(int formId, NodeValueParameter parameter)
+        public ActionResult QuarterChart([NodeValueParameterBinder]NodeValueParameter parameter)
         {
-            ViewBag.CompareYear = Request.QueryString["quarters"] == "1,2,3,4";
             parameter.Quarters = new Quarter[] { Quarter.First, Quarter.Second, Quarter.Third, Quarter.Fourth };
-            parameter.Years = Core.FormManager.GetFormYears(formId);
+            parameter.Years = Core.FormManager.GetFormYears(parameter.FormID);
             ViewBag.Parameter = parameter;
             parameter.RateType = null;
             if (parameter.NodeID > 0)
@@ -78,7 +70,7 @@ namespace LoowooTech.Land.Zhoushan.Web.Controllers
             }
             else
             {
-                var childNodes = Core.FormManager.GetRootNodes(formId);
+                var childNodes = Core.FormManager.GetRootNodes(parameter.FormID);
                 parameter.NodeIds = childNodes.Select(e => e.ID).ToArray();
                 ViewBag.NodeValues = Core.FormManager.GetNodeValues(parameter);
                 ViewBag.Nodes = childNodes;
@@ -87,17 +79,11 @@ namespace LoowooTech.Land.Zhoushan.Web.Controllers
             return View();
         }
 
-        public ActionResult AreaChart(NodeValueParameter parameter)
+        public ActionResult AreaChart([NodeValueParameterBinder]NodeValueParameter parameter)
         {
             if (parameter.NodeID == 0)
             {
                 return View();
-            }
-            parameter.Quarters = Request.QueryString["quarters"].Split(',').Select(str => (Quarter)int.Parse(str)).ToArray();
-            if (parameter.Quarters.Length < 2)
-            {
-                parameter.Quarter = parameter.Quarters[0];
-                parameter.Quarters = null;
             }
 
             var areas = Core.AreaManager.GetAreas();
@@ -106,7 +92,7 @@ namespace LoowooTech.Land.Zhoushan.Web.Controllers
             parameter.AreaID = null;
             ViewBag.Parameter = parameter;
 
-            ViewBag.Areas = areas.Where(e=>e.ParentID == (parameter.AreaID ?? 0)).ToList();
+            ViewBag.Areas = areas.Where(e => e.ParentID == (parameter.AreaID ?? 0)).ToList();
             ViewBag.ValueTypes = Core.FormManager.GetNodeValueTypes();
             ViewBag.AreaValues = Core.FormManager.GetNodeValues(parameter);
             ViewBag.Node = Core.FormManager.GetNode(parameter.NodeID);

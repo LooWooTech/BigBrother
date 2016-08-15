@@ -28,6 +28,7 @@ namespace LoowooTech.Land.Zhoushan.Web.Controllers
             if (user != null)
             {
                 AuthorizeHelper.Login(HttpContext, user);
+                Core.UserManager.UpdateLogin(user);
             }
             else
             {

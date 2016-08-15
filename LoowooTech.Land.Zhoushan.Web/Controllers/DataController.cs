@@ -88,7 +88,7 @@ namespace LoowooTech.Land.Zhoushan.Web.Controllers
             {
 
                 fileName = year + "年" + Core.TemplateManager.GetQuartersDescription(qs) + "统计报表.xls";
-                stream = Core.ExportManager.ExportStatistics(year, qs);
+                stream = Core.ExportManager.ExportStatistics(year, qs, CurrentIdentity.AreaIds);
             }
             else
             {
@@ -98,7 +98,7 @@ namespace LoowooTech.Land.Zhoushan.Web.Controllers
                     throw new ArgumentException("请选择一个报表");
                 }
 
-                stream = Core.ExportManager.ExportFormStatistic(form, year, qs);
+                stream = Core.ExportManager.ExportFormStatistic(form, year, qs, CurrentIdentity.AreaIds);
                 fileName = form.Name + "-" + year + "-" + Core.TemplateManager.GetQuartersDescription(qs) + ".xls";
             }
             Response.ContentType = "application/vnd.ms-excel;charset=UTF-8";
@@ -123,7 +123,7 @@ namespace LoowooTech.Land.Zhoushan.Web.Controllers
             var docStream = Core.ExportManager.ExportTrend(year, qs);
 
             //导出excel（word的配图）
-            var excelStream = Core.ExportManager.ExportTrendCharts(year, qs);
+            var excelStream = Core.ExportManager.ExportTrendCharts(year, qs, CurrentIdentity.AreaIds);
 
             using (var ms = new MemoryStream())
             {

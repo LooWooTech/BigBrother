@@ -17,7 +17,7 @@ namespace LoowooTech.Land.Zhoushan.Managers
             Cache.Remove(AreaCacheKey);
         }
 
-        private List<Area> GetAreas()
+        private List<Area> GetList()
         {
             return Cache.GetOrSet(AreaCacheKey, () =>
             {
@@ -33,59 +33,43 @@ namespace LoowooTech.Land.Zhoushan.Managers
             });
         }
 
-        public List<Area> GetAreaTree(string[] areaNames=null)
+        public List<Area> GetAreas(int[] areaIds)
         {
-            var list = GetAreas();
-            if (areaNames == null)
+            return GetList().Where(e => areaIds.Contains(e.ID)).ToList();
+        }
+
+        public List<Area> GetAreas(int? parentId = null)
+        {
+            IEnumerable<Area> query = GetList();
+            if (parentId.HasValue)
             {
-                list = list.Where(e => e.ParentID == 0).ToList();
-                return list;
+                query = query.Where(e => e.ParentID == parentId.Value);
+            }
+            return query.ToList();
+        }
+
+        public List<Area> GetAreaTree(int[] areaIds = null)
+        {
+            if (areaIds == null || areaIds.Length == 0)
+            {
+                return GetList().Where(e => e.ParentID == 0).ToList();
             }
             else
             {
-                var result = new List<Area>();
-                foreach (var item in areaNames)
-                {
-                    var entry=list.FirstOrDefault(e=>e.Name==item);
-                    if(entry!=null)
-                    {
-                        result.Add(entry);
-                    }
-                }
-                return result;
+                return GetList().Where(e => areaIds.Contains(e.ID)).ToList();
             }
         }
 
         public Area GetArea(int id)
         {
             if (id == 0) return null;
-            return GetAreas().FirstOrDefault(e => e.ID == id);
-        }
-
-        public List<Area> GetAreas(int[] areaIDs)
-        {
-            var list = new List<Area>();
-            foreach (var id in areaIDs)
-            {
-                list.Add(GetArea(id));
-            }
-            return list;
+            return GetList().FirstOrDefault(e => e.ID == id);
         }
 
         public Area GetArea(string name)
         {
             if (string.IsNullOrEmpty(name)) return null;
-            return GetAreas().FirstOrDefault(e => e.Name == name);
-        }
-
-        public List<Area> GetAreas(int? parentId = null)
-        {
-            var list = GetAreas();
-            if (parentId.HasValue)
-            {
-                list = list.Where(e => e.ParentID == parentId.Value).ToList();
-            }
-            return list;
+            return GetList().FirstOrDefault(e => e.Name == name);
         }
 
         public void Save(Area model)

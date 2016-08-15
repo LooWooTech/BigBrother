@@ -31,7 +31,7 @@ namespace LoowooTech.Land.Zhoushan.Web
                             ID = userId,
                             Name = name,
                             Role = (UserRole)role,
-                            AreaNames=values[3]
+                            AreaIds = values[3].Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries).Select(e => int.Parse(e)).ToArray()
                         };
                     }
                 }
@@ -41,7 +41,7 @@ namespace LoowooTech.Land.Zhoushan.Web
 
         public static void Login(HttpContextBase context, User user)
         {
-            var tokenValue = user.ID + "|" + user.Name + "|" + user.Role + "|" +(user.Areas!=null?string.Join(",",user.Areas.Select(e=>e.Name).ToArray()):"")+ "|" + DateTime.Now;
+            var tokenValue = user.ID + "|" + user.Name + "|" + user.Role + "|" + user.AreaIdsValue + "|" + DateTime.Now;
             var ticket = new FormsAuthenticationTicket(tokenValue, false, int.MaxValue);
             var cookie = new HttpCookie(_tokenKey, FormsAuthentication.Encrypt(ticket));
             cookie.Expires = DateTime.Now.AddDays(1);

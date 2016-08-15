@@ -1,17 +1,25 @@
 -- --------------------------------------------------------
--- 主机:                           10.22.102.90
--- 服务器版本:                        5.1.73-community - MySQL Community Server (GPL)
--- 服务器操作系统:                      Win32
--- HeidiSQL 版本:                  9.3.0.5110
+-- 主机:                           rdsyefqqmvq7bie.mysql.rds.aliyuncs.com
+-- 服务器版本:                        5.5.18.1-log - Source distribution
+-- 服务器操作系统:                      Linux
+-- HeidiSQL 版本:                  9.3.0.4984
 -- --------------------------------------------------------
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
-/*!40101 SET NAMES utf8 */;
+/*!40101 SET NAMES utf8mb4 */;
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 
--- 正在导出表  zhoushanland.area 的数据：~10 rows (大约)
-DELETE FROM `area`;
+-- 导出  表 zhoushan.area 结构
+DROP TABLE IF EXISTS `area`;
+CREATE TABLE IF NOT EXISTS `area` (
+  `ID` int(11) NOT NULL AUTO_INCREMENT,
+  `Name` varchar(50) NOT NULL DEFAULT '0',
+  `ParentID` int(11) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`ID`)
+) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8;
+
+-- 正在导出表  zhoushan.area 的数据：~10 rows (大约)
 /*!40000 ALTER TABLE `area` DISABLE KEYS */;
 INSERT INTO `area` (`ID`, `Name`, `ParentID`) VALUES
 	(1, '市本级', 0),
@@ -26,18 +34,70 @@ INSERT INTO `area` (`ID`, `Name`, `ParentID`) VALUES
 	(12, '朱家尖', 5);
 /*!40000 ALTER TABLE `area` ENABLE KEYS */;
 
--- 正在导出表  zhoushanland.dossier 的数据：~0 rows (大约)
-DELETE FROM `dossier`;
+
+-- 导出  表 zhoushan.dossier 结构
+DROP TABLE IF EXISTS `dossier`;
+CREATE TABLE IF NOT EXISTS `dossier` (
+  `ID` int(11) NOT NULL AUTO_INCREMENT,
+  `Year` int(11) NOT NULL,
+  `Quarter` int(11) NOT NULL,
+  `Remark` varchar(1023) DEFAULT NULL,
+  `UploadTime` datetime NOT NULL,
+  PRIMARY KEY (`ID`)
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8;
+
+-- 正在导出表  zhoushan.dossier 的数据：~10 rows (大约)
 /*!40000 ALTER TABLE `dossier` DISABLE KEYS */;
+INSERT INTO `dossier` (`ID`, `Year`, `Quarter`, `Remark`, `UploadTime`) VALUES
+	(1, 2016, 1, 'uploads/QL_20160725_0007.pdf', '2016-08-14 23:16:38'),
+	(2, 2016, 2, 'uploads/QL_20160725_0007.pdf', '2016-07-27 11:22:58'),
+	(3, 2016, 3, 'uploads/QL_20160725_0007.pdf', '2016-07-27 11:27:07'),
+	(4, 2015, 1, '第一季度', '2016-08-01 16:34:10'),
+	(5, 2014, 1, '年度统计册子', '2016-08-01 16:33:33'),
+	(6, 2015, 2, 'uploads/QL_20160725_0008636052294359612835.pdf', '2016-07-27 15:17:17'),
+	(7, 2016, 4, 'uploads/SKM_C364e16072710310_0001636052294514076858.pdf', '2016-07-27 15:17:37'),
+	(8, 2013, 1, NULL, '2016-07-29 10:22:53'),
+	(9, 2013, 2, '123342', '2016-07-29 10:44:02'),
+	(10, 2012, 2, '第二季度', '2016-07-29 13:38:47');
 /*!40000 ALTER TABLE `dossier` ENABLE KEYS */;
 
--- 正在导出表  zhoushanland.dossierfile 的数据：~0 rows (大约)
-DELETE FROM `dossierfile`;
+
+-- 导出  表 zhoushan.dossierfile 结构
+DROP TABLE IF EXISTS `dossierfile`;
+CREATE TABLE IF NOT EXISTS `dossierfile` (
+  `ID` int(11) NOT NULL AUTO_INCREMENT,
+  `FileName` varchar(255) NOT NULL,
+  `FilePath` varchar(1023) NOT NULL,
+  `DossierID` int(11) NOT NULL,
+  PRIMARY KEY (`ID`)
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8;
+
+-- 正在导出表  zhoushan.dossierfile 的数据：~8 rows (大约)
 /*!40000 ALTER TABLE `dossierfile` DISABLE KEYS */;
+INSERT INTO `dossierfile` (`ID`, `FileName`, `FilePath`, `DossierID`) VALUES
+	(1, 'QL_20160725_0007.pdf', 'uploads/QL_20160725_0007636053858312597793.pdf', 9),
+	(2, 'QL_20160725_0008.pdf', 'uploads/QL_20160725_0008636053858344267208.pdf', 9),
+	(3, 'SKM_C364e16072710310_0001.pdf', 'uploads/SKM_C364e16072710310_0001636053858373893285.pdf', 9),
+	(4, 'SKM_C364e16072710310_0003.pdf', 'uploads/SKM_C364e16072710310_0003636053858404059122.pdf', 9),
+	(6, 'SKM_C364e16072710310_0004.pdf', 'uploads/SKM_C364e16072710310_0004636053963259065437.pdf', 10),
+	(7, '2014年度数据册子.doc', 'uploads/2014年度数据册子636056660126596791.doc', 5),
+	(8, '2015年第一季度数据册子.doc', 'uploads/2015年第一季度数据册子636056660493232278.doc', 4),
+	(9, 'QL_20160725_0007.pdf', 'uploads/QL_20160725_0007636053962884252665.pdf', 1);
 /*!40000 ALTER TABLE `dossierfile` ENABLE KEYS */;
 
--- 正在导出表  zhoushanland.form 的数据：~9 rows (大约)
-DELETE FROM `form`;
+
+-- 导出  表 zhoushan.form 结构
+DROP TABLE IF EXISTS `form`;
+CREATE TABLE IF NOT EXISTS `form` (
+  `ID` int(11) NOT NULL AUTO_INCREMENT,
+  `Name` varchar(255) NOT NULL,
+  `ImportTemplate` varchar(512) DEFAULT NULL,
+  `ExportTemplate` varchar(512) DEFAULT NULL,
+  `ExcludeSubArea` bit(1) NOT NULL,
+  PRIMARY KEY (`ID`)
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8;
+
+-- 正在导出表  zhoushan.form 的数据：~9 rows (大约)
 /*!40000 ALTER TABLE `form` DISABLE KEYS */;
 INSERT INTO `form` (`ID`, `Name`, `ImportTemplate`, `ExportTemplate`, `ExcludeSubArea`) VALUES
 	(1, '建设用地审批', NULL, NULL, b'1'),
@@ -51,8 +111,22 @@ INSERT INTO `form` (`ID`, `Name`, `ImportTemplate`, `ExportTemplate`, `ExcludeSu
 	(9, '国土资源违法案件', NULL, NULL, b'1');
 /*!40000 ALTER TABLE `form` ENABLE KEYS */;
 
--- 正在导出表  zhoushanland.node 的数据：~81 rows (大约)
-DELETE FROM `node`;
+
+-- 导出  表 zhoushan.node 结构
+DROP TABLE IF EXISTS `node`;
+CREATE TABLE IF NOT EXISTS `node` (
+  `ID` int(11) NOT NULL AUTO_INCREMENT,
+  `FormID` int(11) NOT NULL DEFAULT '0',
+  `ParentID` int(11) NOT NULL DEFAULT '0',
+  `Name` varchar(50) NOT NULL DEFAULT '0',
+  `Group` varchar(50) DEFAULT NULL,
+  `ValueTypes` varchar(50) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`ID`),
+  KEY `FormID` (`FormID`),
+  KEY `ParentID` (`ParentID`)
+) ENGINE=InnoDB AUTO_INCREMENT=151 DEFAULT CHARSET=utf8;
+
+-- 正在导出表  zhoushan.node 的数据：~81 rows (大约)
 /*!40000 ALTER TABLE `node` DISABLE KEYS */;
 INSERT INTO `node` (`ID`, `FormID`, `ParentID`, `Name`, `Group`, `ValueTypes`) VALUES
 	(1, 1, 0, '批准建设用地面积', NULL, '1'),
@@ -138,8 +212,24 @@ INSERT INTO `node` (`ID`, `FormID`, `ParentID`, `Name`, `Group`, `ValueTypes`) V
 	(147, 4, 68, '耕地', NULL, '1');
 /*!40000 ALTER TABLE `node` ENABLE KEYS */;
 
--- 正在导出表  zhoushanland.node_value 的数据：~2,053 rows (大约)
-DELETE FROM `node_value`;
+
+-- 导出  表 zhoushan.node_value 结构
+DROP TABLE IF EXISTS `node_value`;
+CREATE TABLE IF NOT EXISTS `node_value` (
+  `ID` int(11) NOT NULL AUTO_INCREMENT,
+  `NodeID` int(11) NOT NULL,
+  `Value` double NOT NULL,
+  `Raw_Value` double NOT NULL,
+  `Quarter` int(11) NOT NULL,
+  `AreaID` int(11) NOT NULL,
+  `TypeID` int(11) NOT NULL,
+  `Year` int(11) NOT NULL,
+  `UpdateTime` datetime NOT NULL,
+  PRIMARY KEY (`ID`),
+  KEY `NodeID` (`NodeID`)
+) ENGINE=InnoDB AUTO_INCREMENT=2113 DEFAULT CHARSET=utf8;
+
+-- 正在导出表  zhoushan.node_value 的数据：~1,958 rows (大约)
 /*!40000 ALTER TABLE `node_value` DISABLE KEYS */;
 INSERT INTO `node_value` (`ID`, `NodeID`, `Value`, `Raw_Value`, `Quarter`, `AreaID`, `TypeID`, `Year`, `UpdateTime`) VALUES
 	(1, 1, 10130.15, 10130.15, 4, 0, 1, 2014, '2016-08-12 11:56:37'),
@@ -920,7 +1010,7 @@ INSERT INTO `node_value` (`ID`, `NodeID`, `Value`, `Raw_Value`, `Quarter`, `Area
 	(1021, 48, 1282204600, 1282204600, 1, 5, 5, 2015, '2016-08-12 19:25:05'),
 	(1022, 48, -55, -55, 3, 0, 4, 2015, '2016-08-12 19:25:12'),
 	(1023, 48, -2426.7, -2426.7, 3, 0, 1, 2015, '2016-08-12 19:25:12'),
-	(1024, 48, -206700, -206700, 3, 0, 5, 2015, '2016-08-12 19:25:12'),
+	(1024, 48, -206700.00000000003, -206700.00000000003, 3, 0, 5, 2015, '2016-08-12 19:25:12'),
 	(1025, 49, 41, 41, 3, 0, 4, 2015, '2016-08-12 19:25:12'),
 	(1026, 49, 2637.15, 2637.15, 3, 0, 1, 2015, '2016-08-12 19:25:12'),
 	(1027, 49, 270000, 270000, 3, 0, 5, 2015, '2016-08-12 19:25:12'),
@@ -959,7 +1049,7 @@ INSERT INTO `node_value` (`ID`, `NodeID`, `Value`, `Raw_Value`, `Quarter`, `Area
 	(1060, 48, -148.73, -148.73, 2, 1, 1, 2015, '2016-08-12 19:25:18'),
 	(1061, 48, -14291598200, -14291598200, 2, 1, 5, 2015, '2016-08-12 19:25:18'),
 	(1062, 48, -206.570000000001, -206.570000000001, 2, 6, 1, 2015, '2016-08-12 19:25:18'),
-	(1063, 48, -14291651100, -14291651100, 2, 6, 5, 2015, '2016-08-12 19:25:18'),
+	(1063, 48, -14291651100.000002, -14291651100.000002, 2, 6, 5, 2015, '2016-08-12 19:25:18'),
 	(1064, 48, 57.84, 57.84, 2, 7, 1, 2015, '2016-08-12 19:25:18'),
 	(1065, 48, 52900, 52900, 2, 7, 5, 2015, '2016-08-12 19:25:18'),
 	(1066, 48, -1956.39, -1956.39, 2, 2, 1, 2015, '2016-08-12 19:25:18'),
@@ -1039,7 +1129,7 @@ INSERT INTO `node_value` (`ID`, `NodeID`, `Value`, `Raw_Value`, `Quarter`, `Area
 	(1140, 48, -524000, -524000, 2, 0, 5, 2016, '2016-08-12 19:25:50'),
 	(1141, 49, 74, 74, 2, 0, 4, 2016, '2016-08-12 19:25:50'),
 	(1142, 49, 7100.25, 7100.25, 2, 0, 1, 2016, '2016-08-12 19:25:50'),
-	(1143, 49, 436600, 436600, 2, 0, 5, 2016, '2016-08-12 19:25:50'),
+	(1143, 49, 436599.99999999994, 436599.99999999994, 2, 0, 5, 2016, '2016-08-12 19:25:50'),
 	(1144, 50, 126, 126, 2, 0, 4, 2016, '2016-08-12 19:25:50'),
 	(1145, 50, 6737.1, 6737.1, 2, 0, 1, 2016, '2016-08-12 19:25:50'),
 	(1146, 50, 960600, 960600, 2, 0, 5, 2016, '2016-08-12 19:25:50'),
@@ -1056,13 +1146,13 @@ INSERT INTO `node_value` (`ID`, `NodeID`, `Value`, `Raw_Value`, `Quarter`, `Area
 	(1157, 48, -2424.89, -2424.89, 2, 3, 1, 2016, '2016-08-12 19:25:50'),
 	(1158, 48, -334900, -334900, 2, 3, 5, 2016, '2016-08-12 19:25:50'),
 	(1159, 48, 190.58, 190.58, 2, 9, 1, 2016, '2016-08-12 19:25:50'),
-	(1160, 48, 9899.99999999995, 9899.99999999995, 2, 9, 5, 2016, '2016-08-12 19:25:50'),
+	(1160, 48, 9899.999999999949, 9899.999999999949, 2, 9, 5, 2016, '2016-08-12 19:25:50'),
 	(1161, 48, 0, 0, 2, 10, 1, 2016, '2016-08-12 19:25:50'),
 	(1162, 48, 0, 0, 2, 10, 5, 2016, '2016-08-12 19:25:50'),
 	(1163, 48, 3937.95, 3937.95, 2, 4, 1, 2016, '2016-08-12 19:25:50'),
 	(1164, 48, 173700, 173700, 2, 4, 5, 2016, '2016-08-12 19:25:50'),
 	(1165, 48, -161.1, -161.1, 2, 5, 1, 2016, '2016-08-12 19:25:50'),
-	(1166, 48, -1999.99999999999, -1999.99999999999, 2, 5, 5, 2016, '2016-08-12 19:25:50'),
+	(1166, 48, -1999.9999999999902, -1999.9999999999902, 2, 5, 5, 2016, '2016-08-12 19:25:50'),
 	(1167, 72, 1, 1, 4, 0, 6, 2014, '2016-08-12 19:44:07'),
 	(1168, 73, 3, 3, 4, 0, 6, 2014, '2016-08-12 19:44:07'),
 	(1169, 74, 0, 0, 4, 0, 6, 2014, '2016-08-12 19:44:07'),
@@ -1948,8 +2038,21 @@ INSERT INTO `node_value` (`ID`, `NodeID`, `Value`, `Raw_Value`, `Quarter`, `Area
 	(2112, 112, 0, 0, 2, 6, 1, 2016, '2016-08-12 20:46:15');
 /*!40000 ALTER TABLE `node_value` ENABLE KEYS */;
 
--- 正在导出表  zhoushanland.season 的数据：~4 rows (大约)
-DELETE FROM `season`;
+
+-- 导出  表 zhoushan.season 结构
+DROP TABLE IF EXISTS `season`;
+CREATE TABLE IF NOT EXISTS `season` (
+  `ID` int(11) NOT NULL AUTO_INCREMENT,
+  `Quarter` int(11) NOT NULL DEFAULT '0',
+  `StartTime` datetime NOT NULL,
+  `Year` int(11) NOT NULL,
+  `EndTime` datetime NOT NULL,
+  `SetTime` datetime NOT NULL,
+  `Delete` bit(3) NOT NULL DEFAULT b'0',
+  PRIMARY KEY (`ID`)
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
+
+-- 正在导出表  zhoushan.season 的数据：~4 rows (大约)
 /*!40000 ALTER TABLE `season` DISABLE KEYS */;
 INSERT INTO `season` (`ID`, `Quarter`, `StartTime`, `Year`, `EndTime`, `SetTime`, `Delete`) VALUES
 	(1, 1, '2016-01-01 00:00:00', 0, '2016-03-01 00:00:00', '2016-07-30 21:14:23', b'001'),
@@ -1958,16 +2061,45 @@ INSERT INTO `season` (`ID`, `Quarter`, `StartTime`, `Year`, `EndTime`, `SetTime`
 	(4, 4, '2016-11-02 00:00:00', 2016, '2016-12-30 00:00:00', '2016-08-01 15:34:51', b'000');
 /*!40000 ALTER TABLE `season` ENABLE KEYS */;
 
--- 正在导出表  zhoushanland.user 的数据：~6 rows (大约)
-DELETE FROM `user`;
+
+-- 导出  表 zhoushan.user 结构
+DROP TABLE IF EXISTS `user`;
+CREATE TABLE IF NOT EXISTS `user` (
+  `ID` int(11) NOT NULL AUTO_INCREMENT,
+  `Username` varchar(50) NOT NULL,
+  `Password` varchar(50) NOT NULL,
+  `Role` int(11) NOT NULL,
+  `Name` varchar(50) DEFAULT NULL,
+  `Deleted` bit(1) NOT NULL,
+  `LastLoginTime` time DEFAULT NULL,
+  `AreaIDs` varchar(50) DEFAULT NULL,
+  PRIMARY KEY (`ID`),
+  KEY `Username` (`Username`)
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8;
+
+-- 正在导出表  zhoushan.user 的数据：~6 rows (大约)
 /*!40000 ALTER TABLE `user` DISABLE KEYS */;
 INSERT INTO `user` (`ID`, `Username`, `Password`, `Role`, `Name`, `Deleted`, `LastLoginTime`, `AreaIDs`) VALUES
 	(1, 'admin', '202cb962ac59075b964b07152d234b70', 4, 'admin', b'0', NULL, NULL),
-	(3, 'loowootech', '202cb962ac59075b964b07152d234b70', 4, 'loowootech', b'0', NULL, NULL);
+	(3, 'loowootech', '202cb962ac59075b964b07152d234b70', 4, 'loowootech', b'0', NULL, NULL),
+	(4, 'ty', '202cb962ac59075b964b07152d234b70', 3, '唐尧', b'0', NULL, NULL),
+	(5, 'zq', '202cb962ac59075b964b07152d234b70', 2, '赵泉', b'0', NULL, '1'),
+	(6, 'zwj', '202cb962ac59075b964b07152d234b70', 1, '周威俊', b'0', NULL, '6'),
+	(7, 'xc', '202cb962ac59075b964b07152d234b70', 1, '新城', b'0', NULL, '2');
 /*!40000 ALTER TABLE `user` ENABLE KEYS */;
 
--- 正在导出表  zhoushanland.value_type 的数据：~8 rows (大约)
-DELETE FROM `value_type`;
+
+-- 导出  表 zhoushan.value_type 结构
+DROP TABLE IF EXISTS `value_type`;
+CREATE TABLE IF NOT EXISTS `value_type` (
+  `ID` int(11) NOT NULL AUTO_INCREMENT,
+  `Name` varchar(50) NOT NULL DEFAULT '0',
+  `Units` varchar(255) NOT NULL,
+  `Ratio` int(11) NOT NULL,
+  PRIMARY KEY (`ID`)
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8;
+
+-- 正在导出表  zhoushan.value_type 的数据：~8 rows (大约)
 /*!40000 ALTER TABLE `value_type` DISABLE KEYS */;
 INSERT INTO `value_type` (`ID`, `Name`, `Units`, `Ratio`) VALUES
 	(1, '面积', '亩,公顷', 1000),
@@ -1979,7 +2111,6 @@ INSERT INTO `value_type` (`ID`, `Name`, `Units`, `Ratio`) VALUES
 	(8, '面积', '平方米', 0),
 	(9, '批次', '次', 0);
 /*!40000 ALTER TABLE `value_type` ENABLE KEYS */;
-
 /*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;
 /*!40014 SET FOREIGN_KEY_CHECKS=IF(@OLD_FOREIGN_KEY_CHECKS IS NULL, 1, @OLD_FOREIGN_KEY_CHECKS) */;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

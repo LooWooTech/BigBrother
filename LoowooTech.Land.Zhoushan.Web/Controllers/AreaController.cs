@@ -26,7 +26,7 @@ namespace LoowooTech.Land.Zhoushan.Web.Controllers
 
         public ActionResult Dropdown(int areaId = 0, string controlName = "areaId")
         {
-            ViewBag.List = Core.AreaManager.GetAreaTree(CurrentIdentity.AreaNames.Split(','));
+            ViewBag.List = Core.AreaManager.GetAreaTree(CurrentIdentity.AreaIds);
             ViewBag.ControlName = controlName;
             ViewBag.AreaID = areaId;
             return View();

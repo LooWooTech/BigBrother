@@ -1,4 +1,7 @@
 ﻿@{
+    UserRole role = ((UserIdentity)ViewBag.CurrentIdentity).Role;
+    UserIdentity identity = ViewBag.CurrentIdentity;
+
     List<Form> forms = ViewBag.Forms;
     ViewBag.Title = "统计图";
     NodeValueParameter parameter = ViewBag.Parameter;
@@ -52,9 +55,12 @@
 <div id="panel-node" class="row col-lg-12" style="margin-top:20px;">
 
 </div>
+@if (role > UserRole.Branch)
+{
 <div id="panel-area" class="row col-lg-12">
 
 </div>
+}
 <div id="panel-quarter" class="row col-lg-12">
 
 </div>
@@ -157,14 +163,19 @@
 
             var years = $("#ddl-years").val() || 3;
             var formId = $("#ddl-form").val();
-            $("#panel-quarter").load("/chart/quarterchart?formId=" + formId + "&" + data, function () {
+            $("#panel-quarter").load("/chart/quarterchart?" + data, function () {
                 quarterChartCompleted = true;
                 hideLoading();
             });
+            @if (role > UserRole.Branch)
+            {
+                <text>
             $("#panel-area").load("/chart/areachart?" + data, function () {
                 areaChartCompleted = true;
                 hideLoading();
             });
+           </text>
+            }
             return false;
         });
 

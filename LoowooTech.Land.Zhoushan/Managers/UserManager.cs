@@ -20,62 +20,48 @@ namespace LoowooTech.Land.Zhoushan.Managers
                 {
                     query = query.Where(e => e.Name.Contains(parameter.SearchKey));
                 }
-                list= query.OrderByDescending(e => e.ID).SetPage(parameter.Page).ToList();
-               
+                list = query.OrderByDescending(e => e.ID).SetPage(parameter.Page).ToList();
+
             }
-            if (list != null)
-            {
-                foreach (var user in list)
-                {
-                    if (!string.IsNullOrEmpty(user.AreaIDS))
-                    {
-                        if (user.Role == UserRole.City || user.Role == UserRole.Branch)
-                        {
-                            user.Areas = Core.AreaManager.GetAreas(StringArrayHelper.GetIntArray(user.AreaIDS));
-                        }
-                    }
-                }
-            }
-       
+
             return list;
         }
 
         public User GetUser(string username, string password = null)
         {
-            User user = null;
             using (var db = GetDbContext())
             {
-                user =db.Users.FirstOrDefault(e => e.Username == username.ToLower());
-               
-            }
-            if (user != null)
-            {
+                var user = db.Users.FirstOrDefault(e => e.Username == username.ToLower());
+                if (user == null)
+                {
+                    throw new ArgumentException("用户名不存在");
+                }
                 if (!string.IsNullOrEmpty(password) && user.Password != password.MD5())
                 {
                     throw new ArgumentException("密码错误");
                 }
-                if (!string.IsNullOrEmpty(user.AreaIDS))
-                {
-                    user.Areas = Core.AreaManager.GetAreas(StringArrayHelper.GetIntArray(user.AreaIDS));
-                }
+
+                return user;
             }
-            return user;
+        }
+
+        public void UpdateLogin(User user)
+        {
+            using (var db = GetDbContext())
+            {
+                var entity = db.Users.FirstOrDefault(e => e.ID == user.ID);
+                entity.LastLoginTime = DateTime.Now;
+                db.SaveChanges();
+            }
         }
 
         public User GetUser(int id)
         {
             if (id == 0) return null;
-            User user = null;
             using (var db = GetDbContext())
             {
-                user= db.Users.FirstOrDefault(e => e.ID == id);
-               
+                return db.Users.FirstOrDefault(e => e.ID == id);
             }
-            if (user != null && user.Role==UserRole.Branch&&!string.IsNullOrEmpty(user.AreaIDS))
-            {
-                user.Areas = Core.AreaManager.GetAreas(StringArrayHelper.GetIntArray(user.AreaIDS));
-            }
-            return user;
         }
 
         public void Save(User model)
@@ -87,14 +73,18 @@ namespace LoowooTech.Land.Zhoushan.Managers
                 {
                     throw new ArgumentException("未找到市本级相关区域记录");
                 }
-                model.AreaIDS = area.ID.ToString();
-            }else if (model.Role == UserRole.Branch)
+                model.AreaIds = new[] { area.ID };
+            }
+            else if (model.Role == UserRole.Branch)
             {
-
+                if (string.IsNullOrEmpty(model.AreaIdsValue))
+                {
+                    throw new ArgumentException("没有选择用户所属区域");
+                }
             }
             else
             {
-                model.AreaIDS = null;
+                model.AreaIds = null;
             }
             using (var db = GetDbContext())
             {
@@ -114,7 +104,7 @@ namespace LoowooTech.Land.Zhoushan.Managers
                         }
                         entity.Name = model.Name;
                         entity.Role = model.Role;
-                        entity.AreaIDS = model.AreaIDS;
+                        entity.AreaIdsValue = model.AreaIdsValue;
                     }
                 }
                 else

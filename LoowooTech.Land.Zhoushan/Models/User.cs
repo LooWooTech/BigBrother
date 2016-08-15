@@ -24,25 +24,48 @@ namespace LoowooTech.Land.Zhoushan.Models
         public UserRole Role { get; set; }
 
         public DateTime? LastLoginTime { get; set; }
-        public string AreaIDS { get; set; }
+
+        //public bool HasAreaRight(int areaId)
+        //{
+        //    if (string.IsNullOrEmpty(AreaIdsValue))
+        //    {
+        //        return Role >= UserRole.Advanced;
+        //    }
+        //    else
+        //    {
+        //        return AreaIds.Contains(areaId);
+        //    }
+        //}
+
+        [Column("AreaIds")]
+        public string AreaIdsValue { get; set; }
+
         [NotMapped]
-        public List<Area> Areas { get; set; }
-        [NotMapped]
-        public string AreaNames
+        public int[] AreaIds
         {
             get
             {
-                return !string.IsNullOrEmpty(AreaIDS) && Areas != null ? string.Join(",", Areas.Select(e => e.Name).ToArray()) : "/";
+                return (AreaIdsValue ?? string.Empty).Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries).Select(str => int.Parse(str)).ToArray();
+            }
+            set
+            {
+                if (value != null)
+                {
+                    AreaIdsValue = string.Join(",", value);
+                }
+                else
+                {
+                    AreaIdsValue = null;
+                }
             }
         }
-
     }
 
     [Flags]
     public enum UserRole
     {
         [System.ComponentModel.Description("分局用户")]
-        Branch =1,
+        Branch = 1,
         [System.ComponentModel.Description("市局用户")]
         City = 2,
         [System.ComponentModel.Description("市局高级用户")]

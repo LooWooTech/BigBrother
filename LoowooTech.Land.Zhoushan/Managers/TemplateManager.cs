@@ -64,7 +64,7 @@ namespace LoowooTech.Land.Zhoushan.Managers
         /// <summary>
         /// 导出
         /// </summary>
-        public List<ExcelCell> WriteDbDataToExcel(Form form, int year, Quarter[] quarters, Template template)
+        public List<ExcelCell> WriteDbDataToExcel(Form form, int year, Quarter[] quarters, int[] areaIds, Template template)
         {
             using (var db = GetDbContext())
             {

@@ -1,5 +1,5 @@
 ﻿@{
-    UserRole role = ((LoowooTech.Land.Zhoushan.Web.Security.UserIdentity)ViewBag.CurrentIdentity).Role;
+    UserRole role = ((UserIdentity)ViewBag.CurrentIdentity).Role;
     UserIdentity identity = ViewBag.CurrentIdentity;
 }
 <!DOCTYPE html>

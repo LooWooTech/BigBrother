@@ -61,7 +61,6 @@
             $("#loading").text("正在加载").show();
             var data = $(this).serialize();
             var action = $(this).attr("action");
-
             $.request(action, data, function (json) {
                 $(".node-value").val('');
                 $.each(json.data, function (k, v) {
@@ -73,11 +72,11 @@
             $.request("/node/canedit?year=" + year + "&quarter=" + quarter, function (result) {
                 if (!result) {
                     $("#btn-submit").hide();
-                    $(".node-value").attr("disabled", true);
+                    $(".node-value").attr("readonly", true);
                 }
                 else {
                     $("#btn-submit").show();
-                    $(".node-value").removeAttr("disabled");
+                    $(".node-value").removeAttr("readonly");
                 }
                 $("#loading").text("加载完毕");
                 setTimeout(function () {
@@ -92,6 +91,7 @@
         function updateNodeValue(val) {
             var rowId = "#node-item-" + val.NodeID;
             var control = $("#node-value-" + val.TypeID, rowId)
+
             control.val(val.Value || 0);
             control.attr("valueId", val.ID);
         }

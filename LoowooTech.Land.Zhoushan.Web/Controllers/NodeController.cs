@@ -133,8 +133,12 @@ namespace LoowooTech.Land.Zhoushan.Web.Controllers
             return JsonSuccessResult();
         }
 
-        public ActionResult GetNodeValues(NodeValueParameter parameter)
+        public ActionResult GetNodeValues([NodeValueParameterBinder]NodeValueParameter parameter)
         {
+            if (CurrentIdentity.Role == UserRole.City && parameter.AreaID == 0)
+            {
+                parameter.AreaID = CurrentIdentity.AreaIds.FirstOrDefault();
+            }
             var list = Core.FormManager.GetNodeValues(parameter);
 
             return JsonSuccessResult(list);

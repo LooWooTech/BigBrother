@@ -10,7 +10,6 @@ using System.Web.Mvc;
 
 namespace LoowooTech.Land.Zhoushan.Web.Controllers
 {
-    [UserRoleFilter(UserRole.Branch)]
     public class DataController : ControllerBase
     {
         [HttpGet]
@@ -78,6 +77,7 @@ namespace LoowooTech.Land.Zhoushan.Web.Controllers
         }
 
         [HttpPost]
+        [UserRoleFilter(UserRole.City)]
         public void ExportStatistic(int formId, int year, string quarters, string type)
         {
             Quarter[] qs = quarters.Split(',').Select(str => (Quarter)int.Parse(str)).ToArray();
@@ -114,6 +114,7 @@ namespace LoowooTech.Land.Zhoushan.Web.Controllers
         }
 
         [HttpPost]
+        [UserRoleFilter(UserRole.City)]
         public void ExportTrend(int year, string quarters)
         {
             var qs = quarters.Split(',').Select(str => (Quarter)int.Parse(str)).ToArray();

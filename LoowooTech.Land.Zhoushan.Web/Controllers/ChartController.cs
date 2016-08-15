@@ -51,7 +51,6 @@ namespace LoowooTech.Land.Zhoushan.Web.Controllers
 
         public ActionResult QuarterChart([NodeValueParameterBinder]NodeValueParameter parameter)
         {
-            parameter.Quarters = new Quarter[] { Quarter.First, Quarter.Second, Quarter.Third, Quarter.Fourth };
             parameter.Years = Core.FormManager.GetFormYears(parameter.FormID);
             ViewBag.Parameter = parameter;
             parameter.RateType = null;

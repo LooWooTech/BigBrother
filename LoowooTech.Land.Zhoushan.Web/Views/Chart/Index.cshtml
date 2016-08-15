@@ -148,7 +148,7 @@
             $("#loading").show();
             var nodeChartCompleted = false;
             var quarterChartCompleted = false;
-            var areaChartCompleted = false;
+            var areaChartCompleted = @(role == UserRole.Branch?"true":"false");
 
             function hideLoading() {
                 if (nodeChartCompleted && quarterChartCompleted && areaChartCompleted) {
@@ -167,14 +167,13 @@
                 quarterChartCompleted = true;
                 hideLoading();
             });
-            @if (role > UserRole.Branch)
+
+            if(!areaChartCompleted)
             {
-                <text>
-            $("#panel-area").load("/chart/areachart?" + data, function () {
-                areaChartCompleted = true;
-                hideLoading();
-            });
-           </text>
+                $("#panel-area").load("/chart/areachart?" + data, function () {
+                    areaChartCompleted = true;
+                    hideLoading();
+                });
             }
             return false;
         });

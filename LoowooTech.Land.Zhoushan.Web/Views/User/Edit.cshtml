@@ -1,4 +1,5 @@
-﻿@{
+﻿@using LoowooTech.Land.Zhoushan.Common
+@{
     User model = ViewBag.Model;
     var isAdd = model.ID == 0;
     ViewBag.Title = isAdd ? "添加用户" : "修改用户";
@@ -52,8 +53,8 @@
                     {
                         continue;
                     }
-                    <label class="radio-inline">
-                        <input type="radio" name="AreaID" value="@(area.ID)" @(model.Role==UserRole.Branch&&model.AreaID.HasValue&&model.AreaID.Value==area.ID?"checked=checked":"") />@(area.Name)
+                    <label class="checkbox-inline">
+                        <input type="checkbox" name="AreaIDS" value="@(area.ID)" @(model.Role==UserRole.Branch&&!string.IsNullOrEmpty(model.AreaIDS)&&StringArrayHelper.GetIntArray(model.AreaIDS).Contains(area.ID)?"checked=checked":"") />@(area.Name)
                     </label>
                 }
                 <span class="help-block">分局用户，请选择区域！</span>

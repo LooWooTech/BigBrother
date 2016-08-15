@@ -92,6 +92,19 @@ namespace LoowooTech.Land.Zhoushan.Managers
             }
         }
 
+        public void Delete(int id)
+        {
+            using (var db = GetDbContext())
+            {
+                var dossier = db.Dossiers.FirstOrDefault(e => e.ID == id);
+                if (dossier != null)
+                {
+                    db.Dossiers.Remove(dossier);
+                    db.SaveChanges();
+                }
+            }
+        }
+
         public List<Dossier> GetDossiers(DossierParameter parameter)
         {
             using (var db = GetDbContext())

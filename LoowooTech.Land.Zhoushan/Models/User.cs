@@ -24,9 +24,17 @@ namespace LoowooTech.Land.Zhoushan.Models
         public UserRole Role { get; set; }
 
         public DateTime? LastLoginTime { get; set; }
-        public int? AreaID { get; set; }
+        public string AreaIDS { get; set; }
         [NotMapped]
-        public Area Area { get; set; }
+        public List<Area> Areas { get; set; }
+        [NotMapped]
+        public string AreaNames
+        {
+            get
+            {
+                return !string.IsNullOrEmpty(AreaIDS) && Areas != null ? string.Join(",", Areas.Select(e => e.Name).ToArray()) : "/";
+            }
+        }
 
     }
 

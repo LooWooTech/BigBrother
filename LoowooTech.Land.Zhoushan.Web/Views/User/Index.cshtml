@@ -26,7 +26,7 @@
             <td>@(item.Username)</td>
             <td>@(item.Name)</td>
             <td>@(item.Role.GetDescription())</td>
-            <td>@(item.AreaID.HasValue&&item.Area!=null?item.Area.Name:"/")</td>
+            <td>@(item.AreaNames)</td>
             <td>@(item.LastLoginTime.HasValue ? item.LastLoginTime.Value.ToString() : null)</td>
             <td style="width:80px;">
                 <a href="/User/edit?id=@(item.ID)" class="btn btn-primary btn-xs" data-toggle="modal" data-target="#modal" title="编辑"><i class="fa fa-edit"></i></a>

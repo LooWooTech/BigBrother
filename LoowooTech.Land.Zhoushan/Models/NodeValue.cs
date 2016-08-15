@@ -1,4 +1,5 @@
-﻿using System;
+﻿using LoowooTech.Land.Zhoushan.Common;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -78,13 +79,7 @@ namespace LoowooTech.Land.Zhoushan.Models
         {
             get
             {
-                var val = (RawValue == 0 ? Value : RawValue) - CompareValue;
-                if (CompareValue == 0)
-                {
-                    if (val == 0) return 0;
-                    return val > 0 ? 100 : -100;
-                }
-                return val / CompareValue * 100;
+                return MathHelper.GetRateValue(RawValue, CompareValue);
             }
         }
 

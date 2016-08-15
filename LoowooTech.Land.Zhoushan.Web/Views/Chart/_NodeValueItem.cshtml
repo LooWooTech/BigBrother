@@ -14,7 +14,8 @@
         continue;
     }
     var sumValue = g.Sum(e => e.RawValue);
-    var sumRate = g.Sum(e => e.RateValue);
+    var comValue = g.Sum(e => e.CompareValue);
+    var sumRate = MathHelper.GetRateValue(sumValue, comValue);
     <div class="col-lg-3 @(rowIndex>1?"col-lg-offset-6":null)">
         <span class="node-value-type" data-value="@(sumValue)" data-type-units="@(type.Units)" data-type-ratio="@(type.Ratio)">
             <span class="value">@(sumValue.ToString("f2").TrimEnd('0').TrimEnd('.'))</span>

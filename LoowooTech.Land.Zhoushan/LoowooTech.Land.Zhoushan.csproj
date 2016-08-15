@@ -94,6 +94,7 @@
     <Compile Include="Common\ExcelHelper.cs" />
     <Compile Include="Common\ExceptionExtension.cs" />
     <Compile Include="Common\JsonExtension.cs" />
+    <Compile Include="Common\MathHelper.cs" />
     <Compile Include="Common\QueryableExtensions.cs" />
     <Compile Include="Common\ServiceFactory.cs" />
     <Compile Include="Common\TimeExtensions.cs" />

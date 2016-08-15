@@ -64,6 +64,7 @@ namespace LoowooTech.Land.Zhoushan.Managers
                     GetNode = false,
                     GetArea = false,
                     GetValueType = true,
+                    RateType = RateType.YearOnYear,
                 };
                 var values = Core.FormManager.GetNodeValues(parameter);
                 var nodes = Core.FormManager.GetRootNodes(form.ID);
@@ -109,22 +110,26 @@ namespace LoowooTech.Land.Zhoushan.Managers
             }
 
             var unit = new StringBuilder();
-            foreach (var val in vals)
+            foreach (var kv in vals.GroupBy(v => v.Type).ToDictionary(g => g.Key, g => g.ToList()))
             {
-                if (val.RawValue == 0 && val.RateValue == 0)
+                var type = kv.Key;
+                var sumVal = kv.Value.Select(e => e.RawValue).DefaultIfEmpty(0).Sum();
+                var sumComVal = kv.Value.Select(e => e.CompareValue).DefaultIfEmpty(0).Sum();
+                var rateSumVal = MathHelper.GetRateValue(sumVal, sumComVal);
+                if (sumVal == 0)
                 {
                     continue;
                 }
-                if (!node.Name.EndsWith(val.Type.Name))
+                if (!node.Name.EndsWith(type.Name))
                 {
-                    unit.Append(val.Type.Name);
+                    unit.Append(type.Name);
                 }
 
-                unit.Append(val.RawValue.ToString("f2").TrimEnd('0').TrimEnd('.'));
-                unit.Append(val.Type.Unit);
+                unit.Append(sumVal.ToString("f2").TrimEnd('0').TrimEnd('.'));
+                unit.Append(type.Unit);
                 unit.Append("，同比");
-                unit.Append(val.RateValue > 0 ? "增加" : "减少");
-                unit.Append(val.RateValue);
+                unit.Append(rateSumVal > 0 ? "增加" : "减少");
+                unit.Append(rateSumVal.ToString("f2").TrimEnd('0').TrimEnd('.'));
                 unit.Append("%；");
             }
             if (unit.Length > 0)

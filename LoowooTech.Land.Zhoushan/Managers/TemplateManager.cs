@@ -131,13 +131,15 @@ namespace LoowooTech.Land.Zhoushan.Managers
                                 if (firstParameter.Type == FieldType.Value)
                                 {
                                     values = Core.FormManager.GetNodeValues(parameter);
-                                    value = values.Select(e => e.Value).DefaultIfEmpty(0).Sum();
+                                    value = values.Select(e => e.RawValue).DefaultIfEmpty(0).Sum();
                                 }
                                 else
                                 {
                                     parameter.RateType = RateType.YearOnYear;
                                     values = Core.FormManager.GetNodeValues(parameter);
-                                    value = values.Select(e => e.RateValue).DefaultIfEmpty(0).Sum();
+                                    var sumVal = values.Select(e => e.RawValue).DefaultIfEmpty(0).Sum();
+                                    var comVal = values.Select(e => e.CompareValue).DefaultIfEmpty(0).Sum();
+                                    value = MathHelper.GetRateValue(sumVal, comVal);
                                 }
                                 double ratio = 1;
                                 if (field.HasPrameter(FieldType.Unit))

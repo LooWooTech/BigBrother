@@ -57,9 +57,9 @@
 </div>
 @if (role > UserRole.Branch)
 {
-<div id="panel-area" class="row col-lg-12">
+    <div id="panel-area" class="row col-lg-12">
 
-</div>
+    </div>
 }
 <div id="panel-quarter" class="row col-lg-12">
 
@@ -85,26 +85,20 @@
         $("#btn-type-change").click(function () {
             $(".node-value-type").each(function (k, v) {
                 var self = $(v);
-                var value = self.attr("data-value");
-                if (!value) return;
+                var value = parseFloat($(".value", self).text() || 0);
 
                 var units = self.attr("data-type-units").split(',');
                 var ratio = parseInt(self.attr("data-type-ratio"));
                 var unit = $(".unit", v).text();
-                var currentIndex = 0;
-                for (var i = 0; i < units.length; i++) {
-                    if (units[i] == unit) {
-                        currentIndex = i;
-                        break;
-                    }
+                var currentIndex =  parseInt(self.attr("data-unit-index") || 0);
+                var targetIndex = Math.abs(units.length - (currentIndex + 1));
+                console.log(targetIndex);
+                if(targetIndex != currentIndex){
+                    var targetValue = targetIndex > currentIndex ? value / ratio : value * ratio;
+                    $(".value", self).text(targetValue);
+                    $(".unit", self).text(units[targetIndex]);
+                    self.attr("data-unit-index",targetIndex);
                 }
-                var targetIndex = currentIndex + 1;
-                if (targetIndex >= units.length) {
-                    targetIndex -= units.length;
-                }
-                var targetValue = parseFloat(targetIndex == 0 ? value : (value / ratio * targetIndex));
-                $(".value", self).text(targetValue.toFixed(2));
-                $(".unit", self).text(units[targetIndex]);
             });
         });
 

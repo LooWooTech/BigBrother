@@ -2,10 +2,14 @@
     List<Area> list = ViewBag.List;
     int areaId = ViewBag.AreaID == null ? 0 : ViewBag.AreaID;
     string controlName = ViewBag.ControlName ?? "AreaId";
+    bool editValue = ViewBag.EditValue;
+    UserIdentity identity = ViewBag.CurrentIdentity;
 }
 <select name="@(controlName)" class="form-control">
-    <option value="0" @(areaId == 0 ? "checked" : null)>选择地区</option>
-    
+    @if (!editValue || identity.Role > UserRole.City)
+    {
+        <option value="0" @(areaId == 0 ? "checked" : null)>选择地区</option>
+    }
     @foreach (var item in list)
     {
         Html.RenderPartial("_AreaOption", item);

@@ -17,7 +17,7 @@
         }
         <td>
             <input type="text" class="node-value form-control input-sm col-sm-1" id="node-value-@(type.ID)" nodeId="@(model.ID)" typeId="@(type.ID)" />
-            &nbsp; @(type.Name)（@(type.Unit)）
+            &nbsp;<span class="node-value-type" data-type-units="@(type.Units)" data-type-ratio="@(type.Ratio)" data-type-name="@(type.Name)">@(type.Name)（@(type.Unit)）</span>
         </td>
     }
 </tr>

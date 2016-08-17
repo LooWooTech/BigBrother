@@ -3,6 +3,7 @@
     List<Node> root = ViewBag.Nodes;
     Season season = ViewBag.Season;
     Season nearSeason = ViewBag.NearSeason;
+    UserIdentity identity = ViewBag.CurrentIdentity;
 }
 
 @if (season != null)
@@ -21,17 +22,19 @@
     <div class="input-group">
         <span class="input-group-addon">选择条件</span>
         <div class="input-group-btn">
-            @(season!=null?Html.Partial("_YearDropdown",season.Year):Html.Partial("_YearDropdown"))
-            @(season!=null?Html.Partial("_QuarterDropdown",season.Quarter):Html.Partial("_QuarterDropdown"))
-
-            @Html.Action("Dropdown", "Area")
-            <button type="submit" class="btn btn-primary" id="btn-load"><i class="fa fa-circle-o-notch"></i> 加载已有数据</button>
+            @(season != null ? Html.Partial("_YearDropdown", season.Year) : Html.Partial("_YearDropdown"))
+            @(season != null ? Html.Partial("_QuarterDropdown", season.Quarter) : Html.Partial("_QuarterDropdown"))
+            @Html.Action("Dropdown", "Area", new { editValue = true })
+            <button type="submit" class="btn btn-default" id="btn-load"><i class="fa fa-circle-o-notch"></i> 加载已有数据</button>
         </div>
 
-        &nbsp;<button id="btn-submit" class="btn btn-success">
+        &nbsp;<button id="btn-submit" class="btn btn-primary">
             <i class="fa fa-save"></i> 保存
         </button>
-        &nbsp;<a class="btn btn-default" href="javascript:history.back()">
+        &nbsp;
+        <input type="hidden" id="type-unit-index" value="0" />
+        <a id="btn-type-change" class="btn btn-success">切换单位</a>
+        &nbsp;<a id="btn-back" class="btn btn-default" href="javascript:history.back()">
             <i class="fa fa-chevron-left"></i> 返回
         </a>
     </div>
@@ -55,7 +58,32 @@
 </table>
 <script>
     $(function () {
-        //判断当前用户权限，是否可以编辑
+        $("#btn-back").click(function () {
+            if (confirm("填写的信息尚未保存，你确定要离开吗？")) {
+                history.back();
+            }
+        });
+
+        $("#btn-type-change").click(function () {
+            $(".node-value-type").each(function () {
+                var self = $(this);
+                var units = self.attr("data-type-units").split(',');
+                var ratio = self.attr("data-type-ratio");
+                var name = self.attr("data-type-name");
+                var nodeValue = $(".node-value", self.parent()).eq(0);
+                var unitIndex = parseInt(nodeValue.attr("data-unit-index") || 0);
+
+                var targetUnitIndex = Math.abs(units.length - (unitIndex + 1));
+                if (targetUnitIndex != unitIndex) {
+                    var targetUnit = units[targetUnitIndex];
+                    self.html(name + "（" + targetUnit + "）");
+                    var val = parseFloat(nodeValue.val() || 0);
+                    var targetVal = targetUnitIndex > unitIndex ? val / ratio : val * ratio;
+                    nodeValue.val(targetVal ? targetVal : "");
+                    nodeValue.attr("data-unit-index", targetUnitIndex);
+                }
+            });
+        });
 
         $("#form-filter").submit(function () {
             $("#loading").text("正在加载").show();

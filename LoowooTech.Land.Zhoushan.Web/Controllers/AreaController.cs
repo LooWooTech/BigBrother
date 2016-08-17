@@ -24,9 +24,18 @@ namespace LoowooTech.Land.Zhoushan.Web.Controllers
             return View();
         }
 
-        public ActionResult Dropdown(int areaId = 0, string controlName = "areaId")
+        public ActionResult Dropdown(int areaId = 0, bool editValue = false, string controlName = "areaId")
         {
-            ViewBag.List = Core.AreaManager.GetAreaTree(CurrentIdentity.AreaIds);
+            if(editValue || CurrentIdentity.Role == UserRole.Branch)
+            {
+                ViewBag.List = Core.AreaManager.GetAreaTree(CurrentIdentity.AreaIds);
+            }
+            else
+            {
+                ViewBag.List = Core.AreaManager.GetAreaTree();
+            }
+            ViewBag.EditValue = editValue;
+
             ViewBag.ControlName = controlName;
             ViewBag.AreaID = areaId;
             return View();

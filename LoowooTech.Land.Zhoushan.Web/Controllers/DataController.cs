@@ -22,7 +22,7 @@ namespace LoowooTech.Land.Zhoushan.Web.Controllers
             }
             else
             {
-                ViewBag.Forms = Core.FormManager.GetForms();
+                ViewBag.Forms = Core.FormManager.GetForms(CurrentIdentity.FormIds);
             }
             return View();
         }

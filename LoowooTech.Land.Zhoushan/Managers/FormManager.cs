@@ -18,12 +18,26 @@ namespace LoowooTech.Land.Zhoushan.Managers
             }
         }
 
-        public List<Form> GetForms()
+        public List<Form> GetForms(int[] formIds=null)
         {
-            using (var db = GetDbContext())
+            if (formIds == null||formIds.Count()==0)
             {
-                return db.Forms.ToList();
+                using (var db = GetDbContext())
+                {
+                    return db.Forms.ToList();
+                }
             }
+            var list = new List<Form>();
+            foreach(var id in formIds)
+            {
+                var entry = GetForm(id);
+                if (entry != null)
+                {
+                    list.Add(entry);
+                }
+            }
+            return list;
+
         }
 
         public void SaveForm(Form model)

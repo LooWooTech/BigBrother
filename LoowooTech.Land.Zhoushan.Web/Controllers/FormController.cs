@@ -36,7 +36,7 @@ namespace LoowooTech.Land.Zhoushan.Web.Controllers
 
         public ActionResult Write()
         {
-            ViewBag.Forms = Core.FormManager.GetForms();
+            ViewBag.Forms = Core.FormManager.GetForms(CurrentIdentity.FormIds);
             return View();
         }
 

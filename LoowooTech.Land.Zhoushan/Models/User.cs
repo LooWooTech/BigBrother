@@ -25,18 +25,6 @@ namespace LoowooTech.Land.Zhoushan.Models
 
         public DateTime? LastLoginTime { get; set; }
 
-        //public bool HasAreaRight(int areaId)
-        //{
-        //    if (string.IsNullOrEmpty(AreaIdsValue))
-        //    {
-        //        return Role >= UserRole.Advanced;
-        //    }
-        //    else
-        //    {
-        //        return AreaIds.Contains(areaId);
-        //    }
-        //}
-
         [Column("AreaIds")]
         public string AreaIdsValue { get; set; }
 
@@ -56,6 +44,27 @@ namespace LoowooTech.Land.Zhoushan.Models
                 else
                 {
                     AreaIdsValue = null;
+                }
+            }
+        }
+        [Column("FormIds")]
+        public string FormIdsValue { get; set; }
+        [NotMapped]
+        public int[] FormsIds
+        {
+            get
+            {
+                return (FormIdsValue ?? string.Empty).Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries).Select(str => int.Parse(str)).ToArray();
+            }
+            set
+            {
+                if (value != null)
+                {
+                    FormIdsValue = string.Join(",", value);
+                }
+                else
+                {
+                    FormIdsValue = null;
                 }
             }
         }

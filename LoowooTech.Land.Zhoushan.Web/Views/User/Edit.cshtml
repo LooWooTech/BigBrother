@@ -13,6 +13,9 @@
         <h4 class="modal-title"><i class="glyphicon glyphicon-@(isAdd?"plus":"pencil")"></i> @(ViewBag.Title)</h4>
     </div>
     <div class="modal-body">
+        <div class="alert alert-warning" role="alert" id="user-alert" style="display:none">
+            <span>警告框</span>
+        </div>
         <div class="form-group">
             <label class="control-label col-lg-3">用户角色</label>
             <div class="col-lg-8">

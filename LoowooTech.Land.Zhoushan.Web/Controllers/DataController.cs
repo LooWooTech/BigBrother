@@ -24,16 +24,32 @@ namespace LoowooTech.Land.Zhoushan.Web.Controllers
             {
                 ViewBag.Forms = Core.FormManager.GetForms();
             }
+
+            ViewBag.Season = Core.SeasonManager.GetCurrentSeason();
+
             return View();
         }
 
         [HttpPost]
-        public ActionResult Import(int formId, int year, Quarter quarter, string filePath)
+        public ActionResult Import(int formId, int year, Quarter quarter, int areaId, string filePath)
         {
             var form = Core.FormManager.GetForm(formId);
             if (form == null)
             {
                 throw new ArgumentException("没有找到该表单");
+            }
+            var season = Core.SeasonManager.GetSeason(year, quarter);
+
+            if (CurrentIdentity.Role <= UserRole.City)
+            {
+                if (season == null || !season.Indate)
+                {
+                    throw new HttpException(401, "当前时段不能添加表单数据");
+                }
+                if (areaId == 0 || !CurrentIdentity.AreaIds.Contains(areaId))
+                {
+                    throw new HttpException(401, "无法导入指定的区域");
+                }
             }
 
             var sheet = ExcelHelper.GetSheet(Request.MapPath("/templates/" + form.GetImportTemplate() + ".xls"));
@@ -42,7 +58,7 @@ namespace LoowooTech.Land.Zhoushan.Web.Controllers
 
             var excelData = ExcelHelper.ReadData(filePath);
 
-            Core.TemplateManager.WriteExcelDataToDb(year, quarter, excelData, template);
+            Core.TemplateManager.WriteExcelDataToDb(year, quarter, areaId, excelData, template);
 
             return JsonSuccessResult();
 
@@ -98,7 +114,7 @@ namespace LoowooTech.Land.Zhoushan.Web.Controllers
                     throw new ArgumentException("请选择一个报表");
                 }
 
-                stream = Core.ExportManager.ExportFormStatistic(form, year, qs, CurrentIdentity.AreaIds);
+                stream = Core.ExportManager.ExportFormStatistic(form, year, qs, CurrentIdentity.Role == UserRole.Branch ? CurrentIdentity.AreaIds : null);
                 fileName = form.Name + "-" + year + "-" + Core.TemplateManager.GetQuartersDescription(qs) + ".xls";
             }
             Response.ContentType = "application/vnd.ms-excel;charset=UTF-8";

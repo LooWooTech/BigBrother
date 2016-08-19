@@ -2,6 +2,15 @@
     ViewBag.Title = "导入表格";
     Form form = ViewBag.Form;
     List<Form> forms = ViewBag.Forms;
+    UserIdentity user = ViewBag.CurrentIdentity;
+    Season season = ViewBag.Season;
+    if (season == null && user.Role <= UserRole.City)
+    {
+        <div class="alert">
+
+        </div>
+        return;
+    }
 }
 <form id="form-import" action="/data/import" method="post" class="form-horizontal">
     <div class="modal-header">
@@ -28,16 +37,41 @@
         {
             <input type="hidden" name="FormId" value="@(form.ID)" />
         }
-        <div class="form-group">
-            <label class="control-label col-lg-3">选择年份</label>
-            <div class="col-lg-8">
-                @Html.Partial("_YearDropdown")
+        @if (user.Role > UserRole.City)
+        {
+            <div class="form-group">
+                <label class="control-label col-lg-3">选择年份</label>
+                <div class="col-lg-8">
+                    @Html.Partial("_YearDropdown")
+                </div>
             </div>
-        </div>
+            <div class="form-group">
+                <label class="control-label col-lg-3">选择季度</label>
+                <div class="col-lg-8">
+                    @Html.Partial("_QuarterDropdown")
+                </div>
+            </div>
+        }
+        else if (season != null)
+        {
+            <input type="hidden" name="Year" value="@(season.Year)" />
+            <input type="hidden" name="Quarter" value="@(season.Quarter)" />
+        }
+        else
+        {
+            <div class="alert alert-warning">当前时段无法导入数据</div>
+            <div class="modal-footer">
+                <div class="col-lg-8 col-lg-offset-3">
+                    <button type="submit" id="" class="btn btn-primary"><i class="glyphicon glyphicon-ok"></i> 确定</button>
+                </div>
+            </div>
+            @Html.Raw("</form>");
+            return;
+        }
         <div class="form-group">
-            <label class="control-label col-lg-3">选择季度</label>
+            <label class="control-label col-lg-3">选择区域</label>
             <div class="col-lg-8">
-                @Html.Partial("_QuarterDropdown")
+                @Html.Action("Dropdown", "Area", new { editValue = true })
             </div>
         </div>
         <div class="form-group">
@@ -75,4 +109,3 @@
         });
     });
 </script>
-

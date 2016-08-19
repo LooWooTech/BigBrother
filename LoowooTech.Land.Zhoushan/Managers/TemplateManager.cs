@@ -18,7 +18,7 @@ namespace LoowooTech.Land.Zhoushan.Managers
         /// <summary>
         /// 把Template的Field中的Value数据写入数据库
         /// </summary>
-        public void WriteExcelDataToDb(int year, Quarter quarter, List<ExcelCell> data, Template template)
+        public void WriteExcelDataToDb(int year, Quarter quarter, int areaId, List<ExcelCell> data, Template template)
         {
             template.ReadData(data);
             using (var db = GetDbContext())
@@ -26,17 +26,21 @@ namespace LoowooTech.Land.Zhoushan.Managers
                 foreach (var field in template.Fields)
                 {
                     if (!field.HasPrameter(FieldType.Value)) continue;
-                    var parameter = field.GetNodeValueParameter(year, new[] { quarter });
+                    var parameter = field.GetNodeValueParameter(year, new[] { quarter }, new[] { areaId });
+                    if (parameter == null)
+                    {
+                        continue;
+                    }
                     var entity = Core.FormManager.GetNodeValues(parameter).FirstOrDefault();
                     if (entity == null)
                     {
                         entity = new NodeValue();
-                        field.SetEntity(entity, year, quarter);
+                        field.SetEntity(entity, year, quarter, areaId);
                         db.NodeValues.Add(entity);
                     }
                     else
                     {
-                        field.SetEntity(entity, year, quarter);
+                        field.SetEntity(entity, year, quarter, areaId);
                         Core.FormManager.SaveNodeValue(entity);
                     }
                     db.SaveChanges();
@@ -127,7 +131,13 @@ namespace LoowooTech.Land.Zhoushan.Managers
                             case FieldType.RateValue:
                                 double value = 0;
                                 List<NodeValue> values = null;
-                                var parameter = field.GetNodeValueParameter(year, quarters);
+                                var parameter = field.GetNodeValueParameter(year, quarters, areaIds);
+                                if (parameter == null)
+                                {
+                                    //没有权限导出该区域的数据
+                                    field.Value = 0;
+                                    break;
+                                }
                                 if (firstParameter.Type == FieldType.Value)
                                 {
                                     values = Core.FormManager.GetNodeValues(parameter);
@@ -164,7 +174,7 @@ namespace LoowooTech.Land.Zhoushan.Managers
 
     internal static class FieldExtension
     {
-        public static NodeValueParameter GetNodeValueParameter(this Field field, int year, Quarter[] quarters)
+        public static NodeValueParameter GetNodeValueParameter(this Field field, int year, Quarter[] quarters, int[] areaIds)
         {
             var result = new NodeValueParameter { GetArea = false, GetNode = true, GetValueType = false };
             foreach (var parameter in field.Parameters)
@@ -172,7 +182,12 @@ namespace LoowooTech.Land.Zhoushan.Managers
                 switch (parameter.Type)
                 {
                     case FieldType.Area:
-                        result.AreaID = parameter.Value;
+                        //如果当先用户限制了areaIds，但是并不包含模板中的该区域，则跳过此数据
+                        if (areaIds != null && !areaIds.Contains(parameter.Value))
+                        {
+                            result = null;
+                            return result;
+                        }
                         break;
                     case FieldType.Node:
                         result.NodeID = parameter.Value;
@@ -216,10 +231,14 @@ namespace LoowooTech.Land.Zhoushan.Managers
             {
                 result.Year = year;
             }
+            if (result.AreaID == 0 && areaIds != null)
+            {
+                result.AreaIds = areaIds;
+            }
             return result;
         }
 
-        public static void SetEntity(this Field field, NodeValue entity, int year = 0, Quarter quarter = 0)
+        public static void SetEntity(this Field field, NodeValue entity, int year, Quarter quarter, int areaId)
         {
             foreach (var parameter in field.Parameters)
             {
@@ -243,6 +262,8 @@ namespace LoowooTech.Land.Zhoushan.Managers
                         break;
                 }
             }
+
+            if (entity.AreaID == 0) entity.AreaID = areaId;
             if (entity.Year == 0) entity.Year = year;
             if (entity.Quarter == 0) entity.Quarter = quarter;
 

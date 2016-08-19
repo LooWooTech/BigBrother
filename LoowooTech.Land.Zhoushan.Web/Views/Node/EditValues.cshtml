@@ -9,7 +9,8 @@
 @if (season != null)
 {
     <div class="alert alert-warning" role="alert">
-        <span>@("当前系统正在填报：" + season.Description) </span>
+        当前系统正在填报：@(season.Year)年@(season.Quarter.GetDescription())数据。
+        填报时间段：@(season.StartTime.ToString("yyyy-MM-dd")) ~ @(season.EndTime.ToString("yyyy-MM-dd"))
     </div>
 }
 
@@ -20,16 +21,23 @@
 <form id="form-filter" action="/node/GetNodeValues" method="get" class="form-inline">
     <input type="hidden" name="formId" value="@(form.ID)" />
     <div class="input-group">
-        <span class="input-group-addon">选择条件</span>
         <div class="input-group-btn">
-            @(season != null ? Html.Partial("_YearDropdown", season.Year) : Html.Partial("_YearDropdown"))
-            @(season != null ? Html.Partial("_QuarterDropdown", season.Quarter) : Html.Partial("_QuarterDropdown"))
+            @if (identity.Role > UserRole.City)
+            {
+                Html.RenderPartial("_YearDropdown", season == null ? default(int?) : season.Year);
+                Html.RenderPartial("_QuarterDropdown", season == null ? default(Quarter?) : season.Quarter);
+            }
+            else
+            {
+                <input type="hidden" name="Year" value="@(season == null ? default(int?) : season.Year)" />
+                <input type="hidden" name="Quarter" value="@(season == null ? default(Quarter?) : season.Quarter)" title="@(season==null?"": season.Quarter.GetDescription())" />
+            }
             @Html.Action("Dropdown", "Area", new { editValue = true })
-            <button type="submit" class="btn btn-default" id="btn-load"><i class="fa fa-circle-o-notch"></i> 加载已有数据</button>
+            <button type="submit" class="btn btn-primary" id="btn-load"><i class="fa fa-circle-o-notch"></i> @(identity.Role > UserRole.City ? "加载数据" : "切换地区")</button>
         </div>
 
         &nbsp;<button id="btn-submit" class="btn btn-primary">
-            <i class="fa fa-save"></i> 保存
+            <i class="fa fa-save"></i> 保存数据
         </button>
         &nbsp;
         <input type="hidden" id="type-unit-index" value="0" />
@@ -64,6 +72,11 @@
             }
         });
 
+        if ($("#form-filter select[name='areaId'] option").length == 1) {
+            $("#form-filter select[name='areaId']").hide();
+            $("#btn-load").hide();
+        }
+
         $("#btn-type-change").click(function () {
             $(".node-value-type").each(function () {
                 var self = $(this);
@@ -71,7 +84,7 @@
                 var ratio = self.attr("data-type-ratio");
                 var name = self.attr("data-type-name");
                 var nodeValue = $(".node-value", self.parent()).eq(0);
-                var unitIndex = parseInt(nodeValue.attr("data-unit-index") || 0);
+                var unitIndex = parseInt(nodeValue.attr("unit-index") || 0);
 
                 var targetUnitIndex = Math.abs(units.length - (unitIndex + 1));
                 if (targetUnitIndex != unitIndex) {
@@ -80,7 +93,7 @@
                     var val = parseFloat(nodeValue.val() || 0);
                     var targetVal = targetUnitIndex > unitIndex ? val / ratio : val * ratio;
                     nodeValue.val(targetVal ? targetVal : "");
-                    nodeValue.attr("data-unit-index", targetUnitIndex);
+                    nodeValue.attr("unit-index", targetUnitIndex);
                 }
             });
         });
@@ -95,8 +108,8 @@
                     updateNodeValue(v);
                 });
             });
-            var year = $("#form-filter select[name='Year']").val();
-            var quarter = $("#form-filter select[name='Quarter']").val();
+            var year = $("#form-filter [name='Year']").val();
+            var quarter = $("#form-filter [name='Quarter']").val();
             $.request("/node/canedit?year=" + year + "&quarter=" + quarter, function (result) {
                 if (!result) {
                     $("#btn-submit").hide();
@@ -126,9 +139,12 @@
 
         $("#btn-submit").click(function () {
             var data = [];
-            var year = $("select[name='Year']").eq(0).val();
-            var quarter = $("select[name='Quarter']").eq(0).val();
-            var area = $("select[name='areaId']").eq(0).val();
+            var year = $("#form-filter [name='Year']").val();
+            var quarter = $("#form-filter [name='Quarter']").val();
+            var quarterText = $("#form-filter [name='Quarter']").attr("title") || $("select[name='Quarter'] option:selected").text();
+            var areaId = $("#form-filter select[name='areaId']").eq(0).val();
+            var areaText = areaId == 0 ? "舟山市" : $("#form-filter select[name='areaId'] option:selected").text().replace(/\s|\n|-|\r/g, "");
+
             $("#list-node-values .node-value").each(function (k, v) {
                 var control = $(v);
                 var val = control.val();
@@ -142,11 +158,16 @@
                 if (typeId == 0) {
                     return;
                 }
+                var unitIndex = parseInt(control.attr("unit-index") || 0);
+                if (unitIndex > 0) {
+                    var ratio = parseInt($(".node-value-type").attr("data-type-ratio"));
+                    val = val / Math.pow(ratio, unitIndex);
+                }
                 data.push({
                     ID: control.attr("valueId") || 0,
                     Year: year,
                     Quarter: quarter,
-                    AreaID: area,
+                    AreaID: areaId,
                     NodeID: nodeId,
                     TypeID: typeId,
                     Value: val
@@ -155,8 +176,8 @@
             });
 
             var json = JSON.stringify(data);
-            $.request("/node/SaveValues?formId=@(form.ID)&year=" + year + "&quarter=" + quarter + "&areaId=" + area, "data=" + encodeURIComponent(json), function () {
-                alert("保存成功");
+            $.request("/node/SaveValues?formId=@(form.ID)&year=" + year + "&quarter=" + quarter + "&areaId=" + areaId, "data=" + encodeURIComponent(json), function () {
+                alert(year + "年" + quarterText + areaText + "的数据保存成功");
             });
         });
     });

@@ -126,6 +126,14 @@ namespace LoowooTech.Land.Zhoushan.Web.Controllers
 
         public ActionResult SaveValues(int formId, int year, Quarter quarter, int areaId, string data)
         {
+            //判断用户是否可以保存当前年份、季度的数据
+            var season = Core.SeasonManager.GetSeason(year, quarter);
+
+            if (CurrentIdentity.Role <= UserRole.City && (season == null || !season.Indate))
+            {
+                throw new HttpException(401, "当前时段不能添加表单数据");
+            }
+
             var values = data.ToObject<List<NodeValue>>();
 
             Core.FormManager.SaveNodeValues(values);

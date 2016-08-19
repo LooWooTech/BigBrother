@@ -94,6 +94,14 @@ namespace LoowooTech.Land.Zhoushan.Managers
             }
         }
 
+        public Season GetSeason(int year, Quarter quarter)
+        {
+            using (var db = GetDbContext())
+            {
+                return db.Seasons.FirstOrDefault(e => e.Year == year && e.Quarter == quarter && !e.Delete);
+            }
+        }
+
         public Season GetCurrentSeason()
         {
             using (var db = GetDbContext())

@@ -79,8 +79,11 @@ namespace LoowooTech.Land.Zhoushan.Models
         City = 2,
         [System.ComponentModel.Description("市局高级用户")]
         Advanced = 3,
+        [System.ComponentModel.Description("数据维护用户")]
+        Maintain = 5,
         [System.ComponentModel.Description("系统管理员")]
         Administrator = 4
+    
     }
 
 }

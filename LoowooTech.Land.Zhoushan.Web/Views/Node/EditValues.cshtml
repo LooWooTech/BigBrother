@@ -32,7 +32,7 @@
                 <input type="hidden" name="Year" value="@(season == null ? default(int?) : season.Year)" />
                 <input type="hidden" name="Quarter" value="@(season == null ? default(Quarter?) : season.Quarter)" title="@(season==null?"": season.Quarter.GetDescription())" />
             }
-            @Html.Action("Dropdown", "Area", new { editValue = true })
+            @Html.Action("Dropdown", "Area", new { editValue = true,Limit=true })
             <button type="submit" class="btn btn-primary" id="btn-load"><i class="fa fa-circle-o-notch"></i> @(identity.Role > UserRole.City ? "加载数据" : "切换地区")</button>
         </div>
 

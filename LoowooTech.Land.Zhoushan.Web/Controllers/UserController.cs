@@ -91,6 +91,7 @@ namespace LoowooTech.Land.Zhoushan.Web.Controllers
         {
             ViewBag.Model = Core.UserManager.GetUser(id) ?? new User { Role = UserRole.Branch };
             ViewBag.Areas = Core.AreaManager.GetAreas();
+            ViewBag.Forms = Core.FormManager.GetForms();
             return View();
         }
 

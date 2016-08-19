@@ -26,14 +26,15 @@ namespace LoowooTech.Land.Zhoushan.Web.Controllers
 
         public ActionResult Dropdown(int areaId = 0, bool editValue = false, string controlName = "areaId")
         {
-            if(editValue || CurrentIdentity.Role == UserRole.Branch)
-            {
-                ViewBag.List = Core.AreaManager.GetAreaTree(CurrentIdentity.AreaIds);
-            }
-            else
-            {
-                ViewBag.List = Core.AreaManager.GetAreaTree();
-            }
+            //if(editValue || CurrentIdentity.Role <=UserRole.Advanced)
+            //{
+               
+            //}
+            //else
+            //{
+            //    ViewBag.List = Core.AreaManager.GetAreaTree();
+            //}
+            ViewBag.List = Core.AreaManager.GetAreaTree(CurrentIdentity.AreaIds);
             ViewBag.EditValue = editValue;
 
             ViewBag.ControlName = controlName;

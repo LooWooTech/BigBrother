@@ -68,15 +68,26 @@ namespace LoowooTech.Land.Zhoushan.Managers
         {
             if (model.Role < UserRole.Advanced)
             {
+                if (model.Role == UserRole.City)
+                {
+                    var CityArea= Core.AreaManager.GetArea(System.Configuration.ConfigurationManager.AppSettings["CITY"].ToString());
+                    model.AreaIdsValue = CityArea == null ? string.Empty : CityArea.ID.ToString();
+                }
                 if (string.IsNullOrEmpty(model.AreaIdsValue))
                 {
                     throw new ArgumentException("没有选择用户所属区域");
+                }
+                if (string.IsNullOrEmpty(model.FormIdsValue))
+                {
+                    throw new ArgumentException("没有选择用户填报类型");
                 }
             }
             else
             {
                 model.AreaIds = null;
+                model.FormsIds = null;
             }
+
 
             using (var db = GetDbContext())
             {
@@ -97,6 +108,7 @@ namespace LoowooTech.Land.Zhoushan.Managers
                         entity.Name = model.Name;
                         entity.Role = model.Role;
                         entity.AreaIdsValue = model.AreaIdsValue;
+                        entity.FormIdsValue = model.FormIdsValue;
                     }
                 }
                 else

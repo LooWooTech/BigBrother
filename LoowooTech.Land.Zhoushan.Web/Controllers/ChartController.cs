@@ -16,7 +16,7 @@ namespace LoowooTech.Land.Zhoushan.Web.Controllers
             {
                 ViewBag.Form = Core.FormManager.GetForm(parameter.FormID);
             }
-            ViewBag.Forms = Core.FormManager.GetForms();
+            ViewBag.Forms = Core.FormManager.GetForms(CurrentIdentity.FormIds);
             ViewBag.Parameter = parameter;
             return View();
         }

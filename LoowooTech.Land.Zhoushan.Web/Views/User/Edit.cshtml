@@ -4,6 +4,8 @@
     var isAdd = model.ID == 0;
     ViewBag.Title = isAdd ? "添加用户" : "修改用户";
     List<Area> Areas = ViewBag.Areas;
+    List<Form> Forms = ViewBag.Forms;
+    var cityString = System.Configuration.ConfigurationManager.AppSettings["CITY"].ToString();
 }
 <form id="form-user" action="/User/edit?id=@(model.ID)" method="post" class="form-horizontal">
     <div class="modal-header">
@@ -11,6 +13,9 @@
         <h4 class="modal-title"><i class="glyphicon glyphicon-@(isAdd?"plus":"pencil")"></i> @(ViewBag.Title)</h4>
     </div>
     <div class="modal-body">
+        <div class="alert alert-warning" role="alert" id="user-alert" style="display:none">
+            <span>警告框</span>
+        </div>
         <div class="form-group">
             <label class="control-label col-lg-3">用户角色</label>
             <div class="col-lg-8">
@@ -44,19 +49,44 @@
                 }
             </div>
         </div>
-        <div class="form-group">
-            <label for="Area" class="control-label col-lg-3">区域选择</label>
-            <div class="col-lg-8 checkbox">
-                @foreach (var area in Areas)
-                {
-                    var isChecked = model.AreaIds.Contains(area.ID);
-                    <label>
-                        <input type="checkbox" name="AreaIds" value="@(area.ID)"  @(isChecked? "checked" : "") />@(area.Name)
-                    </label>
-                }
-                <span class="help-block">分局用户，请选择区域</span>
+        <div id="Data" style="display:@(model.Role>UserRole.City?"none":"block")">
+            <div class="form-group">
+                <label for="" class="control-label col-lg-3">填报类型</label>
+                <div class="col-lg-8 checkbox">
+                    @foreach(var form in Forms)
+                    {
+                        var isChecked = model.FormsIds.Contains(form.ID);
+                        <div class="col-xs-6 col-sm-6 col-md-6">
+                            <label>
+                                <input type="checkbox" name="FormIdsValue" value="@(form.ID)" @(isChecked?"checked":"") />@(form.Name)
+                            </label>
+                        </div>
+                    }
+                </div>
             </div>
         </div>
+        <div id="Region" style="display:@(model.Role>UserRole.Branch?"none":"block")">
+            <div class="form-group">
+                <label for="Area" class="control-label col-lg-3">区域选择</label>
+                <div class="col-lg-8 checkbox">
+                    @foreach (var area in Areas)
+                    {
+                        if (area.Name == cityString)
+                        {
+                            continue;
+                        }
+                        var isChecked = model.AreaIds.Contains(area.ID);
+                        <div class="col-md-4 col-xs-4 col-sm-4">
+                            <label>
+                                <input type="checkbox" name="AreaIdsValue" value="@(area.ID)" @(isChecked ? "checked" : "") />@(area.Name)
+                            </label>
+                        </div>
+
+                    }
+                </div>
+            </div>
+        </div>
+       
     </div>
     <div class="modal-footer">
         <div class="col-lg-8 col-lg-offset-3">
@@ -66,6 +96,21 @@
 </form>
 <script>
     $(function () {
+        $("Select[name='Role']").change(function () {
+            var val = $(this).val();
+            if (val == "Branch") {
+                $("#Data").show(500);
+                $("#Region").show(500);
+            } else if (val == "City") {
+                $("#Data").show(500);
+                $("#Region").hide(500);
+            } else {
+                $("#Data").hide(500);
+                $("#Region").hide(500);
+            }
+        });
+
+
         $("#form-user").setForm(function () {
             $.closeWindow();
             $.loadMain();

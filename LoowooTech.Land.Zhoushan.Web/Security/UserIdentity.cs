@@ -34,5 +34,6 @@ namespace LoowooTech.Land.Zhoushan.Web.Security
         public string Name { get; set; }
 
         public int[] AreaIds { get; set; }
+        public int[] FormIds { get; set; }
     }
 }

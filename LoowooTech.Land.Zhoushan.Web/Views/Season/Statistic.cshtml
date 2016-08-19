@@ -11,7 +11,7 @@
         <span class="input-group-addon">选择条件</span>
         <div class="input-group-btn">
             @Html.Partial("_YearDropdown")
-            @Html.Partial("_QuarterDropdown")
+            @*@Html.Partial("_QuarterDropdown")*@
             <button type="submit" class="btn btn-primary"><i class="fa fa-bar-chart-o"></i>统计</button>
             &nbsp;<a class="btn btn-default" href="javascript:history.back()">
                 <i class="fa fa-chevron-left"></i> 返回
@@ -55,15 +55,15 @@
             var tableFlag = false;
 
             function CheckLoad() {
-                if (nodeFlag && tableFlag) {
+                if (tableFlag) {
                     $("#statistic").hide();
                 }
             }
 
-            $("#panel-node").load("/Season/NodeChart?" + data, function () {
-                nodeFlag = true;
-                CheckLoad();
-            });
+            //$("#panel-node").load("/Season/NodeChart?" + data, function () {
+            //    nodeFlag = true;
+            //    CheckLoad();
+            //});
 
             $("#panel-table").load("/Season/Table?" + data, function () {
                 tableFlag = true;

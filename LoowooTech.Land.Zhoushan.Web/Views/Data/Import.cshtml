@@ -2,13 +2,23 @@
     ViewBag.Title = "导入表格";
     Form form = ViewBag.Form;
     List<Form> forms = ViewBag.Forms;
+    Season currentSeason = ViewBag.Season;
+    Season nearSeason = ViewBag.NearSeason;
 }
+
 <form id="form-import" action="/data/import" method="post" class="form-horizontal">
     <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
         <h4 class="modal-title"><i class="fa fa-download"></i> @(ViewBag.Title)</h4>
     </div>
     <div class="modal-body">
+        @if (currentSeason != null)
+        {
+            <div class="alert alert-warning" role="alert">
+                <span>@(string.Format("当前系统正在填报：{0}", currentSeason.Description))</span>
+            </div>
+        }
+
         @if (form == null)
         {
             <div class="form-group">
@@ -31,13 +41,13 @@
         <div class="form-group">
             <label class="control-label col-lg-3">选择年份</label>
             <div class="col-lg-8">
-                @Html.Partial("_YearDropdown")
+                @(currentSeason!=null?Html.Partial("_YearDropdown",currentSeason.Year):Html.Partial("_YearDropdown"))
             </div>
         </div>
         <div class="form-group">
             <label class="control-label col-lg-3">选择季度</label>
             <div class="col-lg-8">
-                @Html.Partial("_QuarterDropdown")
+                @(currentSeason!=null?Html.Partial("_QuarterDropdown",currentSeason.Quarter):Html.Partial("_QuarterDropdown"))
             </div>
         </div>
         <div class="form-group">

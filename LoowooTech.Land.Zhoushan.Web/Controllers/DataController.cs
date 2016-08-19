@@ -24,6 +24,8 @@ namespace LoowooTech.Land.Zhoushan.Web.Controllers
             {
                 ViewBag.Forms = Core.FormManager.GetForms(CurrentIdentity.FormIds);
             }
+            ViewBag.Season = Core.SeasonManager.GetCurrentSeason();
+            ViewBag.NearSeason = Core.SeasonManager.GetNearSeason();
             return View();
         }
 

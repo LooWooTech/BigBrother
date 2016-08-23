@@ -111,6 +111,7 @@
     <Compile Include="Managers\NodeValueTypeManager.cs" />
     <Compile Include="Managers\SeasonManager.cs" />
     <Compile Include="Managers\TemplateManager.cs" />
+    <Compile Include="Managers\TrendTemplateManager.cs" />
     <Compile Include="Managers\UserManager.cs" />
     <Compile Include="Models\Area.cs" />
     <Compile Include="Models\DataContext.cs" />
@@ -126,6 +127,7 @@
     <Compile Include="Models\PageParameter.cs" />
     <Compile Include="Models\Season.cs" />
     <Compile Include="Models\Template.cs" />
+    <Compile Include="Models\TrendTemplate.cs" />
     <Compile Include="Models\User.cs" />
     <Compile Include="Models\UserParameter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

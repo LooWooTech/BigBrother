@@ -30,17 +30,20 @@ namespace LoowooTech.Land.Zhoushan.Models
         /// 从Excel里读取记录
         /// </summary>
         /// <param name="list"></param>
-        public void ReadData(List<ExcelCell> list)
+        public bool TryReadData(List<ExcelCell> list)
         {
+            var count = 0;
             foreach (var field in Fields)
             {
                 field.Value = null;
                 var cell = list.FirstOrDefault(e => e.Row == field.Cell.Row && e.Column == field.Cell.Column);
                 if (cell != null)
                 {
+                    count++;
                     field.Value = cell.Value;
                 }
             }
+            return count > 0;
         }
 
         public void WriteData(List<ExcelCell> list)

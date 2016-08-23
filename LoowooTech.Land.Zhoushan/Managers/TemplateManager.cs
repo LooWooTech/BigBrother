@@ -18,9 +18,8 @@ namespace LoowooTech.Land.Zhoushan.Managers
         /// <summary>
         /// 把Template的Field中的Value数据写入数据库
         /// </summary>
-        public void WriteExcelDataToDb(int year, Quarter quarter, int areaId, List<ExcelCell> data, Template template)
+        public void WriteExcelDataToDb(int year, Quarter quarter, int areaId, Template template)
         {
-            template.ReadData(data);
             using (var db = GetDbContext())
             {
                 foreach (var field in template.Fields)

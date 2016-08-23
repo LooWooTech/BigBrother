@@ -54,6 +54,11 @@
                     <ul class="dropdown-menu" role="menu">
                         <li><a href="/data/exportstatistic" data-toggle="modal" data-target="#modal">统计报表</a></li>
                         <li><a href="/data/exporttrend" data-toggle="modal" data-target="#modal">国土资源形势</a></li>
+                        @if (role >= UserRole.Advanced)
+                        {
+                            <li class="divider"></li>
+                            <li><a href="/trendtemplate/">资源形势Excel模板</a></li>
+                        }
                     </ul>
                 </li>
                 }

@@ -2118,3 +2118,23 @@ INSERT INTO `value_type` (`ID`, `Name`, `Units`, `Ratio`) VALUES
 /*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;
 /*!40014 SET FOREIGN_KEY_CHECKS=IF(@OLD_FOREIGN_KEY_CHECKS IS NULL, 1, @OLD_FOREIGN_KEY_CHECKS) */;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+
+
+
+-- 导出  表 zhoushanland.trend_template 结构
+DROP TABLE IF EXISTS `trend_template`;
+CREATE TABLE IF NOT EXISTS `trend_template` (
+  `ID` int(11) NOT NULL AUTO_INCREMENT,
+  `Name` varchar(50) NOT NULL,
+  `FilePath` varchar(50) NOT NULL,
+  PRIMARY KEY (`ID`)
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
+
+-- 正在导出表  zhoushanland.trend_template 的数据：~0 rows (大约)
+/*!40000 ALTER TABLE `trend_template` DISABLE KEYS */;
+INSERT INTO `trend_template` (`ID`, `Name`, `FilePath`) VALUES
+	(1, '建设用地预审.xls', '建设用地预审.xls'),
+	(2, '各土地应用变化.xls', '各土地应用变化.xls'),
+	(3, '信访情况.xls', '信访情况.xls');
+/*!40000 ALTER TABLE `trend_template` ENABLE KEYS */;
+

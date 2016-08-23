@@ -167,6 +167,7 @@
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\NodeController.cs" />
     <Compile Include="Controllers\SeasonController.cs" />
+    <Compile Include="Controllers\TrendTemplateController.cs" />
     <Compile Include="Controllers\UserController.cs" />
     <Compile Include="Controllers\ValueTypeController.cs" />
     <Compile Include="Global.asax.cs">
@@ -244,6 +245,8 @@
     <Content Include="templates\土地征收.xls" />
     <Content Include="templates\土地登记.xls" />
     <Content Include="templates\国土资源违法案件.xls" />
+    <Content Include="Views\TrendTemplate\Index.cshtml" />
+    <Content Include="Views\TrendTemplate\Edit.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

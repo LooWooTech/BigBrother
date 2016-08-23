@@ -58,7 +58,12 @@ namespace LoowooTech.Land.Zhoushan.Web.Controllers
 
             var excelData = ExcelHelper.ReadData(filePath);
 
-            Core.TemplateManager.WriteExcelDataToDb(year, quarter, areaId, excelData, template);
+            if (!template.TryReadData(excelData))
+            {
+                throw new ArgumentException("请选择格式正确的excel数据文件");
+            }
+
+            Core.TemplateManager.WriteExcelDataToDb(year, quarter, areaId, template);
 
             return JsonSuccessResult();
 
@@ -126,21 +131,23 @@ namespace LoowooTech.Land.Zhoushan.Web.Controllers
         [HttpGet]
         public ActionResult ExportTrend()
         {
+            ViewBag.Templates = Core.TrendTemplateManager.GetList();
             return View();
         }
 
         [HttpPost]
         [UserRoleFilter(UserRole.City)]
-        public void ExportTrend(int year, string quarters)
+        public void ExportTrend(int year, string quarters, int[] templateIds)
         {
             var qs = quarters.Split(',').Select(str => (Quarter)int.Parse(str)).ToArray();
             var name = year + "年" + Core.TemplateManager.GetQuartersDescription(qs) + "国土资源形势";
+            if (templateIds == null || templateIds.Length == 0)
+            {
+                throw new ArgumentException("没有选择导出的模板");
+            }
 
             //导出word
             var docStream = Core.ExportManager.ExportTrend(year, qs);
-
-            //导出excel（word的配图）
-            var excelStream = Core.ExportManager.ExportTrendCharts(year, qs, CurrentIdentity.AreaIds);
 
             using (var ms = new MemoryStream())
             {
@@ -152,11 +159,21 @@ namespace LoowooTech.Land.Zhoushan.Web.Controllers
                         sw.Write(((MemoryStream)docStream).GetBuffer(), 0, (int)docStream.Length);
                     }
 
-                    var excel = zip.CreateEntry(name + "-图表.xlsx");
-                    using (var sw = excel.Open())
+                    foreach (var templateId in templateIds)
                     {
-                        sw.Write(((MemoryStream)excelStream).GetBuffer(), 0, (int)excelStream.Length);
+                        var trendTemplate = Core.TrendTemplateManager.GetModel(templateId);
+                        //导出excel（word的配图）
+                        var templatePath = Path.Combine(Request.MapPath("/TrendTemplates/"), trendTemplate.FilePath);
+                        var excelStream = Core.ExportManager.ExportTrendCharts(templatePath, year, qs, CurrentIdentity.AreaIds);
+                        var excelName = Path.GetFileName(trendTemplate.FilePath);
+                        var excel = zip.CreateEntry(name + "-" + excelName);
+                        using (var sw = excel.Open())
+                        {
+                            sw.Write(((MemoryStream)excelStream).GetBuffer(), 0, (int)excelStream.Length);
+                        }
+
                     }
+
                 }
                 Response.ContentType = "application/zip";
                 Response.AddHeader("Content-Disposition", string.Format("attachment;filename={0}", HttpUtility.UrlEncode(name + ".zip")));

@@ -86,17 +86,12 @@ namespace LoowooTech.Land.Zhoushan.Managers
             return doc.GetStream();
         }
 
-        public Stream ExportTrendCharts(int year, Quarter[] quarters, int[] areaIds)
+        public Stream ExportTrendCharts(string templatePath, int year, Quarter[] quarters, int[] areaIds)
         {
-            var templatePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "templates", "资源形势图表模板.xlsx");
             var sheet = ExcelHelper.GetSheet(templatePath);
-            for (var i = 0; i < sheet.Workbook.NumberOfSheets; i++)
-            {
-                sheet = sheet.Workbook.GetSheetAt(i);
-                var template = new Template(sheet);
-                var data = Core.TemplateManager.WriteDbDataToExcel(null, year, quarters, areaIds, template);
-                sheet.WriteData(data);
-            }
+            var template = new Template(sheet);
+            var data = Core.TemplateManager.WriteDbDataToExcel(null, year, quarters, areaIds, template);
+            sheet.WriteData(data);
             return GetExcelStream(sheet.Workbook);
         }
 

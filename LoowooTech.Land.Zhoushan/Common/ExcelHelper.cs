@@ -162,9 +162,14 @@ namespace LoowooTech.Land.Zhoushan.Common
             {
                 var row = sheet.GetRow(item.Row);
                 var cell = row.GetCell(item.Column);
-                if (item.Value is double || item.Value is int)
+                if (item.Value is double)
                 {
                     cell.SetCellValue((double)item.Value);
+                    cell.SetCellType(CellType.Numeric);
+                }
+                else if (item.Value is int)
+                {
+                    cell.SetCellValue((int)item.Value);
                     cell.SetCellType(CellType.Numeric);
                 }
                 else

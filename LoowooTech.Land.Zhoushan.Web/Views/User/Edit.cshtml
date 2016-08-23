@@ -20,10 +20,14 @@
             <label class="control-label col-lg-3">用户角色</label>
             <div class="col-lg-8">
                 <select name="Role" class="form-control">
-                    <option value="@(UserRole.Branch)" @(model.Role == UserRole.Branch ? "selected" : null)>@(UserRole.Branch.GetDescription())</option>
+                    @foreach(UserRole role in Enum.GetValues(typeof(UserRole)))
+                    {
+                        <option value="@(role)" @(model.Role==role?"selected":"")>@(role.GetDescription())</option>
+                    }
+                    @*<option value="@(UserRole.Branch)" @(model.Role == UserRole.Branch ? "selected" : null)>@(UserRole.Branch.GetDescription())</option>
                     <option value="@(UserRole.City)" @(model.Role == UserRole.City ? "selected" : null)>@(UserRole.City.GetDescription())</option>
                     <option value="@(UserRole.Advanced)" @(model.Role == UserRole.Advanced ? "selected" : null)>@(UserRole.Advanced.GetDescription())</option>
-                    <option value="@(UserRole.Administrator)" @(model.Role == UserRole.Administrator ? "selected" : null)>@(UserRole.Administrator.GetDescription())</option>
+                    <option value="@(UserRole.Administrator)" @(model.Role == UserRole.Administrator ? "selected" : null)>@(UserRole.Administrator.GetDescription())</option>*@
                 </select>
             </div>
         </div>
@@ -49,7 +53,7 @@
                 }
             </div>
         </div>
-        <div id="Data" style="display:@(model.Role>UserRole.City?"none":"block")">
+        <div id="Data" style="display:@(model.Role>UserRole.Advanced?"none":"block")">
             <div class="form-group">
                 <label for="" class="control-label col-lg-3">填报类型</label>
                 <div class="col-lg-8 checkbox">
@@ -101,10 +105,11 @@
             if (val == "Branch") {
                 $("#Data").show(500);
                 $("#Region").show(500);
-            } else if (val == "City") {
+            } else if (val == "City" || val == "Advanced") {
                 $("#Data").show(500);
                 $("#Region").hide(500);
-            } else {
+            }
+            else {
                 $("#Data").hide(500);
                 $("#Region").hide(500);
             }

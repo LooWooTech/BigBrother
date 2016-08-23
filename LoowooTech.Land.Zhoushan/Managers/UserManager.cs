@@ -66,9 +66,9 @@ namespace LoowooTech.Land.Zhoushan.Managers
 
         public void Save(User model)
         {
-            if (model.Role < UserRole.Advanced)
+            if (model.Role <= UserRole.Advanced)
             {
-                if (model.Role == UserRole.City)
+                if (model.Role == UserRole.City||model.Role==UserRole.Advanced)
                 {
                     var CityArea= Core.AreaManager.GetArea(System.Configuration.ConfigurationManager.AppSettings["CITY"].ToString());
                     model.AreaIdsValue = CityArea == null ? string.Empty : CityArea.ID.ToString();

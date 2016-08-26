@@ -129,7 +129,7 @@ namespace LoowooTech.Land.Zhoushan.Web.Controllers
             //判断用户是否可以保存当前年份、季度的数据
             var season = Core.SeasonManager.GetSeason(year, quarter);
 
-            if (CurrentIdentity.Role <= UserRole.City && (season == null || !season.Indate))
+            if (CurrentIdentity.Role <= UserRole.Advanced && (season == null || !season.Indate))
             {
                 throw new HttpException(401, "当前时段不能添加表单数据");
             }
@@ -143,7 +143,7 @@ namespace LoowooTech.Land.Zhoushan.Web.Controllers
 
         public ActionResult GetNodeValues([NodeValueParameterBinder]NodeValueParameter parameter)
         {
-            if (CurrentIdentity.Role == UserRole.City && parameter.AreaID == 0)
+            if (CurrentIdentity.Role == UserRole.Advanced && parameter.AreaID == 0)
             {
                 parameter.AreaID = CurrentIdentity.AreaIds.FirstOrDefault();
             }

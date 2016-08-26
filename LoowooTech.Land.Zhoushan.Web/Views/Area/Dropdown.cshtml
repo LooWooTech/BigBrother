@@ -6,7 +6,7 @@
     UserIdentity identity = ViewBag.CurrentIdentity;
 }
 <select name="@(controlName)" class="form-control">
-    @if (!editValue || identity.Role > UserRole.City)
+    @if (!editValue || identity.Role > UserRole.Advanced)
     {
         <option value="0" @(areaId == 0 ? "checked" : null)>选择地区</option>
     }

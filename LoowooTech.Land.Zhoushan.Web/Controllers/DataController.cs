@@ -40,7 +40,7 @@ namespace LoowooTech.Land.Zhoushan.Web.Controllers
             }
             var season = Core.SeasonManager.GetSeason(year, quarter);
 
-            if (CurrentIdentity.Role <= UserRole.City)
+            if (CurrentIdentity.Role <= UserRole.Advanced)
             {
                 if (season == null || !season.Indate)
                 {

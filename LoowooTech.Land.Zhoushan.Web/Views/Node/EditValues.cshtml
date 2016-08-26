@@ -6,11 +6,14 @@
     UserIdentity identity = ViewBag.CurrentIdentity;
 }
 
-@if (season != null)
+@if (identity.Role <= UserRole.Advanced && season != null)
 {
     <div class="alert alert-warning" role="alert">
         当前系统正在填报：@(season.Year)年@(season.Quarter.GetDescription())数据。
         填报时间段：@(season.StartTime.ToString("yyyy-MM-dd")) ~ @(season.EndTime.ToString("yyyy-MM-dd"))
+        <button id="btn-submit" class="btn btn-primary">
+            <i class="fa fa-save"></i> 保存数据
+        </button>
     </div>
 }
 
@@ -22,7 +25,7 @@
     <input type="hidden" name="formId" value="@(form.ID)" />
     <div class="input-group">
         <div class="input-group-btn">
-            @if (identity.Role > UserRole.City)
+            @if (identity.Role > UserRole.Advanced)
             {
                 Html.RenderPartial("_YearDropdown", season == null ? default(int?) : season.Year);
                 Html.RenderPartial("_QuarterDropdown", season == null ? default(Quarter?) : season.Quarter);
@@ -34,11 +37,13 @@
             }
             @Html.Action("Dropdown", "Area", new { editValue = true,Limit=true })
             <button type="submit" class="btn btn-primary" id="btn-load"><i class="fa fa-circle-o-notch"></i> @(identity.Role > UserRole.City ? "加载数据" : "切换地区")</button>
-        </div>
-
-        &nbsp;<button id="btn-submit" class="btn btn-primary">
+        </div>&nbsp;
+        @if (identity.Role > UserRole.Advanced)
+        {
+            <button id="btn-submit" class="btn btn-primary">
             <i class="fa fa-save"></i> 保存数据
-        </button>
+            </button>
+        }
         &nbsp;
         <input type="hidden" id="type-unit-index" value="0" />
         <a id="btn-type-change" class="btn btn-success">切换单位</a>

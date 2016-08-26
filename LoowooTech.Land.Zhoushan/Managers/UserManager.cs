@@ -68,10 +68,10 @@ namespace LoowooTech.Land.Zhoushan.Managers
         {
             if (model.Role <= UserRole.Advanced)
             {
-                if (model.Role == UserRole.City||model.Role==UserRole.Advanced)
+                if (model.Role != UserRole.Branch)
                 {
-                    var CityArea= Core.AreaManager.GetArea(System.Configuration.ConfigurationManager.AppSettings["CITY"].ToString());
-                    model.AreaIdsValue = CityArea == null ? string.Empty : CityArea.ID.ToString();
+                    var cityArea = Core.AreaManager.GetArea(System.Configuration.ConfigurationManager.AppSettings["CITY"].ToString());
+                    model.AreaIdsValue = cityArea == null ? string.Empty : cityArea.ID.ToString();
                 }
                 if (string.IsNullOrEmpty(model.AreaIdsValue))
                 {

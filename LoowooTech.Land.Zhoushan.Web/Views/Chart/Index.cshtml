@@ -92,10 +92,10 @@
                 var unit = $(".unit", v).text();
                 var currentIndex =  parseInt(self.attr("data-unit-index") || 0);
                 var targetIndex = Math.abs(units.length - (currentIndex + 1));
-                console.log(targetIndex);
+
                 if(targetIndex != currentIndex){
                     var targetValue = targetIndex > currentIndex ? value / ratio : value * ratio;
-                    $(".value", self).text(targetValue);
+                    $(".value", self).text(targetValue.toFixed(2));
                     $(".unit", self).text(units[targetIndex]);
                     self.attr("data-unit-index",targetIndex);
                 }

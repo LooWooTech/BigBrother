@@ -54,6 +54,7 @@ namespace LoowooTech.Land.Zhoushan.Web.Controllers
             parameter.Years = Core.FormManager.GetFormYears(parameter.FormID);
             ViewBag.Parameter = parameter;
             parameter.RateType = null;
+            parameter.Quarter = 0;
             if (parameter.NodeID > 0)
             {
                 var node = Core.FormManager.GetNode(parameter.NodeID);

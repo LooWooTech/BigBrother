@@ -101,9 +101,9 @@ namespace LoowooTech.Land.Zhoushan.Web.Controllers
             return View();
         }
 
-        public ActionResult CanEdit(int year, Quarter quarter)
+        public ActionResult CanEdit(int? year, Quarter? quarter)
         {
-            var result = CurrentIdentity.Role >= UserRole.Advanced || Core.SeasonManager.Exist(year, quarter);
+            var result = CurrentIdentity.Role > UserRole.Advanced || (year.HasValue && quarter.HasValue && Core.SeasonManager.Exist(year.Value, quarter.Value));
             return Content(result ? "1" : "0");
         }
 
@@ -120,7 +120,6 @@ namespace LoowooTech.Land.Zhoushan.Web.Controllers
             ViewBag.Nodes = Core.FormManager.GetNodeRoots(formId);
             ViewBag.ValueTypes = Core.FormManager.GetNodeValueTypes();
             ViewBag.Season = Core.SeasonManager.GetCurrentSeason();
-            ViewBag.NearSeason = Core.SeasonManager.GetNearSeason();
             return View();
         }
 

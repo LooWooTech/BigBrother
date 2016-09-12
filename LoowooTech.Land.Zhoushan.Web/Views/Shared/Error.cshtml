@@ -1,6 +1,10 @@
 ﻿@{
-    Layout = null;
+    Layout = "~/Views/Shared/_Layout.cshtml";
     Exception ex = ViewBag.Exception;
 }
-<h3>@(ex.Message)</h3>
+<div class="alert alert-warning">
+    <h3>@(ex.Message)</h3>
+</div>
+<!--
 @Html.Raw(ex.StackTrace.Replace("\n", "<br />"))
+    -->

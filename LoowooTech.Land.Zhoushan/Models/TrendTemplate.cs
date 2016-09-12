@@ -15,6 +15,8 @@ namespace LoowooTech.Land.Zhoushan.Models
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int ID { get; set; }
 
+        public int FormID { get; set; }
+
         public string Name { get; set; }
 
         public string FilePath { get; set; }

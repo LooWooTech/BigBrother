@@ -7,6 +7,7 @@ using System.Web.Mvc;
 
 namespace LoowooTech.Land.Zhoushan.Web.Controllers
 {
+    [UserRoleFilter(UserRole.Maintain)]
     public class ValueTypeController : ControllerBase
     {
         public ActionResult Index()
@@ -15,7 +16,6 @@ namespace LoowooTech.Land.Zhoushan.Web.Controllers
             return View();
         }
 
-        [UserRoleFilter(UserRole.Branch)]
         [HttpGet]
         public ActionResult Edit(int id = 0)
         {
@@ -23,7 +23,6 @@ namespace LoowooTech.Land.Zhoushan.Web.Controllers
             return View();
         }
 
-        [UserRoleFilter(UserRole.Branch)]
         [HttpPost]
         public ActionResult Edit(NodeValueType model)
         {
@@ -31,7 +30,6 @@ namespace LoowooTech.Land.Zhoushan.Web.Controllers
             return JsonSuccessResult();
         }
 
-        [UserRoleFilter(UserRole.Branch)]
         public ActionResult Delete(int id)
         {
             Core.FormManager.DeleteNodeValueType(id);

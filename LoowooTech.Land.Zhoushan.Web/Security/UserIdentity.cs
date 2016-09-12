@@ -33,7 +33,44 @@ namespace LoowooTech.Land.Zhoushan.Web.Security
 
         public string Name { get; set; }
 
-        public int[] AreaIds { get; set; }
-        public int[] FormIds { get; set; }
+        private int[] _areaIds;
+
+        public int[] AreaIds
+        {
+            get
+            {
+                if (_areaIds == null || _areaIds.Length == 0)
+                {
+                    return Role > UserRole.Advanced ? null : _areaIds;
+                }
+                return _areaIds;
+            }
+            set
+            {
+                _areaIds = value;
+            }
+        }
+
+        public int[] ReadAreaIds
+        {
+            get
+            {
+                if (Role >= UserRole.Advanced)
+                {
+                    return null;
+                }
+                return AreaIds;
+            }
+        }
+
+        private int[] _formIds;
+        public int[] FormIds
+        {
+            get
+            {
+                return Role >= UserRole.Maintain ? null : _formIds;
+            }
+            set { _formIds = value; }
+        }
     }
 }

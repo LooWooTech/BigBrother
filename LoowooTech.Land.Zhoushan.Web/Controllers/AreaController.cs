@@ -7,6 +7,7 @@ using System.Web.Mvc;
 
 namespace LoowooTech.Land.Zhoushan.Web.Controllers
 {
+    [UserRoleFilter(UserRole.Maintain)]
     public class AreaController : ControllerBase
     {
         public ActionResult Index()
@@ -15,7 +16,6 @@ namespace LoowooTech.Land.Zhoushan.Web.Controllers
             return View();
         }
 
-        [UserRoleFilter(UserRole.Advanced)]
         [HttpGet]
         public ActionResult Edit(int id = 0)
         {
@@ -24,9 +24,10 @@ namespace LoowooTech.Land.Zhoushan.Web.Controllers
             return View();
         }
 
-        public ActionResult Dropdown(int areaId = 0, bool editValue = false, string controlName = "areaId",bool Limit=false)
+        [UserRoleFilter(UserRole.Branch)]
+        public ActionResult Dropdown(int areaId = 0, bool editValue = false, string controlName = "areaId")
         {
-            ViewBag.List = Core.AreaManager.GetAreaTree(Limit ? CurrentIdentity.AreaIds : (CurrentIdentity.Role == UserRole.Advanced ? null : CurrentIdentity.AreaIds));
+            ViewBag.List = Core.AreaManager.GetAreaTree(editValue ? CurrentIdentity.ReadAreaIds : CurrentIdentity.AreaIds);
             ViewBag.EditValue = editValue;
 
             ViewBag.ControlName = controlName;
@@ -34,7 +35,6 @@ namespace LoowooTech.Land.Zhoushan.Web.Controllers
             return View();
         }
 
-        [UserRoleFilter(UserRole.Advanced)]
         [HttpPost]
         public ActionResult Edit(Area model)
         {

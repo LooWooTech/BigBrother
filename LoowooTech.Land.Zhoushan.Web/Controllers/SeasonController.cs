@@ -8,7 +8,7 @@ using System.Web.Mvc;
 
 namespace LoowooTech.Land.Zhoushan.Web.Controllers
 {
-    [UserRoleFilter(Models.UserRole.Administrator)]
+    [UserRoleFilter(UserRole.Maintain)]
     public class SeasonController : ControllerBase
     {
         // GET: Season

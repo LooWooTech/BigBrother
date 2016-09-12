@@ -18,26 +18,17 @@ namespace LoowooTech.Land.Zhoushan.Managers
             }
         }
 
-        public List<Form> GetForms(int[] formIds=null)
+        public List<Form> GetForms(int[] formIds = null)
         {
-            if (formIds == null||formIds.Count()==0)
+            using (var db = GetDbContext())
             {
-                using (var db = GetDbContext())
+                var query = db.Forms.AsQueryable();
+                if (formIds != null && formIds.Length > 0)
                 {
-                    return db.Forms.ToList();
+                    query = query.Where(e => formIds.Contains(e.ID));
                 }
+                return query.ToList();
             }
-            var list = new List<Form>();
-            foreach(var id in formIds)
-            {
-                var entry = GetForm(id);
-                if (entry != null)
-                {
-                    list.Add(entry);
-                }
-            }
-            return list;
-
         }
 
         public void SaveForm(Form model)

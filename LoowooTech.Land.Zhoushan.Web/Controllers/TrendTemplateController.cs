@@ -21,6 +21,7 @@ namespace LoowooTech.Land.Zhoushan.Web.Controllers
         [HttpGet]
         public ActionResult Edit(int id = 0)
         {
+            ViewBag.Forms = Core.FormManager.GetForms(CurrentIdentity.FormIds);
             ViewBag.Model = Core.TrendTemplateManager.GetModel(id) ?? new TrendTemplate();
             return View();
         }
@@ -30,7 +31,11 @@ namespace LoowooTech.Land.Zhoushan.Web.Controllers
         {
             if (string.IsNullOrEmpty(data.Name) || string.IsNullOrEmpty(data.FilePath))
             {
-                throw new ArgumentException("参数错误");
+                throw new ArgumentException("没有上传模板文件");
+            }
+            if (data.FormID == 0)
+            {
+                throw new Exception("请选择表单");
             }
             Core.TrendTemplateManager.Save(data);
         }

@@ -50,11 +50,11 @@ namespace LoowooTech.Land.Zhoushan.Managers
             return GetExcelStream(excel);
         }
 
-        public Stream ExportTrend(int year, Quarter[] quarters)
+        public Stream ExportTrend(int year, Quarter[] quarters, int[] formIds)
         {
             var doc = WordHelper.CreateDoc("templates/资源形势模板.docx");
             doc.WriteTitle(year + "年" + Core.TemplateManager.GetQuartersDescription(quarters) + "国土资源主要指标走势", "2");
-            foreach (var form in Core.FormManager.GetForms())
+            foreach (var form in Core.FormManager.GetForms(formIds))
             {
                 var parameter = new NodeValueParameter
                 {

@@ -7,6 +7,7 @@ using System.Web.Mvc;
 
 namespace LoowooTech.Land.Zhoushan.Web.Controllers
 {
+    [UserRoleFilter(UserRole.Maintain)]
     public class FormController : ControllerBase
     {
         public ActionResult Index()
@@ -15,12 +16,14 @@ namespace LoowooTech.Land.Zhoushan.Web.Controllers
             return View();
         }
 
+        [UserRoleFilter(UserRole.Branch)]
         public ActionResult GetYears(int formId)
         {
             var list = Core.FormManager.GetFormYears(formId);
             return JsonSuccessResult(list);
         }
 
+        [UserRoleFilter(UserRole.Branch)]
         public ActionResult Charts()
         {
             var data = new Dictionary<Form, int[]>();
@@ -40,7 +43,6 @@ namespace LoowooTech.Land.Zhoushan.Web.Controllers
             return View();
         }
 
-        [UserRoleFilter(UserRole.Branch)]
         [HttpGet]
         public ActionResult Edit(int id = 0)
         {
@@ -49,7 +51,6 @@ namespace LoowooTech.Land.Zhoushan.Web.Controllers
             return View();
         }
 
-        [UserRoleFilter(UserRole.Advanced)]
         [HttpPost]
         public ActionResult Edit(Form form)
         {

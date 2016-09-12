@@ -131,7 +131,7 @@ namespace LoowooTech.Land.Zhoushan.Web.Controllers
         [HttpGet]
         public ActionResult ExportTrend()
         {
-            ViewBag.Templates = Core.TrendTemplateManager.GetList();
+            ViewBag.Templates = Core.TrendTemplateManager.GetList(CurrentIdentity.FormIds);
             return View();
         }
 
@@ -143,11 +143,12 @@ namespace LoowooTech.Land.Zhoushan.Web.Controllers
             var name = year + "年" + Core.TemplateManager.GetQuartersDescription(qs) + "国土资源形势";
             if (templateIds == null || templateIds.Length == 0)
             {
-                throw new ArgumentException("没有选择导出的模板");
+                throw new ArgumentException("请选择导出模板");
+                templateIds = Core.TrendTemplateManager.GetList().Select(e => e.ID).ToArray();
             }
 
             //导出word
-            var docStream = Core.ExportManager.ExportTrend(year, qs);
+            var docStream = Core.ExportManager.ExportTrend(year, qs, CurrentIdentity.FormIds);
 
             using (var ms = new MemoryStream())
             {

@@ -1,5 +1,5 @@
-﻿@using LoowooTech.Land.Zhoushan.Common
-@{
+﻿@{
+    List<Form> forms = ViewBag.Forms;
     TrendTemplate model = ViewBag.Model;
     ViewBag.Title = model.ID > 0 ? "编辑形势模板" : "添加形势模板";
 }
@@ -24,6 +24,18 @@
             <label class="control-label col-lg-3">模板名称</label>
             <div class="col-lg-8">
                 <input type="text" name="Name" class="form-control" value="@(model.Name)" id="control-name" />
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="control-label col-lg-3">所属表单</label>
+            <div class="col-lg-8">
+                <select class="form-control" name="formId">
+                    <option value="0">选择表单</option>
+                    @foreach (var item in forms)
+                    {
+                        <option value="@(item.ID)" @(item.ID == model.FormID ? "selected" : null)>@(item.Name)</option>
+                    }
+                </select>
             </div>
         </div>
     </div>

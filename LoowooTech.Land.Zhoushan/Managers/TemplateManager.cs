@@ -187,6 +187,10 @@ namespace LoowooTech.Land.Zhoushan.Managers
                             result = null;
                             return result;
                         }
+                        else
+                        {
+                            result.AreaID = parameter.Value;
+                        }
                         break;
                     case FieldType.Node:
                         result.NodeID = parameter.Value;

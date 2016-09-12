@@ -4,7 +4,7 @@
         Layout = "~/Views/Shared/_Layout.cshtml";
     }
     ViewBag.Title = "欢迎页";
-    UserRole role = ((LoowooTech.Land.Zhoushan.Web.Security.UserIdentity)ViewBag.CurrentIdentity).Role;
+    UserRole role = ((UserIdentity)ViewBag.CurrentIdentity).Role;
 }
 <h3 class="page-header">欢迎页</h3>
 <div class="col-lg-6">
@@ -35,7 +35,7 @@
     </blockquote>
 </div>
 }
-@if (role >= UserRole.Advanced)
+@if (role > UserRole.Advanced)
 {
     <div class="col-lg-6">
         <blockquote>

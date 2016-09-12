@@ -9,11 +9,16 @@ namespace LoowooTech.Land.Zhoushan.Managers
 {
     public class TrendTemplateManager : ManagerBase
     {
-        public List<TrendTemplate> GetList()
+        public List<TrendTemplate> GetList(int[] formIds = null)
         {
             using (var db = GetDbContext())
             {
-                return db.TrendTemplates.OrderByDescending(e => e.ID).ToList();
+                var query = db.TrendTemplates.AsQueryable();
+                if (formIds != null)
+                {
+                    query = query.Where(e => formIds.Contains(e.FormID));
+                }
+                return query.OrderByDescending(e => e.ID).ToList();
             }
         }
 
@@ -35,6 +40,7 @@ namespace LoowooTech.Land.Zhoushan.Managers
                     var entity = db.TrendTemplates.FirstOrDefault(e => e.ID == model.ID);
                     entity.Name = model.Name;
                     entity.FilePath = model.FilePath;
+                    entity.FormID = model.FormID;
                 }
                 else
                 {
@@ -48,7 +54,7 @@ namespace LoowooTech.Land.Zhoushan.Managers
         {
             using (var db = GetDbContext())
             {
-                var entity =  db.TrendTemplates.FirstOrDefault(e => e.ID == id);
+                var entity = db.TrendTemplates.FirstOrDefault(e => e.ID == id);
                 db.TrendTemplates.Remove(entity);
 
                 db.SaveChanges();

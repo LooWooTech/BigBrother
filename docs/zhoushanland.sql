@@ -232,7 +232,7 @@ CREATE TABLE IF NOT EXISTS `node_value` (
   KEY `NodeID` (`NodeID`)
 ) ENGINE=InnoDB AUTO_INCREMENT=719 DEFAULT CHARSET=utf8;
 
--- 正在导出表  zhoushan.node_value 的数据：~0 rows (大约)
+-- 正在导出表  zhoushan.node_value 的数据：~472 rows (大约)
 /*!40000 ALTER TABLE `node_value` DISABLE KEYS */;
 INSERT INTO `node_value` (`ID`, `NodeID`, `Value`, `Raw_Value`, `Quarter`, `AreaID`, `TypeID`, `Year`, `UpdateTime`) VALUES
 	(1, 1, 10130.15, 10130.15, 4, 0, 1, 2014, '2016-08-26 15:18:23'),
@@ -824,20 +824,21 @@ CREATE TABLE IF NOT EXISTS `trend_template` (
   `ID` int(11) NOT NULL AUTO_INCREMENT,
   `Name` varchar(50) NOT NULL,
   `FilePath` varchar(50) NOT NULL,
+  `FormID` int(11) NOT NULL,
   PRIMARY KEY (`ID`)
 ) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8;
 
 -- 正在导出表  zhoushan.trend_template 的数据：~8 rows (大约)
 /*!40000 ALTER TABLE `trend_template` DISABLE KEYS */;
-INSERT INTO `trend_template` (`ID`, `Name`, `FilePath`) VALUES
-	(1, '建设用地预审.xls', '建设用地预审.xls'),
-	(2, '各土地应用变化.xls', '各土地应用变化.xls'),
-	(3, '信访情况.xls', '信访情况.xls'),
-	(4, '土地储备.xls', '土地储备.xls'),
-	(5, '矿产收费情况.xls', '矿产收费情况.xls'),
-	(6, '国土资源违法案件.xls', '国土资源违法案件.xls'),
-	(7, '土地登记和抵押.xls', '土地登记和抵押.xls'),
-	(8, '土地征收.xls', '土地征收.xls');
+INSERT INTO `trend_template` (`ID`, `Name`, `FilePath`, `FormID`) VALUES
+	(1, '建设用地预审.xls', '建设用地预审.xls', 8),
+	(2, '各土地应用变化.xls', '各土地应用变化.xls', 2),
+	(3, '信访情况.xls', '信访情况.xls', 7),
+	(4, '土地储备.xls', '土地储备.xls', 3),
+	(5, '矿产收费情况.xls', '矿产收费情况.xls', 6),
+	(6, '国土资源违法案件.xls', '国土资源违法案件.xls', 9),
+	(7, '土地登记和抵押.xls', '土地登记和抵押.xls', 5),
+	(8, '土地征收.xls', '土地征收.xls', 4);
 /*!40000 ALTER TABLE `trend_template` ENABLE KEYS */;
 
 
@@ -855,17 +856,26 @@ CREATE TABLE IF NOT EXISTS `user` (
   `FormIds` varchar(50) DEFAULT NULL,
   PRIMARY KEY (`ID`),
   KEY `Username` (`Username`)
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=utf8;
 
--- 正在导出表  zhoushan.user 的数据：~6 rows (大约)
+-- 正在导出表  zhoushan.user 的数据：~14 rows (大约)
 /*!40000 ALTER TABLE `user` DISABLE KEYS */;
 INSERT INTO `user` (`ID`, `Username`, `Password`, `Role`, `Name`, `Deleted`, `LastLoginTime`, `AreaIds`, `FormIds`) VALUES
-	(1, 'admin', '202cb962ac59075b964b07152d234b70', 4, 'admin', b'0', '2016-08-26 15:16:28', NULL, ''),
+	(1, 'admin', '202cb962ac59075b964b07152d234b70', 4, 'admin', b'0', '2016-09-13 11:47:24', NULL, ''),
 	(3, 'loowootech', '202cb962ac59075b964b07152d234b70', 4, 'loowootech', b'0', NULL, NULL, ''),
 	(4, 'ty', '202cb962ac59075b964b07152d234b70', 3, '唐尧', b'0', NULL, NULL, ''),
 	(5, 'zq', '202cb962ac59075b964b07152d234b70', 2, '赵泉', b'0', '2016-08-18 14:09:55', '1', ''),
 	(6, 'zwj', '202cb962ac59075b964b07152d234b70', 1, '周威俊', b'0', NULL, '6', ''),
-	(7, 'xc', '202cb962ac59075b964b07152d234b70', 1, '新城', b'0', '2016-08-26 15:12:07', '2', '');
+	(7, 'xc', '202cb962ac59075b964b07152d234b70', 1, '新城', b'0', '2016-09-13 11:45:57', '2', ''),
+	(8, 'sjgh', '202cb962ac59075b964b07152d234b70', 3, '市局规划', b'0', '2016-09-13 11:48:00', '1', '1,8'),
+	(9, 'sjly', '202cb962ac59075b964b07152d234b70', 3, '市局利用', b'0', NULL, '1', '2'),
+	(10, 'cbzx', '202cb962ac59075b964b07152d234b70', 3, '储备中心', b'0', NULL, '1', '3'),
+	(11, 'zds', '202cb962ac59075b964b07152d234b70', 3, '征地所', b'0', '2016-09-13 11:47:09', '1', '4'),
+	(12, 'sjkg', '202cb962ac59075b964b07152d234b70', 3, '市局矿管', b'0', NULL, '1', '6'),
+	(13, 'jczd', '202cb962ac59075b964b07152d234b70', 3, '监察支队', b'0', NULL, '1', '9'),
+	(14, 'sjxf', '202cb962ac59075b964b07152d234b70', 3, '市局信访', b'0', '2016-09-12 15:07:01', '1', '7'),
+	(15, 'bdc', '202cb962ac59075b964b07152d234b70', 3, '不动产中心', b'0', NULL, '1', '5'),
+	(16, 'sjdj', '202cb962ac59075b964b07152d234b70', 3, '地籍处', b'0', NULL, '1', '5');
 /*!40000 ALTER TABLE `user` ENABLE KEYS */;
 
 

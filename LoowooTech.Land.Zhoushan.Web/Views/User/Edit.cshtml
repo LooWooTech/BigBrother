@@ -5,6 +5,7 @@
     ViewBag.Title = isAdd ? "添加用户" : "修改用户";
     List<Area> Areas = ViewBag.Areas;
     List<Form> Forms = ViewBag.Forms;
+    UserIdentity user = ViewBag.CurrentIdentity;
     var cityString = System.Configuration.ConfigurationManager.AppSettings["CITY"].ToString();
 }
 <form id="form-user" action="/User/edit?id=@(model.ID)" method="post" class="form-horizontal">
@@ -22,7 +23,10 @@
                 <select name="Role" class="form-control">
                     @foreach(UserRole role in Enum.GetValues(typeof(UserRole)))
                     {
-                        <option value="@(role)" @(model.Role==role?"selected":"")>@(role.GetDescription())</option>
+                        if (user.Role >= role)
+                        {
+                            <option value="@(role)" @(model.Role == role ? "selected" : "")>@(role.GetDescription())</option>
+                        }
                     }
                     @*<option value="@(UserRole.Branch)" @(model.Role == UserRole.Branch ? "selected" : null)>@(UserRole.Branch.GetDescription())</option>
                     <option value="@(UserRole.City)" @(model.Role == UserRole.City ? "selected" : null)>@(UserRole.City.GetDescription())</option>

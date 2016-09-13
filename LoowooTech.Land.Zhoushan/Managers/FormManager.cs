@@ -23,7 +23,7 @@ namespace LoowooTech.Land.Zhoushan.Managers
             using (var db = GetDbContext())
             {
                 var query = db.Forms.AsQueryable();
-                if (formIds != null && formIds.Length > 0)
+                if (formIds != null)
                 {
                     query = query.Where(e => formIds.Contains(e.ID));
                 }

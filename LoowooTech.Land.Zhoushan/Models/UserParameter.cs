@@ -11,5 +11,7 @@ namespace LoowooTech.Land.Zhoushan.Models
         public string SearchKey { get; set; }
 
         public PageParameter Page { get; set; }
+
+        public UserRole? Role { get; set; }
     }
 }

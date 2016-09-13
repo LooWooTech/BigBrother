@@ -20,6 +20,10 @@ namespace LoowooTech.Land.Zhoushan.Managers
                 {
                     query = query.Where(e => e.Name.Contains(parameter.SearchKey));
                 }
+                if (parameter.Role.HasValue)
+                {
+                    query = query.Where(e => e.Role <= parameter.Role.Value);
+                }
                 list = query.OrderByDescending(e => e.ID).SetPage(parameter.Page).ToList();
 
             }

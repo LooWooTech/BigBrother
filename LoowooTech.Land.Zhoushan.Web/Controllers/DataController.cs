@@ -22,7 +22,7 @@ namespace LoowooTech.Land.Zhoushan.Web.Controllers
             }
             else
             {
-                ViewBag.Forms = Core.FormManager.GetForms();
+                ViewBag.Forms = Core.FormManager.GetForms(CurrentIdentity.FormIds);
             }
 
             ViewBag.Season = Core.SeasonManager.GetCurrentSeason();
@@ -92,7 +92,7 @@ namespace LoowooTech.Land.Zhoushan.Web.Controllers
             }
             else
             {
-                ViewBag.Forms = Core.FormManager.GetForms();
+                ViewBag.Forms = Core.FormManager.GetForms(CurrentIdentity.FormIds);
             }
             return View();
         }
@@ -109,7 +109,7 @@ namespace LoowooTech.Land.Zhoushan.Web.Controllers
             {
 
                 fileName = year + "年" + Core.TemplateManager.GetQuartersDescription(qs) + "统计报表.xls";
-                stream = Core.ExportManager.ExportStatistics(year, qs, CurrentIdentity.AreaIds);
+                stream = Core.ExportManager.ExportStatistics(CurrentIdentity.FormIds, year, qs, CurrentIdentity.AreaIds);
             }
             else
             {

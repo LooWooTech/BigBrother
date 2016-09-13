@@ -46,7 +46,7 @@ namespace LoowooTech.Land.Zhoushan.Web.Controllers
         [HttpPost]
         public ActionResult EditPassword(string oldPassword, string newPassword, string rePassword)
         {
-            if(string.IsNullOrEmpty(oldPassword) || string.IsNullOrEmpty(newPassword))
+            if (string.IsNullOrEmpty(oldPassword) || string.IsNullOrEmpty(newPassword))
             {
                 throw new AggregateException("请输入密码");
             }
@@ -78,6 +78,7 @@ namespace LoowooTech.Land.Zhoushan.Web.Controllers
             {
                 SearchKey = searchKey,
                 Page = new PageParameter(page, rows),
+                Role = CurrentIdentity.Role,
             };
 
             ViewBag.List = Core.UserManager.GetUsers(parameter);
@@ -99,7 +100,7 @@ namespace LoowooTech.Land.Zhoushan.Web.Controllers
         [HttpPost]
         public ActionResult Edit(User model)
         {
-            
+
             Core.UserManager.Save(model);
             return JsonSuccessResult();
         }

@@ -14,10 +14,10 @@ namespace LoowooTech.Land.Zhoushan.Managers
 {
     public class ExportManager : ManagerBase
     {
-        public Stream ExportStatistics(int year, Quarter[] quarters, int[] areaIds)
+        public Stream ExportStatistics(int[] formIds, int year, Quarter[] quarters, int[] areaIds)
         {
             var book = new HSSFWorkbook();
-            var forms = Core.FormManager.GetForms();
+            var forms = Core.FormManager.GetForms(formIds);
             foreach (var form in forms)
             {
                 var formExcel = (HSSFWorkbook)GetFormExcel(form, year, quarters, areaIds);

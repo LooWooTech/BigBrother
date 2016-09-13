@@ -27,7 +27,7 @@ namespace LoowooTech.Land.Zhoushan.Web.Controllers
         public ActionResult Charts()
         {
             var data = new Dictionary<Form, int[]>();
-            var forms  = Core.FormManager.GetForms();
+            var forms  = Core.FormManager.GetForms(CurrentIdentity.FormIds);
             foreach (var form in forms)
             {
                 var years = Core.FormManager.GetFormYears(form.ID);
@@ -37,6 +37,7 @@ namespace LoowooTech.Land.Zhoushan.Web.Controllers
             return View();
         }
 
+        [UserRoleFilter(UserRole.Branch)]
         public ActionResult Write()
         {
             ViewBag.Forms = Core.FormManager.GetForms(CurrentIdentity.FormIds);

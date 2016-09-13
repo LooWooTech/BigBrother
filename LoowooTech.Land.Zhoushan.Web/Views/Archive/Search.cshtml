@@ -4,18 +4,18 @@
     List<Dossier> list = ViewBag.List;
 }
 
-<div class="col-md-3 col-sm-3 col-xs-3 well" style="padding:0px;">
-    <fieldset><legend >查询设置</legend></fieldset>
-    <form method="get" id="Search-Dossier">
+<div class="col-md-3  well">
+    <fieldset><legend>查询设置</legend></fieldset>
+    <form method="get" id="Search-Dossier" >
         <div class="row">
             <div class="col-md-12 col-xs-12 col-sm-12">
                 <div class="form-group">
                     <label class="control-label">选择年份</label>
                     <div class="col-md-12">
                         <div class="input-group">
-                            <input type="text" name="MinYear" class="form-control" placeholder="起始年" value="@(parameter.MinYear.HasValue?parameter.MinYear.Value.ToString():"")"/>
+                            <input type="text" name="MinYear" class="form-control input-sm" placeholder="起始年" value="@(parameter.MinYear.HasValue?parameter.MinYear.Value.ToString():"")" />
                             <span class="input-group-addon">至</span>
-                            <input type="text" name="MaxYear" class="form-control" placeholder="截止年" value="@(parameter.MaxYear.HasValue?parameter.MaxYear.Value.ToString():"")"/>
+                            <input type="text" name="MaxYear" class="form-control input-sm" placeholder="截止年" value="@(parameter.MaxYear.HasValue?parameter.MaxYear.Value.ToString():"")" />
                         </div>
                     </div>
                 </div>
@@ -24,10 +24,10 @@
                     <div class="col-md-12">
                         <input type="hidden" name="Quarter" value="@(parameter.Quarter)" />
                         <div class="btn-group">
-                            <button type="button" class="btn btn-@(string.IsNullOrEmpty(parameter.Quarter)?"primary":"default")" name="Quarter">全部</button>
-                            @foreach(Quarter quarter in Enum.GetValues(typeof(Quarter)))
+                            <button type="button" class="btn btn-sm btn-@(string.IsNullOrEmpty(parameter.Quarter)?"primary":"default")" name="Quarter">全部</button>
+                            @foreach (Quarter quarter in Enum.GetValues(typeof(Quarter)))
                             {
-                                <button type="button" class="btn btn-@(!string.IsNullOrEmpty(parameter.Quarter)&&quarter.GetDescription()==parameter.Quarter?"primary":"default")" name="Quarter">@(quarter.GetDescription())</button>
+                                <button type="button" class="btn btn-sm btn-@(!string.IsNullOrEmpty(parameter.Quarter)&&quarter.GetDescription()==parameter.Quarter?"primary":"default")" name="Quarter">@(quarter.GetDescription())</button>
                             }
                         </div>
                     </div>
@@ -37,9 +37,9 @@
                     <div class="col-md-12">
                         <div class="input-group">
                             <span class="input-group-btn">
-                                <button type="button" class="btn btn-@(string.IsNullOrEmpty(parameter.Remark)?"primary":"default")" name="Remark">全部</button>
+                                <button type="button" class="btn btn-sm btn-@(string.IsNullOrEmpty(parameter.Remark)?"primary":"default")" name="Remark">全部</button>
                             </span>
-                            <input type="text" name="Remark" class="form-control" placeholder="关键字" value="@(parameter.Remark)" />
+                            <input type="text" name="Remark" class="form-control input-sm" placeholder="关键字" value="@(parameter.Remark)" />
                         </div>
                     </div>
                 </div>
@@ -67,14 +67,14 @@
             </tr>
         </thead>
         <tbody>
-            @foreach(var dossier in list)
+            @foreach (var dossier in list)
             {
                 <tr>
                     <td>@(dossier.Year)</td>
                     <td>@(dossier.Quarter.GetDescription())</td>
                     <td>@(dossier.Remark)</td>
                     <td>
-                        <div class="btn-group">
+                        <div class="btn-group btn-group-sm">
                             <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 @(string.Format("{0}年{1}", dossier.Year, dossier.Quarter.GetDescription())) <span class="caret"></span>
                             </button>
@@ -83,7 +83,7 @@
                                 {
                                     <li><a href="javascript:void(0)">未上传文件</a></li>
                                 }
-                                @foreach(var file in dossier.Files)
+                                @foreach (var file in dossier.Files)
                                 {
                                     <li><a href="/@(file.FilePath)" data-target="#page" target="_blank">@(file.FileName)</a></li>
                                 }

@@ -104,5 +104,10 @@ namespace LoowooTech.Land.Zhoushan.Managers
                 ClearCache();
             }
         }
+
+        internal int[] GetChildAreaIds(int parentId)
+        {
+            return GetAreas().Where(e => e.ParentID == parentId).Select(e => e.ID).ToArray();
+        }
     }
 }

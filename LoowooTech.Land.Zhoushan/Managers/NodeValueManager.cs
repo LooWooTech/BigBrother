@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace LoowooTech.Land.Zhoushan.Managers
@@ -198,7 +199,7 @@ namespace LoowooTech.Land.Zhoushan.Managers
             }
         }
 
-        public void SaveNodeValue(NodeValue data)
+        public void SaveNodeValue(NodeValue data, bool importValue)
         {
             using (var db = GetDbContext())
             {
@@ -220,10 +221,26 @@ namespace LoowooTech.Land.Zhoushan.Managers
                     );
                     if (entity != null)
                     {
-                        entity.Value = data.Value;
+                        if (importValue)
+                        {
+                            entity.RawValue = data.RawValue;
+                        }
+                        else
+                        {
+                            entity.RawValue = data.Value;
+                            entity.Value = data.Value;
+                        }
                     }
                     else
                     {
+                        if (importValue)
+                        {
+                            data.Value = data.RawValue;
+                        }
+                        else
+                        {
+                            data.RawValue = data.Value;
+                        }
                         db.NodeValues.Add(data);
                     }
                 }
@@ -235,65 +252,82 @@ namespace LoowooTech.Land.Zhoushan.Managers
         {
             foreach (var val in values)
             {
-                SaveNodeValue(val);
+                SaveNodeValue(val, false);
             }
-            //计算合计
         }
 
         /// <summary>
         /// 计算表单分类的各种合计
         /// </summary>
-        public void ComputeSumValue(int formId, int year, Quarter quarter)
+        public void ComputeSumValue(int formId, int year, Quarter quarter, List<NodeValue> submitValues)
         {
-            var nodes = Core.FormManager.GetFormNodes(formId);
-            var data = Core.FormManager.GetNodeValues(new NodeValueParameter
+            new Thread(() =>
             {
-                FormID = formId,
-                Year = year,
-                Quarter = quarter,
-            });
-
-            var rootArea = new Area
-            {
-                Children = Core.AreaManager.GetAreas(0),
-                Name = "舟山市",
-            };
-
-            foreach (var node in nodes)
-            {
-                foreach (var typeId in node.NodeValueTypes)
+                var form = Core.FormManager.GetForm(formId);
+                foreach (var val in submitValues)
                 {
-                    GetNodeAreaSumValue(node, year, quarter, typeId, rootArea, data);
+                    UpdateParentAreaValue(val, form);
                 }
-            }
+                _updateList.Clear();
+            }).Start();
         }
 
-        private double GetNodeAreaSumValue(Node node, int year, Quarter quarter, int typeId, Area area, List<NodeValue> data)
+        private List<NodeValueParameter> _updateList = new List<NodeValueParameter>();
+        private void UpdateParentAreaValue(NodeValue val, Form form)
         {
-            if (area.Children.Count == 0)
+            if (val.AreaID == 0) return;
+
+            var area = Core.AreaManager.GetArea(val.AreaID);
+            if (area == null) return;
+
+            //如果form设置了不自动计算子区域，那么非舟山市本身的总计外，其他父区域不自动计算
+            if (form.ExcludeSubArea && area.ParentID != 0)
             {
-                var val = data.FirstOrDefault(e => e.AreaID == area.ID && e.NodeID == node.ID && e.TypeID == typeId);
-                return val == null ? 0 : val.RawValue;
+                return;
             }
 
-            double result = 0;
-            foreach (var child in area.Children)
+            var parameter = new NodeValueParameter(val) { AreaID = area.ParentID };
+            //判断是否已经更新了同条件的parentarea的value
+            if (_updateList.Any(e => e.EqualSingleValueParameter(parameter)))
             {
-                result += GetNodeAreaSumValue(node, year, quarter, typeId, area, data);
+                return;
             }
-            var entity = new NodeValue
-            {
-                AreaID = area.ID,
-                NodeID = node.ID,
-                TypeID = typeId,
-                Quarter = quarter,
-                Year = year,
-                RawValue = result
-            };
-            Core.FormManager.SaveNodeValue(entity);
-            return result;
+            //查询子分类的ID
+            parameter.AreaIds = Core.AreaManager.GetChildAreaIds(area.ParentID);
+
+            //这里只应该有一条记录
+            var parentValue = GetOrSetParentAreaValueEntity(parameter);
+            _updateList.Add(parameter);
+            //更新新值的父区域数据
+            UpdateParentAreaValue(parentValue, form);
         }
 
+        private NodeValue GetOrSetParentAreaValueEntity(NodeValueParameter parameter)
+        {
+            using (var db = GetDbContext())
+            {
+                var entity = db.NodeValues.FirstOrDefault(e => e.AreaID == parameter.AreaID.Value
+                 && e.Year == parameter.Year
+                   && e.Quarter == parameter.Quarter
+                   && e.TypeID == parameter.TypeID
+                   && e.NodeID == parameter.NodeID
+                );
+                if (entity == null)
+                {
+                    entity = new NodeValue(parameter);
+                    db.NodeValues.Add(entity);
+                }
+                entity.RawValue = db.NodeValues.Where(e => parameter.AreaIds.Contains(e.AreaID)
+                 && e.Year == parameter.Year
+                   && e.Quarter == parameter.Quarter
+                   && e.TypeID == parameter.TypeID
+                   && e.NodeID == parameter.NodeID
+                ).Select(e => e.RawValue).DefaultIfEmpty(0).Sum();
+                db.SaveChanges();
+
+                return entity;
+            }
+        }
 
         public void DeleteNodeValue(int id)
         {

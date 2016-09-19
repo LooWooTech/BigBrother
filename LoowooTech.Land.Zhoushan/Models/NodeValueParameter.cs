@@ -18,6 +18,15 @@ namespace LoowooTech.Land.Zhoushan.Models
             Quarters = new Quarter[0];
         }
 
+        public NodeValueParameter(NodeValue val)
+        {
+            AreaID = val.AreaID;
+            NodeID = val.NodeID;
+            TypeID = val.TypeID;
+            Year = val.Year;
+            Quarter = val.Quarter;
+        }
+
         public int FormID { get; set; }
 
         public int NodeID { get; set; }
@@ -31,7 +40,6 @@ namespace LoowooTech.Land.Zhoushan.Models
         public RateType? RateType { get; set; }
 
         public int TypeID { get; set; }
-
 
 
         public int[] NodeIds { get; set; }
@@ -78,6 +86,15 @@ namespace LoowooTech.Land.Zhoushan.Models
         public object Clone()
         {
             return MemberwiseClone();
+        }
+
+        public bool EqualSingleValueParameter(NodeValueParameter parameter)
+        {
+            return parameter.AreaID == AreaID
+                && parameter.NodeID == NodeID
+                && parameter.TypeID == TypeID
+                && parameter.Year == Year
+                && parameter.Quarter == Quarter;
         }
     }
 

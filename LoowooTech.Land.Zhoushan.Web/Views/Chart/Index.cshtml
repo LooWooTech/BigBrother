@@ -3,6 +3,14 @@
     UserIdentity identity = ViewBag.CurrentIdentity;
 
     List<Form> forms = ViewBag.Forms;
+    if (forms.Count == 0)
+    {
+        <div class="alert alert-warning">
+            <h3>权限不足</h3>
+            <p>你目前没有任何表单的管理权限，请联系系统维护人员。</p>
+        </div>
+        return;
+    }
     ViewBag.Title = "统计图";
     NodeValueParameter parameter = ViewBag.Parameter;
     int[] years = ViewBag.Years;

@@ -40,7 +40,7 @@ namespace LoowooTech.Land.Zhoushan.Managers
                     else
                     {
                         field.SetEntity(entity, year, quarter, areaId);
-                        Core.FormManager.SaveNodeValue(entity);
+                        Core.FormManager.SaveNodeValue(entity, true);
                     }
                     db.SaveChanges();
                 }

@@ -136,7 +136,7 @@ namespace LoowooTech.Land.Zhoushan.Web.Controllers
             var values = data.ToObject<List<NodeValue>>();
 
             Core.FormManager.SaveNodeValues(values);
-            Core.FormManager.ComputeSumValue(formId, year, quarter);
+            Core.FormManager.ComputeSumValue(formId, year, quarter, values);
             return JsonSuccessResult();
         }
 
@@ -184,7 +184,7 @@ namespace LoowooTech.Land.Zhoushan.Web.Controllers
         [HttpPost]
         public ActionResult SaveValue(NodeValue data)
         {
-            Core.FormManager.SaveNodeValue(data);
+            Core.FormManager.SaveNodeValue(data, false);
 
             return JsonSuccessResult();
         }

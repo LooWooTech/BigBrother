@@ -17,29 +17,29 @@ namespace LoowooTech.Land.Zhoushan.Models
             UpdateTime = DateTime.Now;
         }
 
+        public NodeValue(NodeValueParameter parameter)
+        {
+            AreaID = parameter.AreaID.Value;
+            NodeID = parameter.NodeID;
+            Year = parameter.Year;
+            Quarter = parameter.Quarter;
+            TypeID = parameter.TypeID;
+        }
+
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int ID { get; set; }
 
         public int NodeID { get; set; }
 
-        private double _value;
-        public double Value
-        {
-            get
-            {
-                return _value == 0 ? RawValue : _value;
-            }
-            set
-            {
-                _value = value;
-                if (value > 0 && RawValue == 0)
-                {
-                    RawValue = value;
-                }
-            }
-        }
+        /// <summary>
+        /// 手工录入的值，该值会影响到子区域的自动计算
+        /// </summary>
+        public double Value { get; set; }
 
+        /// <summary>
+        /// 导入和参与报表计算的真实的值
+        /// </summary>
         [Column("raw_value")]
         public double RawValue { get; set; }
 

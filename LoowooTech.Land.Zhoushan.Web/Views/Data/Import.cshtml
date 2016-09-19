@@ -6,8 +6,9 @@
     Season season = ViewBag.Season;
     if (season == null && user.Role <= UserRole.City)
     {
-        <div class="alert">
-
+        <div class="alert alert-warning">
+            <h3>导入关闭</h3>
+            <p>目前系统没有开放导入功能，请等待数据维护人员开放表单录入和导入事件。</p>
         </div>
         return;
     }

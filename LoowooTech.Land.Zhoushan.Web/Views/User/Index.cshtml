@@ -34,4 +34,4 @@
         </tr>
     }
 </table>
-@Html.Partial("_Page", ViewBag.Page as object)
+@Html.Pagination(ViewBag.Page as PageParameter, " data-target='#main'")

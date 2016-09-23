@@ -52,6 +52,7 @@ namespace LoowooTech.Land.Zhoushan.Web.Controllers
         }
 
         [HttpGet]
+        [UserRoleFilter(UserRole.Branch)]
         public ActionResult Search(int? minYear=null,int? maxYear=null,string quarter=null,string remark=null)
         {
             var parameter = new DossierParameter()

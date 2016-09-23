@@ -14,7 +14,15 @@ namespace LoowooTech.Land.Zhoushan.Web
         {
             _context = context;
             Page = page;
-            LinkFormat = linkFormart;
+            if (string.IsNullOrEmpty(linkFormart))
+            {
+                LinkFormat = _context.Request.Path + "?page={0}&rows={1}";
+            }
+            else
+            {
+                LinkFormat = linkFormart;
+            }
+
 
             if (string.IsNullOrWhiteSpace(currentPageClass))
             {
@@ -47,23 +55,18 @@ namespace LoowooTech.Land.Zhoushan.Web
 
         public string GetPageLink(int pageIndex)
         {
-            if (string.IsNullOrEmpty(LinkFormat))
-            {
-                LinkFormat = _context.Request.Path + "?page={page}&rows={rows}";
-            }
-            var link = LinkFormat.Replace("{page}", pageIndex.ToString()).Replace("{rows}", Page.PageSize.ToString());
+            var link = string.Format(LinkFormat, pageIndex, Page.PageSize);
             var queryString = string.Empty;
-            if (!link.Contains('?'))
-            {
-                queryString = "?";
-            }
             foreach (var key in _context.Request.QueryString.AllKeys)
             {
-                if (key.ToLower() == "page" || key.ToLower() == "rows")
+                if(!link.Contains(key+"="))
                 {
-                    continue;
+                    queryString += "&" + key + "=" + HttpUtility.UrlEncode(_context.Request.QueryString[key]);
                 }
-                queryString += "&" + key + "=" + _context.Request.QueryString[key];
+            }
+            if (!link.Contains("?"))
+            {
+                link += "?";
             }
             return link + queryString;
         }

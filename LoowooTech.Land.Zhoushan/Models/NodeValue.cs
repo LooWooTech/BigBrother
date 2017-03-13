@@ -49,6 +49,10 @@ namespace LoowooTech.Land.Zhoushan.Models
         public int TypeID { get; set; }
 
         /// <summary>
+        /// 期内
+        /// </summary>
+        public Period Period { get; set; }
+        /// <summary>
         /// 年度
         /// </summary>
         public int Year { get; set; }

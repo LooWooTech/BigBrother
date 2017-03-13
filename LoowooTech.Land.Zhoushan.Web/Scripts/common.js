@@ -172,6 +172,12 @@
             }
         }
     };
+    $.jsonToQueryString = function (json) {
+        return Object.keys(json).map(function (key) {
+            return encodeURIComponent(key) + '=' +
+                encodeURIComponent(json[key]);
+        }).join('&');
+    };
 
     $.request = function (url, data, success, error, global) {
         var options = null;
@@ -205,7 +211,6 @@
                     break;
             }
         }
-
         $.ajax({
             type: options.data ? "POST" : "GET",
             dataType: "text",

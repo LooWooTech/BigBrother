@@ -18,18 +18,18 @@
     var types = nodeValues.GroupBy(e => e.TypeID).Select(g => g.Key).ToArray();
 
 }
-<div class="col-lg-12">
+<div class="col-md-12">
     <hr />
     <h4>各地区数据</h4>
-    <div class="col-lg-4">
+    <div class="col-md-4">
         <canvas id="chart-area"></canvas>
     </div>
-    <div class="col-lg-5">
+    <div class="col-md-5">
         <div class="grid">
             <div class="grid-header row">
-                <div class="col-lg-6">地区名称</div>
-                <div class="col-lg-3">值</div>
-                <div class="col-lg-3">@(parameter.RateType.Value.GetDescription()) %</div>
+                <div class="col-md-6">地区名称</div>
+                <div class="col-md-3">值</div>
+                <div class="col-md-3">@(parameter.RateType.Value.GetDescription()) %</div>
             </div>
             @foreach (var area in areas)
             {

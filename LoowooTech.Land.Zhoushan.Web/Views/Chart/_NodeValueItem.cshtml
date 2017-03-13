@@ -10,19 +10,19 @@
     var type = valueTypes.FirstOrDefault(e => e.ID == g.Key);
     if (type == null)
     {
-        <div class="col-lg-6 @(rowIndex>1?"col-lg-offset-6":null)"></div>
+        <div class="col-md-6 @(rowIndex>1?"col-md-offset-6":null)"></div>
         continue;
     }
     var sumValue = g.Sum(e => e.RawValue);
     var comValue = g.Sum(e => e.CompareValue);
     var sumRate = MathHelper.GetRateValue(sumValue, comValue);
-    <div class="col-lg-3 @(rowIndex>1?"col-lg-offset-6":null)">
+    <div class="col-md-3 @(rowIndex>1?"col-md-offset-6":null)">
         <span class="node-value-type" data-value="@(sumValue)" data-type-units="@(type.Units)" data-type-ratio="@(type.Ratio)">
             <span class="value">@(sumValue.ToString("f2").TrimEnd('0').TrimEnd('.'))</span>
             （<span class="unit">@(type.Unit)</span>）
         </span>
     </div>
-    <div class="col-lg-3">
+    <div class="col-md-3">
         @(sumRate.ToString("f2").TrimEnd('0').TrimEnd('.'))
     </div>
 }

@@ -16,6 +16,7 @@ namespace LoowooTech.Land.Zhoushan.Models
         public Node()
         {
             Children = new List<Node>();
+            ValueTypes = string.Empty;
         }
 
         [Key]

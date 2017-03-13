@@ -122,6 +122,7 @@
     <Compile Include="Models\Node.cs" />
     <Compile Include="Models\NodeValue.cs" />
     <Compile Include="Models\NodeValueParameter.cs" />
+    <Compile Include="Models\Period.cs" />
     <Compile Include="Models\Quarter.cs" />
     <Compile Include="Models\NodeValueType.cs" />
     <Compile Include="Models\PageParameter.cs" />

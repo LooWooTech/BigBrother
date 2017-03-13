@@ -12,8 +12,8 @@
         @if (form == null)
         {
             <div class="form-group">
-                <label class="control-label col-lg-3">选择表单</label>
-                <div class="col-lg-8">
+                <label class="control-label col-md-3">选择表单</label>
+                <div class="col-md-8">
                     <select class="form-control" name="formId" id="formId">
                         <option value="0">全部表单</option>
                         @foreach (var item in forms)
@@ -29,14 +29,14 @@
             <input type="hidden" name="FormId" value="@(form.ID)" />
         }
         <div class="form-group">
-            <label class="control-label col-lg-3">选择年份</label>
-            <div class="col-lg-8">
+            <label class="control-label col-md-3">选择年份</label>
+            <div class="col-md-8">
                 @Html.Partial("_YearDropdown")
             </div>
         </div>
         <div class="form-group">
-            <label class="control-label col-lg-3">选择季度</label>
-            <div class="col-lg-8">
+            <label class="control-label col-md-3">选择季度</label>
+            <div class="col-md-8">
                 <select name="Quarters" class="form-control">
                     <option value="1">第一季度</option>
                     <option value="2">第二季度</option>
@@ -49,8 +49,8 @@
             </div>
         </div>
         @*<div class="form-group">
-            <label class="control-label col-lg-3">选择地区</label>
-            <div class="col-lg-8">
+            <label class="control-label col-md-3">选择地区</label>
+            <div class="col-md-8">
                 @Html.Action("Dropdown","Area")
                 <span class="help-block">
                     如果选择区域，请选择区域专用的导出模板
@@ -59,7 +59,7 @@
         </div>*@
     </div>
     <div class="modal-footer">
-        <div class="col-lg-8 col-lg-offset-3">
+        <div class="col-md-8 col-md-offset-3">
             <button type="submit" id="" class="btn btn-primary"><i class="glyphicon glyphicon-ok"></i> 确定</button>
         </div>
     </div>

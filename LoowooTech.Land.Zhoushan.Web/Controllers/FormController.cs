@@ -58,5 +58,11 @@ namespace LoowooTech.Land.Zhoushan.Web.Controllers
             Core.FormManager.SaveForm(form);
             return JsonSuccessResult();
         }
+
+        public ActionResult Delete(int id)
+        {
+            Core.FormManager.DeleteForm(id);
+            return JsonSuccessResult();
+        }
     }
 }

@@ -62,6 +62,10 @@ namespace LoowooTech.Land.Zhoushan.Web
                 {
                     result.AreaID = int.Parse(request["areaId"]);
                 }
+                if (!string.IsNullOrWhiteSpace(request["period"]))
+                {
+                    result.Period = (Period)Enum.Parse(typeof(Period), request["period"]);
+                }
 
                 //如果是区县用户，则AreaID必须在自己的控制范围内，且自动赋一个默认值
                 var identity = (UserIdentity)Thread.CurrentPrincipal.Identity;

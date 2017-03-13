@@ -16,6 +16,7 @@ namespace LoowooTech.Land.Zhoushan.Models
             GetArea = true;
             GetValueType = true;
             Quarters = new Quarter[0];
+            Period = Models.Period.Default;
         }
 
         public NodeValueParameter(NodeValue val)
@@ -25,6 +26,7 @@ namespace LoowooTech.Land.Zhoushan.Models
             TypeID = val.TypeID;
             Year = val.Year;
             Quarter = val.Quarter;
+            Period = val.Period;
         }
 
         public int FormID { get; set; }
@@ -41,6 +43,7 @@ namespace LoowooTech.Land.Zhoushan.Models
 
         public int TypeID { get; set; }
 
+        public Period? Period { get; set; }
 
         public int[] NodeIds { get; set; }
 

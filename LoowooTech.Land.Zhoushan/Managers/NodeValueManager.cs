@@ -158,6 +158,11 @@ namespace LoowooTech.Land.Zhoushan.Managers
                     query = query.Where(e => e.AreaID == parameter.AreaID.Value);
                 }
 
+                if (parameter.Period.HasValue)
+                {
+                    query = query.Where(e => e.Period == parameter.Period.Value);
+                }
+
                 var list = query.ToList();
                 List<Area> areas = parameter.GetArea ? Core.AreaManager.GetAreas() : null;
                 List<NodeValueType> types = parameter.GetValueType ? Core.FormManager.GetNodeValueTypes() : null;
@@ -218,6 +223,7 @@ namespace LoowooTech.Land.Zhoushan.Managers
                     && e.AreaID == data.AreaID
                     && e.TypeID == data.TypeID
                     && e.NodeID == data.NodeID
+                    && e.Period == data.Period
                     );
                     if (entity != null)
                     {

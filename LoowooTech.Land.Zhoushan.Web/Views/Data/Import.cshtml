@@ -22,8 +22,8 @@
         @if (form == null)
         {
             <div class="form-group">
-                <label class="control-label col-lg-3">选择表单</label>
-                <div class="col-lg-8">
+                <label class="control-label col-md-3">选择表单</label>
+                <div class="col-md-8">
                     <select class="form-control" name="formId" id="formId">
                         <option value="0">选择表单</option>
                         @foreach (var item in forms)
@@ -41,14 +41,14 @@
         @if (user.Role > UserRole.City)
         {
             <div class="form-group">
-                <label class="control-label col-lg-3">选择年份</label>
-                <div class="col-lg-8">
+                <label class="control-label col-md-3">选择年份</label>
+                <div class="col-md-8">
                     @Html.Partial("_YearDropdown")
                 </div>
             </div>
             <div class="form-group">
-                <label class="control-label col-lg-3">选择季度</label>
-                <div class="col-lg-8">
+                <label class="control-label col-md-3">选择季度</label>
+                <div class="col-md-8">
                     @Html.Partial("_QuarterDropdown")
                 </div>
             </div>
@@ -62,7 +62,7 @@
         {
             <div class="alert alert-warning">当前时段无法导入数据</div>
             <div class="modal-footer">
-                <div class="col-lg-8 col-lg-offset-3">
+                <div class="col-md-8 col-md-offset-3">
                     <button type="submit" id="" class="btn btn-primary"><i class="glyphicon glyphicon-ok"></i> 确定</button>
                 </div>
             </div>
@@ -70,14 +70,14 @@
             return;
         }
         <div class="form-group">
-            <label class="control-label col-lg-3">选择区域</label>
-            <div class="col-lg-8">
+            <label class="control-label col-md-3">选择区域</label>
+            <div class="col-md-8">
                 @Html.Action("Dropdown", "Area", new { editValue = true })
             </div>
         </div>
         <div class="form-group">
-            <label class="control-label col-lg-3">选择Excel</label>
-            <div class="col-lg-8">
+            <label class="control-label col-md-3">选择Excel</label>
+            <div class="col-md-8">
                 <input type="file" id="file1" name="file" class="form-control" />
                 <span class="help-block" id="span-file"></span>
                 <input type="hidden" name="filePath" id="hide-file" />
@@ -85,7 +85,7 @@
         </div>
     </div>
     <div class="modal-footer">
-        <div class="col-lg-8 col-lg-offset-3">
+        <div class="col-md-8 col-md-offset-3">
             <button type="submit" id="" class="btn btn-primary"><i class="glyphicon glyphicon-ok"></i> 确定</button>
         </div>
     </div>

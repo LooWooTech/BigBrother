@@ -13,22 +13,22 @@
             本系统仅支持<b>Excel2003</b>文件格式的模板文件。
         </div>
         <div class="form-group">
-            <label class="control-label col-lg-3">上传文件 *</label>
-            <div class="col-lg-8">
+            <label class="control-label col-md-3">上传文件 *</label>
+            <div class="col-md-8">
                 <input type="hidden" name="FilePath" value="@(model.FilePath)" id="control-file" />
                 <input type="file" id="file1" name="file" class="form-control" />
                 <span class="help-block" id="span-file">@(model.FilePath)</span>
             </div>
         </div>
         <div class="form-group">
-            <label class="control-label col-lg-3">模板名称</label>
-            <div class="col-lg-8">
+            <label class="control-label col-md-3">模板名称</label>
+            <div class="col-md-8">
                 <input type="text" name="Name" class="form-control" value="@(model.Name)" id="control-name" />
             </div>
         </div>
         <div class="form-group">
-            <label class="control-label col-lg-3">所属表单</label>
-            <div class="col-lg-8">
+            <label class="control-label col-md-3">所属表单</label>
+            <div class="col-md-8">
                 <select class="form-control" name="formId">
                     <option value="0">选择表单</option>
                     @foreach (var item in forms)
@@ -40,7 +40,7 @@
         </div>
     </div>
     <div class="modal-footer">
-        <div class="col-lg-8 col-lg-offset-3">
+        <div class="col-md-8 col-md-offset-3">
             <button type="submit" class="btn btn-primary"><i class="glyphicon glyphicon-ok"></i> 确定</button>
         </div>
     </div>

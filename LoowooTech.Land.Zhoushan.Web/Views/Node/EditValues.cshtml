@@ -10,9 +10,6 @@
     <div class="alert alert-warning" role="alert">
         当前系统正在填报：@(season.Year)年@(season.Quarter.GetDescription())数据。
         填报时间段：@(season.StartTime.ToString("yyyy-MM-dd")) ~ @(season.EndTime.ToString("yyyy-MM-dd"))
-        <button id="btn-submit" class="btn btn-primary" type="button">
-            <i class="fa fa-save"></i> 保存数据
-        </button>
     </div>
 }
 
@@ -35,9 +32,14 @@
                 <input type="hidden" name="Quarter" value="@(season == null ? default(Quarter?) : season.Quarter)" title="@(season==null?"": season.Quarter.GetDescription())" />
             }
             @Html.Action("Dropdown", "Area", new { editValue = true })
-            <button type="submit" class="btn btn-primary" id="btn-load"><i class="fa fa-circle-o-notch"></i> @(identity.Role > UserRole.City ? "加载数据" : "切换地区")</button>
+            <select name="Period" class="form-control">
+                @foreach (var p in Enum.GetValues(typeof(Period)))
+                {
+                    <option value="@((int)p)">@(((Period)p).GetDescription())</option>
+                }
+            </select>
         </div>&nbsp;
-        @if (identity.Role > UserRole.Advanced)
+        @if (identity.Role > UserRole.Advanced || season != null)
         {
             <button id="btn-submit" class="btn btn-primary" type="button">
                 <i class="fa fa-save"></i> 保存数据
@@ -46,7 +48,7 @@
         &nbsp;
         <input type="hidden" id="type-unit-index" value="0" />
         <a id="btn-type-change" class="btn btn-success">切换单位</a>
-        &nbsp;<a id="btn-back" class="btn btn-default" href="javascript:history.back()">
+        &nbsp;<a id="btn-back" class="btn btn-default">
             <i class="fa fa-chevron-left"></i> 返回
         </a>
     </div>
@@ -59,7 +61,7 @@
                 分类
             </th>
             <td>
-                数值
+                <span id="text-value"></span>数值
             </td>
         </tr>
     </thead>
@@ -76,10 +78,9 @@
             }
         });
 
-        if ($("#form-filter select[name='areaId'] option").length == 1) {
-            $("#form-filter select[name='areaId']").hide();
-            $("#btn-load").hide();
-        }
+        $("#form-filter select").change(function () {
+            $("#form-filter").submit();
+        });
 
         $("#btn-type-change").click(function () {
             $(".node-value-type").each(function () {
@@ -104,17 +105,17 @@
 
         $("#form-filter").submit(function () {
             $("#loading").text("正在加载").show();
-            var data = $(this).serialize();
+            var parameter = getFilter();
             var action = $(this).attr("action");
-            $.request(action, data, function (json) {
+            $.request(action, parameter, function (json) {
+                //清空所有的.node-value
                 $(".node-value").attr("valueId", "").val('');
+                //添加获得的nodevalue
                 $.each(json.data, function (k, v) {
                     updateNodeValue(v);
                 });
             });
-            var year = $("#form-filter [name='Year']").val();
-            var quarter = $("#form-filter [name='Quarter']").val();
-            $.request("/node/canedit?year=" + year + "&quarter=" + quarter, function (result) {
+            $.request("/node/canedit?year=" + parameter.year + "&quarter=" + parameter.quarter, function (result) {
                 if (!result) {
                     $("#btn-submit").hide();
                     $(".node-value").attr("readonly", true);
@@ -124,30 +125,49 @@
                     $(".node-value").removeAttr("readonly");
                 }
                 $("#loading").text("加载完毕");
+                $("#text-value").text(parameter.year + " " + parameter.quarterText + "【" + parameter.areaText + "】地区【" + parameter.periodText+"】的");
+
                 setTimeout(function () {
                     $("#loading").hide();
                 }, 1000);
             });
             return false;
-        });
-
-        $("#btn-load").click();
+        }).submit();
 
         function updateNodeValue(val) {
             var rowId = "#node-item-" + val.NodeID;
-            var control = $("#node-value-" + val.TypeID, rowId)
+            var control = $(".type-" + val.TypeID, rowId)
 
             control.val(val.Value || 0);
             control.attr("valueId", val.ID);
         }
 
-        $("#btn-submit").click(function () {
-            var data = [];
+        function getFilter()
+        {
             var year = $("#form-filter [name='Year']").val();
+            var period = $("#form-filter select[name='Period']").eq(0).val();
+            var periodText = $("#form-filter select[name='Period'] option:selected").text();
+
             var quarter = $("#form-filter [name='Quarter']").val();
             var quarterText = $("#form-filter [name='Quarter']").attr("title") || $("select[name='Quarter'] option:selected").text();
+
             var areaId = $("#form-filter select[name='areaId']").eq(0).val();
             var areaText = areaId == 0 ? "舟山市" : $("#form-filter select[name='areaId'] option:selected").text().replace(/\s|\n|-|\r/g, "");
+
+            return {
+                year: year,
+                period: period,
+                periodText: periodText,
+                quarter: quarter,
+                quarterText: quarterText,
+                areaId: areaId,
+                areaText: areaText
+            };
+        }
+
+        $("#btn-submit").click(function () {
+            var data = [];
+            var parameter = getFilter();
 
             $("#list-node-values .node-value").each(function (k, v) {
                 var control = $(v);
@@ -169,9 +189,10 @@
                 }
                 data.push({
                     ID: control.attr("valueId") || 0,
-                    Year: year,
-                    Quarter: quarter,
-                    AreaID: areaId,
+                    Year: parameter.year,
+                    Quarter: parameter.quarter,
+                    AreaID: parameter.areaId,
+                    Period: parameter.period,
                     NodeID: nodeId,
                     TypeID: typeId,
                     Value: val
@@ -180,8 +201,15 @@
             });
 
             var json = JSON.stringify(data);
-            $.request("/node/SaveValues?formId=@(form.ID)&year=" + year + "&quarter=" + quarter + "&areaId=" + areaId, "data=" + encodeURIComponent(json), function () {
-                alert(year + "年" + quarterText + areaText + "的数据保存成功");
+            $.request("/node/SaveValues?formId=@(form.ID)&year=" + parameter.year +
+                "&quarter=" + parameter.quarter +
+                "&areaId=" + parameter.areaId +
+                "&period=" + parameter.period,
+
+                "data=" + encodeURIComponent(json),
+                function () {
+                    var text = $("#text-value").text();
+                    alert(text + "的数据保存成功");
             });
         });
     });

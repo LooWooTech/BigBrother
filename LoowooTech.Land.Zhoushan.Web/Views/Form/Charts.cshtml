@@ -20,7 +20,7 @@
             <td>
                     @foreach (var year in years.OrderByDescending(y => y))
                     {
-                        <div class="col-lg-12" style="margin:5px;">
+                        <div class="col-md-12" style="margin:5px;">
                             @for (var quarter = 4; quarter > 0; quarter--)
                             {
                                 if (currentYear == year && quarter > currentQuarter)
@@ -28,7 +28,7 @@
                                     continue;
                                 }
                                 var href = "/chart/?formId=" + form.ID + "&year=" + year + "&quarter=" + quarter;
-                                <div class="col-lg-3">
+                                <div class="col-md-3">
                                     <a href="@(href)" class="btn btn-default btn-sm">
                                         @(year)年@(quarter)季度
                                     </a>

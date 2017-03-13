@@ -18,8 +18,8 @@
             <span>警告框</span>
         </div>
         <div class="form-group">
-            <label class="control-label col-lg-3">用户角色</label>
-            <div class="col-lg-8">
+            <label class="control-label col-md-3">用户角色</label>
+            <div class="col-md-8">
                 <select name="Role" class="form-control">
                     @foreach(UserRole role in Enum.GetValues(typeof(UserRole)))
                     {
@@ -36,20 +36,20 @@
             </div>
         </div>
         <div class="form-group">
-            <label class="control-label col-lg-3">用户名</label>
-            <div class="col-lg-8">
+            <label class="control-label col-md-3">用户名</label>
+            <div class="col-md-8">
                 <input type="text" name="Username" class="form-control" value="@(model.Username)" />
             </div>
         </div>
         <div class="form-group">
-            <label for="Specification" class="control-label col-lg-3">真实姓名</label>
-            <div class="col-lg-8">
+            <label for="Specification" class="control-label col-md-3">真实姓名</label>
+            <div class="col-md-8">
                 <input type="text" name="Name" class="form-control" value="@(model.Name)" />
             </div>
         </div>
         <div class="form-group">
-            <label for="Number" class="control-label col-lg-3">密码</label>
-            <div class="col-lg-8">
+            <label for="Number" class="control-label col-md-3">密码</label>
+            <div class="col-md-8">
                 <input type="password" name="Password" class="form-control" />
                 @if (!isAdd)
                 {
@@ -59,8 +59,8 @@
         </div>
         <div id="Data" style="display:@(model.Role>UserRole.Advanced?"none":"block")">
             <div class="form-group">
-                <label for="" class="control-label col-lg-3">填报类型</label>
-                <div class="col-lg-8 checkbox">
+                <label for="" class="control-label col-md-3">填报类型</label>
+                <div class="col-md-8 checkbox">
                     @foreach(var form in Forms)
                     {
                         var isChecked = model.FormsIds.Contains(form.ID);
@@ -75,8 +75,8 @@
         </div>
         <div id="Region" style="display:@(model.Role>UserRole.Branch?"none":"block")">
             <div class="form-group">
-                <label for="Area" class="control-label col-lg-3">区域选择</label>
-                <div class="col-lg-8 checkbox">
+                <label for="Area" class="control-label col-md-3">区域选择</label>
+                <div class="col-md-8 checkbox">
                     @foreach (var area in Areas)
                     {
                         if (area.Name == cityString)
@@ -97,7 +97,7 @@
        
     </div>
     <div class="modal-footer">
-        <div class="col-lg-8 col-lg-offset-3">
+        <div class="col-md-8 col-md-offset-3">
             <button type="submit" class="btn btn-primary"><i class="glyphicon glyphicon-ok"></i> 确定</button>
         </div>
     </div>

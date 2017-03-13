@@ -9,14 +9,14 @@
     </div>
     <div class="modal-body">
         <div class="form-group">
-            <label class="control-label col-lg-3">选择年份</label>
-            <div class="col-lg-8">
+            <label class="control-label col-md-3">选择年份</label>
+            <div class="col-md-8">
                 @Html.Partial("_YearDropdown")
             </div>
         </div>
         <div class="form-group">
-            <label class="control-label col-lg-3">选择季度</label>
-            <div class="col-lg-8">
+            <label class="control-label col-md-3">选择季度</label>
+            <div class="col-md-8">
                 <select name="Quarters" class="form-control">
                     <option value="1">第一季度</option>
                     <option value="1,2">上半年</option>
@@ -26,8 +26,8 @@
             </div>
         </div>
         <div class="form-group">
-            <label class="control-label col-lg-3">选择模板</label>
-            <div class="col-lg-8">
+            <label class="control-label col-md-3">选择模板</label>
+            <div class="col-md-8">
                 <select name="TemplateIds" class="form-control" multiple="multiple" style="height:200px;">
                     @foreach (var item in templates)
                     {
@@ -38,7 +38,7 @@
         </div>
     </div>
     <div class="modal-footer">
-        <div class="col-lg-8 col-lg-offset-3">
+        <div class="col-md-8 col-md-offset-3">
             <button type="submit" id="" class="btn btn-primary"><i class="glyphicon glyphicon-ok"></i> 确定</button>
         </div>
     </div>

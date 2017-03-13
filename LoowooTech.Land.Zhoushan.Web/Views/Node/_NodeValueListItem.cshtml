@@ -8,17 +8,24 @@
     <td class="node-level-@(model.Level)">
         @(model.Name)
     </td>
-    @foreach (var typeId in model.NodeValueTypes)
+    @if (model.NodeValueTypes != null && model.NodeValueTypes.Length > 0)
     {
-        var type = types.FirstOrDefault(e => e.ID == typeId);
-        if (type == null)
+        foreach (var typeId in model.NodeValueTypes)
         {
-            continue;
+            var type = types.FirstOrDefault(e => e.ID == typeId);
+            if (type == null)
+            {
+                continue;
+            }
+            <td>
+                <input type="text" class="node-value form-control input-sm col-sm-1 type-@(type.ID)" nodeId="@(model.ID)" typeId="@(type.ID)" />
+                &nbsp;<span class="node-value-type" data-type-units="@(type.Units)" data-type-ratio="@(type.Ratio)" data-type-name="@(type.Name)">@(type.Name)（@(type.Unit)）</span>
+            </td>
         }
-        <td>
-            <input type="text" class="node-value form-control input-sm col-sm-1" id="node-value-@(type.ID)" nodeId="@(model.ID)" typeId="@(type.ID)" />
-            &nbsp;<span class="node-value-type" data-type-units="@(type.Units)" data-type-ratio="@(type.Ratio)" data-type-name="@(type.Name)">@(type.Name)（@(type.Unit)）</span>
-        </td>
+    }
+    else
+    {
+        <td></td>
     }
 </tr>
 @foreach (var child in model.Children)

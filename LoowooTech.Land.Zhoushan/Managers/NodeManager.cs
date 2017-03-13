@@ -55,9 +55,9 @@ namespace LoowooTech.Land.Zhoushan.Managers
             });
         }
 
-        public List<Node> GetNodeRoots(int formId)
+        public List<Node> GetNodes(int formId, int parentId = 0)
         {
-            return GetNodes().Where(e => e.FormID == formId && e.ParentID == 0).ToList();
+            return GetNodes().Where(e => e.FormID == formId && e.ParentID == parentId).ToList();
         }
 
         public void SaveNode(Node model)

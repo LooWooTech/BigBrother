@@ -1,7 +1,7 @@
 -- --------------------------------------------------------
--- 主机:                           rdsyefqqmvq7bie.mysql.rds.aliyuncs.com
--- 服务器版本:                        5.5.18.1-log - Source distribution
--- 服务器操作系统:                      Linux
+-- 主机:                           127.0.0.1
+-- 服务器版本:                        5.7.12-log - MySQL Community Server (GPL)
+-- 服务器操作系统:                      Win64
 -- HeidiSQL 版本:                  9.3.0.4984
 -- --------------------------------------------------------
 
@@ -10,16 +10,16 @@
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 
--- 导出  表 zhoushan.area 结构
+-- 导出  表 zhoushanland.area 结构
 DROP TABLE IF EXISTS `area`;
 CREATE TABLE IF NOT EXISTS `area` (
   `ID` int(11) NOT NULL AUTO_INCREMENT,
   `Name` varchar(50) NOT NULL DEFAULT '0',
   `ParentID` int(11) NOT NULL DEFAULT '0',
   PRIMARY KEY (`ID`)
-) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8;
 
--- 正在导出表  zhoushan.area 的数据：~10 rows (大约)
+-- 正在导出表  zhoushanland.area 的数据：~10 rows (大约)
 /*!40000 ALTER TABLE `area` DISABLE KEYS */;
 INSERT INTO `area` (`ID`, `Name`, `ParentID`) VALUES
 	(1, '市本级', 0),
@@ -31,11 +31,11 @@ INSERT INTO `area` (`ID`, `Name`, `ParentID`) VALUES
 	(9, '产业集聚区', 1),
 	(10, '金塘', 3),
 	(11, '六横', 5),
-	(12, '朱家尖', 5);
+	(13, '普陀山', 0);
 /*!40000 ALTER TABLE `area` ENABLE KEYS */;
 
 
--- 导出  表 zhoushan.dossier 结构
+-- 导出  表 zhoushanland.dossier 结构
 DROP TABLE IF EXISTS `dossier`;
 CREATE TABLE IF NOT EXISTS `dossier` (
   `ID` int(11) NOT NULL AUTO_INCREMENT,
@@ -44,12 +44,11 @@ CREATE TABLE IF NOT EXISTS `dossier` (
   `Remark` varchar(1023) DEFAULT NULL,
   `UploadTime` datetime NOT NULL,
   PRIMARY KEY (`ID`)
-) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8;
 
--- 正在导出表  zhoushan.dossier 的数据：~10 rows (大约)
+-- 正在导出表  zhoushanland.dossier 的数据：~10 rows (大约)
 /*!40000 ALTER TABLE `dossier` DISABLE KEYS */;
 INSERT INTO `dossier` (`ID`, `Year`, `Quarter`, `Remark`, `UploadTime`) VALUES
-	(1, 2016, 1, 'uploads/QL_20160725_0007.pdf', '2016-08-14 23:16:38'),
 	(2, 2016, 2, 'uploads/QL_20160725_0007.pdf', '2016-07-27 11:22:58'),
 	(3, 2016, 3, 'uploads/QL_20160725_0007.pdf', '2016-07-27 11:27:07'),
 	(4, 2015, 1, '第一季度', '2016-08-01 16:34:10'),
@@ -58,11 +57,12 @@ INSERT INTO `dossier` (`ID`, `Year`, `Quarter`, `Remark`, `UploadTime`) VALUES
 	(7, 2016, 4, 'uploads/SKM_C364e16072710310_0001636052294514076858.pdf', '2016-07-27 15:17:37'),
 	(8, 2013, 1, NULL, '2016-07-29 10:22:53'),
 	(9, 2013, 2, '123342', '2016-07-29 10:44:02'),
-	(10, 2012, 2, '第二季度', '2016-07-29 13:38:47');
+	(10, 2012, 2, '第二季度', '2016-07-29 13:38:47'),
+	(11, 2016, 1, NULL, '2016-09-13 15:50:31');
 /*!40000 ALTER TABLE `dossier` ENABLE KEYS */;
 
 
--- 导出  表 zhoushan.dossierfile 结构
+-- 导出  表 zhoushanland.dossierfile 结构
 DROP TABLE IF EXISTS `dossierfile`;
 CREATE TABLE IF NOT EXISTS `dossierfile` (
   `ID` int(11) NOT NULL AUTO_INCREMENT,
@@ -70,9 +70,9 @@ CREATE TABLE IF NOT EXISTS `dossierfile` (
   `FilePath` varchar(1023) NOT NULL,
   `DossierID` int(11) NOT NULL,
   PRIMARY KEY (`ID`)
-) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8;
 
--- 正在导出表  zhoushan.dossierfile 的数据：~8 rows (大约)
+-- 正在导出表  zhoushanland.dossierfile 的数据：~10 rows (大约)
 /*!40000 ALTER TABLE `dossierfile` DISABLE KEYS */;
 INSERT INTO `dossierfile` (`ID`, `FileName`, `FilePath`, `DossierID`) VALUES
 	(1, 'QL_20160725_0007.pdf', 'uploads/QL_20160725_0007636053858312597793.pdf', 9),
@@ -82,11 +82,13 @@ INSERT INTO `dossierfile` (`ID`, `FileName`, `FilePath`, `DossierID`) VALUES
 	(6, 'SKM_C364e16072710310_0004.pdf', 'uploads/SKM_C364e16072710310_0004636053963259065437.pdf', 10),
 	(7, '2014年度数据册子.doc', 'uploads/2014年度数据册子636056660126596791.doc', 5),
 	(8, '2015年第一季度数据册子.doc', 'uploads/2015年第一季度数据册子636056660493232278.doc', 4),
-	(9, 'QL_20160725_0007.pdf', 'uploads/QL_20160725_0007636053962884252665.pdf', 1);
+	(9, 'QL_20160725_0007.pdf', 'uploads/QL_20160725_0007636053962884252665.pdf', 1),
+	(11, '2016年第一季度册子.pdf', 'uploads/2016年第一季度册子636093785716227670.pdf', 11),
+	(12, '2016年上半年国土资源形式分析定稿.pdf', 'uploads/2016年上半年国土资源形式分析定稿636093786300915170.pdf', 11);
 /*!40000 ALTER TABLE `dossierfile` ENABLE KEYS */;
 
 
--- 导出  表 zhoushan.form 结构
+-- 导出  表 zhoushanland.form 结构
 DROP TABLE IF EXISTS `form`;
 CREATE TABLE IF NOT EXISTS `form` (
   `ID` int(11) NOT NULL AUTO_INCREMENT,
@@ -97,7 +99,7 @@ CREATE TABLE IF NOT EXISTS `form` (
   PRIMARY KEY (`ID`)
 ) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8;
 
--- 正在导出表  zhoushan.form 的数据：~9 rows (大约)
+-- 正在导出表  zhoushanland.form 的数据：~9 rows (大约)
 /*!40000 ALTER TABLE `form` DISABLE KEYS */;
 INSERT INTO `form` (`ID`, `Name`, `ImportTemplate`, `ExportTemplate`, `ExcludeSubArea`) VALUES
 	(1, '建设用地审批', NULL, NULL, b'1'),
@@ -112,7 +114,7 @@ INSERT INTO `form` (`ID`, `Name`, `ImportTemplate`, `ExportTemplate`, `ExcludeSu
 /*!40000 ALTER TABLE `form` ENABLE KEYS */;
 
 
--- 导出  表 zhoushan.node 结构
+-- 导出  表 zhoushanland.node 结构
 DROP TABLE IF EXISTS `node`;
 CREATE TABLE IF NOT EXISTS `node` (
   `ID` int(11) NOT NULL AUTO_INCREMENT,
@@ -126,7 +128,7 @@ CREATE TABLE IF NOT EXISTS `node` (
   KEY `ParentID` (`ParentID`)
 ) ENGINE=InnoDB AUTO_INCREMENT=155 DEFAULT CHARSET=utf8;
 
--- 正在导出表  zhoushan.node 的数据：~84 rows (大约)
+-- 正在导出表  zhoushanland.node 的数据：~84 rows (大约)
 /*!40000 ALTER TABLE `node` DISABLE KEYS */;
 INSERT INTO `node` (`ID`, `FormID`, `ParentID`, `Name`, `Group`, `ValueTypes`) VALUES
 	(1, 1, 0, '批准建设用地面积', NULL, '1'),
@@ -141,7 +143,7 @@ INSERT INTO `node` (`ID`, `FormID`, `ParentID`, `Name`, `Group`, `ValueTypes`) V
 	(11, 1, 8, '水利用地', NULL, '1'),
 	(12, 1, 8, '其他用地', NULL, '1'),
 	(13, 2, 0, '建设用地供应总量', NULL, '1'),
-	(14, 2, 13, '新增建设用地', NULL, '1'),
+	(14, 2, 13, '新增建设用地', '新增建设用地', '1'),
 	(15, 2, 13, '房地产用地', '用地类型', '1'),
 	(16, 2, 13, '工业仓储用地', '用地类型', '1'),
 	(17, 2, 15, '商服用地', NULL, '1'),
@@ -216,7 +218,7 @@ INSERT INTO `node` (`ID`, `FormID`, `ParentID`, `Name`, `Group`, `ValueTypes`) V
 /*!40000 ALTER TABLE `node` ENABLE KEYS */;
 
 
--- 导出  表 zhoushan.node_value 结构
+-- 导出  表 zhoushanland.node_value 结构
 DROP TABLE IF EXISTS `node_value`;
 CREATE TABLE IF NOT EXISTS `node_value` (
   `ID` int(11) NOT NULL AUTO_INCREMENT,
@@ -230,9 +232,9 @@ CREATE TABLE IF NOT EXISTS `node_value` (
   `UpdateTime` datetime NOT NULL,
   PRIMARY KEY (`ID`),
   KEY `NodeID` (`NodeID`)
-) ENGINE=InnoDB AUTO_INCREMENT=719 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=725 DEFAULT CHARSET=utf8;
 
--- 正在导出表  zhoushan.node_value 的数据：~472 rows (大约)
+-- 正在导出表  zhoushanland.node_value 的数据：~563 rows (大约)
 /*!40000 ALTER TABLE `node_value` DISABLE KEYS */;
 INSERT INTO `node_value` (`ID`, `NodeID`, `Value`, `Raw_Value`, `Quarter`, `AreaID`, `TypeID`, `Year`, `UpdateTime`) VALUES
 	(1, 1, 10130.15, 10130.15, 4, 0, 1, 2014, '2016-08-26 15:18:23'),
@@ -791,11 +793,17 @@ INSERT INTO `node_value` (`ID`, `NodeID`, `Value`, `Raw_Value`, `Quarter`, `Area
 	(715, 121, 6, 6, 2, 0, 3, 2015, '2016-08-26 21:50:39'),
 	(716, 122, 6, 6, 2, 0, 3, 2015, '2016-08-26 21:50:39'),
 	(717, 123, 0, 0, 2, 0, 3, 2015, '2016-08-26 21:50:39'),
-	(718, 124, 12711.37, 12711.37, 2, 0, 5, 2015, '2016-08-26 21:50:39');
+	(718, 124, 12711.37, 12711.37, 2, 0, 5, 2015, '2016-08-26 21:50:39'),
+	(719, 1, 1, 1, 4, 1, 1, 2016, '2016-09-21 00:04:59'),
+	(720, 3, 1, 1, 4, 1, 1, 2016, '2016-09-21 00:04:59'),
+	(721, 4, 1, 1, 4, 1, 1, 2016, '2016-09-21 00:04:59'),
+	(722, 1, 0, 1, 4, 0, 1, 2016, '0001-01-01 00:00:00'),
+	(723, 3, 0, 1, 4, 0, 1, 2016, '0001-01-01 00:00:00'),
+	(724, 4, 0, 1, 4, 0, 1, 2016, '0001-01-01 00:00:00');
 /*!40000 ALTER TABLE `node_value` ENABLE KEYS */;
 
 
--- 导出  表 zhoushan.season 结构
+-- 导出  表 zhoushanland.season 结构
 DROP TABLE IF EXISTS `season`;
 CREATE TABLE IF NOT EXISTS `season` (
   `ID` int(11) NOT NULL AUTO_INCREMENT,
@@ -808,17 +816,17 @@ CREATE TABLE IF NOT EXISTS `season` (
   PRIMARY KEY (`ID`)
 ) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
 
--- 正在导出表  zhoushan.season 的数据：~4 rows (大约)
+-- 正在导出表  zhoushanland.season 的数据：~4 rows (大约)
 /*!40000 ALTER TABLE `season` DISABLE KEYS */;
 INSERT INTO `season` (`ID`, `Quarter`, `StartTime`, `Year`, `EndTime`, `SetTime`, `Delete`) VALUES
 	(1, 1, '2016-01-01 00:00:00', 0, '2016-03-01 00:00:00', '2016-07-30 21:14:23', b'001'),
 	(2, 2, '2016-03-01 00:00:00', 2016, '2016-04-29 00:00:00', '2016-08-01 15:34:41', b'000'),
 	(3, 3, '2016-06-01 00:00:00', 2016, '2016-08-30 00:00:00', '2016-08-01 15:34:47', b'000'),
-	(4, 4, '2016-11-02 00:00:00', 2016, '2016-12-30 00:00:00', '2016-08-01 15:34:51', b'000');
+	(4, 4, '2016-09-01 00:00:00', 2016, '2016-12-30 00:00:00', '2016-09-18 11:16:54', b'000');
 /*!40000 ALTER TABLE `season` ENABLE KEYS */;
 
 
--- 导出  表 zhoushan.trend_template 结构
+-- 导出  表 zhoushanland.trend_template 结构
 DROP TABLE IF EXISTS `trend_template`;
 CREATE TABLE IF NOT EXISTS `trend_template` (
   `ID` int(11) NOT NULL AUTO_INCREMENT,
@@ -828,7 +836,7 @@ CREATE TABLE IF NOT EXISTS `trend_template` (
   PRIMARY KEY (`ID`)
 ) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8;
 
--- 正在导出表  zhoushan.trend_template 的数据：~8 rows (大约)
+-- 正在导出表  zhoushanland.trend_template 的数据：~8 rows (大约)
 /*!40000 ALTER TABLE `trend_template` DISABLE KEYS */;
 INSERT INTO `trend_template` (`ID`, `Name`, `FilePath`, `FormID`) VALUES
 	(1, '建设用地预审.xls', '建设用地预审.xls', 8),
@@ -842,7 +850,7 @@ INSERT INTO `trend_template` (`ID`, `Name`, `FilePath`, `FormID`) VALUES
 /*!40000 ALTER TABLE `trend_template` ENABLE KEYS */;
 
 
--- 导出  表 zhoushan.user 结构
+-- 导出  表 zhoushanland.user 结构
 DROP TABLE IF EXISTS `user`;
 CREATE TABLE IF NOT EXISTS `user` (
   `ID` int(11) NOT NULL AUTO_INCREMENT,
@@ -856,30 +864,69 @@ CREATE TABLE IF NOT EXISTS `user` (
   `FormIds` varchar(50) DEFAULT NULL,
   PRIMARY KEY (`ID`),
   KEY `Username` (`Username`)
-) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=57 DEFAULT CHARSET=utf8;
 
--- 正在导出表  zhoushan.user 的数据：~14 rows (大约)
+-- 正在导出表  zhoushanland.user 的数据：~54 rows (大约)
 /*!40000 ALTER TABLE `user` DISABLE KEYS */;
 INSERT INTO `user` (`ID`, `Username`, `Password`, `Role`, `Name`, `Deleted`, `LastLoginTime`, `AreaIds`, `FormIds`) VALUES
-	(1, 'admin', '202cb962ac59075b964b07152d234b70', 4, 'admin', b'0', '2016-09-13 11:47:24', NULL, ''),
-	(3, 'loowootech', '202cb962ac59075b964b07152d234b70', 4, 'loowootech', b'0', NULL, NULL, ''),
-	(4, 'ty', '202cb962ac59075b964b07152d234b70', 3, '唐尧', b'0', NULL, NULL, ''),
-	(5, 'zq', '202cb962ac59075b964b07152d234b70', 2, '赵泉', b'0', '2016-08-18 14:09:55', '1', ''),
+	(1, 'admin', '202cb962ac59075b964b07152d234b70', 5, 'admin', b'0', '2016-11-14 11:36:47', NULL, ''),
+	(3, 'loowootech', '202cb962ac59075b964b07152d234b70', 5, 'loowootech', b'0', NULL, NULL, ''),
+	(4, 'ty', '202cb962ac59075b964b07152d234b70', 3, '唐尧', b'0', '2016-09-18 12:17:46', NULL, ''),
+	(5, 'zq', '202cb962ac59075b964b07152d234b70', 2, '赵泉', b'0', '2016-09-18 12:15:51', '1', ''),
 	(6, 'zwj', '202cb962ac59075b964b07152d234b70', 1, '周威俊', b'0', NULL, '6', ''),
-	(7, 'xc', '202cb962ac59075b964b07152d234b70', 1, '新城', b'0', '2016-09-13 11:45:57', '2', ''),
-	(8, 'sjgh', '202cb962ac59075b964b07152d234b70', 3, '市局规划', b'0', '2016-09-13 11:48:00', '1', '1,8'),
-	(9, 'sjly', '202cb962ac59075b964b07152d234b70', 3, '市局利用', b'0', NULL, '1', '2'),
+	(8, 'sjgh', '202cb962ac59075b964b07152d234b70', 3, '市局规划', b'0', '2016-09-18 11:17:02', '1', '1,8'),
+	(9, 'sjly', '202cb962ac59075b964b07152d234b70', 3, '市局利用', b'0', '2016-10-14 15:25:19', '1', '2'),
 	(10, 'cbzx', '202cb962ac59075b964b07152d234b70', 3, '储备中心', b'0', NULL, '1', '3'),
-	(11, 'zds', '202cb962ac59075b964b07152d234b70', 3, '征地所', b'0', '2016-09-13 11:47:09', '1', '4'),
-	(12, 'sjkg', '202cb962ac59075b964b07152d234b70', 3, '市局矿管', b'0', NULL, '1', '6'),
-	(13, 'jczd', '202cb962ac59075b964b07152d234b70', 3, '监察支队', b'0', NULL, '1', '9'),
-	(14, 'sjxf', '202cb962ac59075b964b07152d234b70', 3, '市局信访', b'0', '2016-09-12 15:07:01', '1', '7'),
-	(15, 'bdc', '202cb962ac59075b964b07152d234b70', 3, '不动产中心', b'0', NULL, '1', '5'),
-	(16, 'sjdj', '202cb962ac59075b964b07152d234b70', 3, '地籍处', b'0', NULL, '1', '5');
+	(11, 'zds', '202cb962ac59075b964b07152d234b70', 3, '征地所', b'0', '2016-09-22 08:19:46', '1', '4'),
+	(12, 'sjkg', '202cb962ac59075b964b07152d234b70', 3, '市局矿管', b'0', '2016-09-14 10:46:29', '1', '6'),
+	(13, 'jczd', '202cb962ac59075b964b07152d234b70', 3, '监察支队', b'0', '2016-09-13 14:51:51', '1', '9'),
+	(14, 'sjxf', '202cb962ac59075b964b07152d234b70', 3, '市局信访', b'0', '2016-09-13 14:15:44', '1', '7'),
+	(15, 'bdc', '202cb962ac59075b964b07152d234b70', 3, '不动产中心', b'0', '2016-10-10 09:12:00', '1', '5'),
+	(16, 'sjdj', '202cb962ac59075b964b07152d234b70', 3, '地籍处', b'0', NULL, '1', '5'),
+	(17, 'dhgh', '202cb962ac59075b964b07152d234b70', 1, '定海规划', b'0', '2016-09-21 15:40:52', '3', '1,8'),
+	(18, 'dhly', '202cb962ac59075b964b07152d234b70', 1, '定海利用储备', b'0', NULL, '3', '2,3'),
+	(19, 'dhzd', '202cb962ac59075b964b07152d234b70', 1, '定海土地征收', b'0', NULL, '3', '4'),
+	(20, 'dhkg', '202cb962ac59075b964b07152d234b70', 1, '定海矿产管理', b'0', NULL, '3', '6'),
+	(21, 'dhbdc', '202cb962ac59075b964b07152d234b70', 1, '定海不动产', b'0', NULL, '3', '5'),
+	(22, 'dhzf', '202cb962ac59075b964b07152d234b70', 1, '定海执法监察', b'0', NULL, '3', '9'),
+	(23, 'dhxf', '202cb962ac59075b964b07152d234b70', 1, '定海信访', b'0', NULL, '3', '7'),
+	(24, 'ptgh', '202cb962ac59075b964b07152d234b70', 1, '普陀规划、征收', b'0', NULL, '5', '1,4,8'),
+	(25, 'ptly', '202cb962ac59075b964b07152d234b70', 1, '普陀利用', b'0', NULL, '5', '2'),
+	(26, 'ptkg', '202cb962ac59075b964b07152d234b70', 1, '普陀矿产管理', b'0', NULL, '5', '6'),
+	(27, 'ptbdc', '202cb962ac59075b964b07152d234b70', 1, '普陀不动产', b'0', '2016-09-22 11:19:14', '5', '5'),
+	(28, 'ptcb', '202cb962ac59075b964b07152d234b70', 1, '普陀土地储备', b'0', NULL, '5', '3'),
+	(29, 'ptzf', '202cb962ac59075b964b07152d234b70', 1, '普陀执法监察', b'0', NULL, '5', '9'),
+	(30, 'ptxf', '202cb962ac59075b964b07152d234b70', 1, '普陀信访', b'0', '2016-09-22 09:12:13', '5', '7'),
+	(31, 'dsgh', '202cb962ac59075b964b07152d234b70', 1, '岱山规划', b'0', NULL, '4', '1,8'),
+	(32, 'dsly', '202cb962ac59075b964b07152d234b70', 1, '岱山利用', b'0', NULL, '4', '2'),
+	(33, 'dszd', '202cb962ac59075b964b07152d234b70', 1, '岱山土地征收、土地储备', b'0', NULL, '4', '3,4'),
+	(34, 'dskg', '202cb962ac59075b964b07152d234b70', 1, '岱山矿产管理', b'0', NULL, '4', '6'),
+	(35, 'dsbdc', '202cb962ac59075b964b07152d234b70', 1, '岱山不动产', b'0', NULL, '4', '5'),
+	(36, 'dszf', '202cb962ac59075b964b07152d234b70', 1, '岱山执法监察', b'0', NULL, '4', '9'),
+	(37, 'dsxf', '202cb962ac59075b964b07152d234b70', 1, '岱山信访', b'0', NULL, '4', '7'),
+	(38, 'ssgh', '202cb962ac59075b964b07152d234b70', 1, '嵊泗规划', b'0', '2016-09-21 11:47:47', '6', '1,8'),
+	(39, 'ssly', '202cb962ac59075b964b07152d234b70', 1, '嵊泗土地利用', b'0', NULL, '6', '2'),
+	(40, 'sszd', '202cb962ac59075b964b07152d234b70', 1, '嵊泗征地', b'0', NULL, '6', '4'),
+	(41, 'sskg', '202cb962ac59075b964b07152d234b70', 1, '嵊泗矿管', b'0', '2016-09-23 09:36:01', '6', '6'),
+	(42, 'ssbdc', '202cb962ac59075b964b07152d234b70', 1, '嵊泗不动产', b'0', NULL, '6', '5'),
+	(43, 'sscb', '202cb962ac59075b964b07152d234b70', 1, '嵊泗储备', b'0', NULL, '6', '3'),
+	(44, 'sszf', '202cb962ac59075b964b07152d234b70', 1, '嵊泗执法监察信访', b'0', NULL, '6', '7,9'),
+	(45, 'xcgh', '202cb962ac59075b964b07152d234b70', 1, '新城土地规划', b'0', NULL, '2', '1,8'),
+	(46, 'xcly', '202cb962ac59075b964b07152d234b70', 1, '新城土地利用、土地储备', b'0', NULL, '2', '2'),
+	(47, 'xczd', '202cb962ac59075b964b07152d234b70', 1, '新城土地征收', b'0', NULL, '2', '4'),
+	(48, 'xckg', '202cb962ac59075b964b07152d234b70', 1, '新城矿管', b'0', NULL, '2', '6'),
+	(49, 'xczf', '202cb962ac59075b964b07152d234b70', 1, '新城执法监察', b'0', NULL, '2', '9'),
+	(50, 'xcxf', '202cb962ac59075b964b07152d234b70', 1, '新城信访', b'0', NULL, '2', '7'),
+	(51, 'jjqgh', '202cb962ac59075b964b07152d234b70', 1, '集聚区分局土地规划、土地征收、执法监察、信访', b'0', NULL, '9', '1,4,7,8,9'),
+	(52, 'jjqly', '202cb962ac59075b964b07152d234b70', 1, '集聚区土地利用', b'0', NULL, '9', '2'),
+	(53, 'jjqkg', '202cb962ac59075b964b07152d234b70', 1, '集聚区矿产管理、不动产', b'0', NULL, '9', '5,6'),
+	(54, 'ptsgh', '202cb962ac59075b964b07152d234b70', 1, '普陀山分局账号1', b'0', NULL, '13', '1,2,3,4,6,8'),
+	(55, 'ptszf', '202cb962ac59075b964b07152d234b70', 1, '普陀山分局执法监察、信访', b'0', NULL, '13', '7,9'),
+	(56, 'ptsbdc', '202cb962ac59075b964b07152d234b70', 1, '普陀山分局不动产', b'0', NULL, '13', '5');
 /*!40000 ALTER TABLE `user` ENABLE KEYS */;
 
 
--- 导出  表 zhoushan.value_type 结构
+-- 导出  表 zhoushanland.value_type 结构
 DROP TABLE IF EXISTS `value_type`;
 CREATE TABLE IF NOT EXISTS `value_type` (
   `ID` int(11) NOT NULL AUTO_INCREMENT,
@@ -889,7 +936,7 @@ CREATE TABLE IF NOT EXISTS `value_type` (
   PRIMARY KEY (`ID`)
 ) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8;
 
--- 正在导出表  zhoushan.value_type 的数据：~8 rows (大约)
+-- 正在导出表  zhoushanland.value_type 的数据：~8 rows (大约)
 /*!40000 ALTER TABLE `value_type` DISABLE KEYS */;
 INSERT INTO `value_type` (`ID`, `Name`, `Units`, `Ratio`) VALUES
 	(1, '面积', '亩,公顷', 1000),

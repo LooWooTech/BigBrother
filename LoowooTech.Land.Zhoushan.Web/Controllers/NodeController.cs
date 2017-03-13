@@ -13,14 +13,14 @@ namespace LoowooTech.Land.Zhoushan.Web.Controllers
         public ActionResult Index(int formId)
         {
             ViewBag.Form = Core.FormManager.GetForm(formId);
-            ViewBag.Nodes = Core.FormManager.GetNodeRoots(formId);
+            ViewBag.Nodes = Core.FormManager.GetNodes(formId);
 
             return View();
         }
 
         public ActionResult GetList(int formId)
         {
-            var data = Core.FormManager.GetNodeRoots(formId);
+            var data = Core.FormManager.GetNodes(formId);
             return JsonSuccessResult(data);
         }
 
@@ -49,8 +49,9 @@ namespace LoowooTech.Land.Zhoushan.Web.Controllers
                 parent = Core.FormManager.GetNode(parentId);
                 node = new Node { FormID = parent.FormID, ParentID = parent.ID };
             }
-            ViewBag.Model = node ?? new Node { FormID = form.ID };
+            ViewBag.Model = node = node ?? new Node { FormID = form.ID };
             ViewBag.ValueTypes = Core.FormManager.GetNodeValueTypes();
+            ViewBag.Nodes = Core.FormManager.GetNodes(node.FormID);
             return View();
         }
 
@@ -117,13 +118,13 @@ namespace LoowooTech.Land.Zhoushan.Web.Controllers
                 throw new ArgumentException("参数错误，未找到该表单");
             }
             ViewBag.Form = form;
-            ViewBag.Nodes = Core.FormManager.GetNodeRoots(formId);
+            ViewBag.Nodes = Core.FormManager.GetNodes(formId);
             ViewBag.ValueTypes = Core.FormManager.GetNodeValueTypes();
             ViewBag.Season = Core.SeasonManager.GetCurrentSeason();
             return View();
         }
 
-        public ActionResult SaveValues(int formId, int year, Quarter quarter, int areaId, string data)
+        public ActionResult SaveValues(int formId, int year, Quarter quarter, int areaId, Period period, string data)
         {
             //判断用户是否可以保存当前年份、季度的数据
             var season = Core.SeasonManager.GetSeason(year, quarter);
@@ -140,12 +141,13 @@ namespace LoowooTech.Land.Zhoushan.Web.Controllers
             return JsonSuccessResult();
         }
 
-        public ActionResult GetNodeValues([NodeValueParameterBinder]NodeValueParameter parameter)
+        public ActionResult GetNodeValues(NodeValueParameter parameter)
         {
-            if (CurrentIdentity.Role == UserRole.Advanced && parameter.AreaID == 0)
+            if (CurrentIdentity.Role < UserRole.Advanced && parameter.AreaID == 0)
             {
                 parameter.AreaID = CurrentIdentity.AreaIds.FirstOrDefault();
             }
+
             var list = Core.FormManager.GetNodeValues(parameter);
 
             return JsonSuccessResult(list);

@@ -126,6 +126,9 @@ namespace LoowooTech.Land.Zhoushan.Managers
                             case FieldType.LastYear:
                                 field.Value = year - 1;
                                 break;
+                            case FieldType.Period:
+                                field.Value = ((Period)firstParameter.Value).GetDescription();
+                                break;
                             case FieldType.Value:
                             case FieldType.RateValue:
                                 double value = 0;
@@ -142,12 +145,15 @@ namespace LoowooTech.Land.Zhoushan.Managers
                                     values = Core.FormManager.GetNodeValues(parameter);
                                     value = values.Select(e => e.RawValue).DefaultIfEmpty(0).Sum();
                                 }
-                                else
+                                else if (firstParameter.Type == FieldType.Rate)
                                 {
+                                    //这里写死了是同比
                                     parameter.RateType = RateType.YearOnYear;
+
                                     values = Core.FormManager.GetNodeValues(parameter);
                                     var sumVal = values.Select(e => e.RawValue).DefaultIfEmpty(0).Sum();
                                     var comVal = values.Select(e => e.CompareValue).DefaultIfEmpty(0).Sum();
+
                                     value = MathHelper.GetRateValue(sumVal, comVal);
                                 }
                                 double ratio = 1;
@@ -227,6 +233,9 @@ namespace LoowooTech.Land.Zhoushan.Managers
                         break;
                     case FieldType.Rate:
                         result.RateType = (RateType)parameter.Value;
+                        break;
+                    case FieldType.Period:
+                        result.Period = (Period)parameter.Value;
                         break;
                 }
             }

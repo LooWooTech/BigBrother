@@ -242,11 +242,17 @@ namespace LoowooTech.Land.Zhoushan.Models
     {
         Form = 1,
         Node,
+        /// <summary>
+        /// 当前季度
+        /// </summary>
         Quarter,
         /// <summary>
-        /// 举例：{Quarters=3}统计前三个季度
+        /// 季度合计：{Quarters=3}统计前三个季度
         /// </summary>
         Quarters,
+        /// <summary>
+        /// 值类型
+        /// </summary>
         Type,
         Area,
         Value,
@@ -257,7 +263,17 @@ namespace LoowooTech.Land.Zhoushan.Models
         /// 指定是同比还是环比
         /// </summary>
         Rate,
-        Unit,//单位
-        Hidden
+        /// <summary>
+        /// 值的单位比率
+        /// </summary>
+        Unit,
+        /// <summary>
+        /// 是否隐藏
+        /// </summary>
+        Hidden,
+        /// <summary>
+        /// 本期=0、期末=1、期内增加=2、期内减少=3
+        /// </summary>
+        Period,
     }
 }

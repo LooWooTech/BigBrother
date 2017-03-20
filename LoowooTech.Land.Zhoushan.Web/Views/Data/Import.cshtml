@@ -8,7 +8,7 @@
     {
         <div class="alert alert-warning">
             <h3>导入关闭</h3>
-            <p>目前系统没有开放导入功能，请等待数据维护人员开放表单录入和导入事件。</p>
+            <p>目前系统没有开放导入功能，请等待数据维护人员开放表单录入和导入时间。</p>
         </div>
         return;
     }
@@ -83,6 +83,12 @@
                 <input type="hidden" name="filePath" id="hide-file" />
             </div>
         </div>
+        <div class="form-group" id="panel-datatemplate">
+            <label class="control-label col-md-3">下载模板</label>
+            <div class="col-md-8">
+                <span class="">请选择表单</span>
+            </div>
+        </div>
     </div>
     <div class="modal-footer">
         <div class="col-md-8 col-md-offset-3">
@@ -95,6 +101,16 @@
         $("#file1").setUpload("/data/upload", function (json) {
             $("#hide-file").val(json.data.filePath);
             $("#span-file").text(json.data.filePath);
+        });
+
+        $("#formId").change(function () {
+            var val = $(this).val();
+            if (val > 0) {
+                var name = $("option:selected", this).text();
+                $("#panel-datatemplate div").html('<a href="/datatemplates/' + name + '.xls" data-target="#page">' + name + '.xls</a>')
+            } else {
+                $("#panel-datatemplate div").html('请选择表单')
+            }
         });
 
         $("#form-import").submit(function () {

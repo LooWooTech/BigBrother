@@ -72,8 +72,14 @@
 </table>
 <script>
     $(function () {
+        var hasChanged = false;
+        $("#list-node-values .node-value").on("change", function () {
+            hasChanged = true;
+        });
         $("#btn-back").click(function () {
-            if (confirm("填写的信息尚未保存，你确定要离开吗？")) {
+            if (hasChanged && confirm("填写的信息尚未保存，你确定要离开吗？")) {
+                history.back();
+            } else {
                 history.back();
             }
         });
@@ -183,10 +189,12 @@
                     return;
                 }
                 var unitIndex = parseInt(control.attr("unit-index") || 0);
+
                 if (unitIndex > 0) {
                     var ratio = parseInt($(".node-value-type").attr("data-type-ratio"));
-                    val = val / Math.pow(ratio, unitIndex);
+                    val = val * Math.pow(ratio, unitIndex);
                 }
+
                 data.push({
                     ID: control.attr("valueId") || 0,
                     Year: parameter.year,
@@ -210,6 +218,7 @@
                 function () {
                     var text = $("#text-value").text();
                     alert(text + "的数据保存成功");
+                    hasChanged = false;
             });
         });
     });

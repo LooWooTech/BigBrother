@@ -196,7 +196,7 @@ namespace LoowooTech.Land.Zhoushan.Managers
                         );
                         if (compareItem != null)
                         {
-                            item.CompareValue = compareItem.RawValue;
+                            item.CompareValue = compareItem.Value;
                         }
                     }
                 }
@@ -204,7 +204,7 @@ namespace LoowooTech.Land.Zhoushan.Managers
             }
         }
 
-        public void SaveNodeValue(NodeValue data, bool importValue)
+        public void SaveNodeValue(NodeValue data)
         {
             using (var db = GetDbContext())
             {
@@ -213,7 +213,7 @@ namespace LoowooTech.Land.Zhoushan.Managers
                     var entity = db.NodeValues.FirstOrDefault(e => e.ID == data.ID);
                     if (entity != null)
                     {
-                        db.Entry(entity).CurrentValues.SetValues(data);
+                        entity.Value = data.Value;
                     }
                 }
                 else
@@ -225,29 +225,13 @@ namespace LoowooTech.Land.Zhoushan.Managers
                     && e.NodeID == data.NodeID
                     && e.Period == data.Period
                     );
-                    if (entity != null)
+                    if (entity == null)
                     {
-                        if (importValue)
-                        {
-                            entity.RawValue = data.RawValue;
-                        }
-                        else
-                        {
-                            entity.RawValue = data.Value;
-                            entity.Value = data.Value;
-                        }
+                        db.NodeValues.Add(data);
                     }
                     else
                     {
-                        if (importValue)
-                        {
-                            data.Value = data.RawValue;
-                        }
-                        else
-                        {
-                            data.RawValue = data.Value;
-                        }
-                        db.NodeValues.Add(data);
+                        entity.Value = data.Value;
                     }
                 }
                 db.SaveChanges();
@@ -258,7 +242,7 @@ namespace LoowooTech.Land.Zhoushan.Managers
         {
             foreach (var val in values)
             {
-                SaveNodeValue(val, false);
+                SaveNodeValue(val);
             }
         }
 
@@ -267,15 +251,12 @@ namespace LoowooTech.Land.Zhoushan.Managers
         /// </summary>
         public void ComputeSumValue(int formId, int year, Quarter quarter, List<NodeValue> submitValues)
         {
-            new Thread(() =>
+            var form = Core.FormManager.GetForm(formId);
+            foreach (var val in submitValues)
             {
-                var form = Core.FormManager.GetForm(formId);
-                foreach (var val in submitValues)
-                {
-                    UpdateParentAreaValue(val, form);
-                }
-                _updateList.Clear();
-            }).Start();
+                UpdateParentAreaValue(val, form);
+            }
+            _updateList.Clear();
         }
 
         private List<NodeValueParameter> _updateList = new List<NodeValueParameter>();
@@ -317,18 +298,21 @@ namespace LoowooTech.Land.Zhoushan.Managers
                    && e.Quarter == parameter.Quarter
                    && e.TypeID == parameter.TypeID
                    && e.NodeID == parameter.NodeID
+                   && e.Period == parameter.Period
                 );
                 if (entity == null)
                 {
                     entity = new NodeValue(parameter);
                     db.NodeValues.Add(entity);
                 }
-                entity.RawValue = db.NodeValues.Where(e => parameter.AreaIds.Contains(e.AreaID)
+                entity.Value = db.NodeValues.Where(e => parameter.AreaIds.Contains(e.AreaID)
                  && e.Year == parameter.Year
                    && e.Quarter == parameter.Quarter
                    && e.TypeID == parameter.TypeID
                    && e.NodeID == parameter.NodeID
-                ).Select(e => e.RawValue).DefaultIfEmpty(0).Sum();
+                   && e.Period == parameter.Period
+                ).Select(e => e.Value).DefaultIfEmpty(0).Sum();
+                entity.Value = entity.Value;
                 db.SaveChanges();
 
                 return entity;

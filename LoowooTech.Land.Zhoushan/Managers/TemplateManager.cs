@@ -40,7 +40,7 @@ namespace LoowooTech.Land.Zhoushan.Managers
                     else
                     {
                         field.SetEntity(entity, year, quarter, areaId);
-                        Core.FormManager.SaveNodeValue(entity, true);
+                        Core.FormManager.SaveNodeValue(entity);
                     }
                     db.SaveChanges();
                 }
@@ -143,7 +143,7 @@ namespace LoowooTech.Land.Zhoushan.Managers
                                 if (firstParameter.Type == FieldType.Value)
                                 {
                                     values = Core.FormManager.GetNodeValues(parameter);
-                                    value = values.Select(e => e.RawValue).DefaultIfEmpty(0).Sum();
+                                    value = values.Select(e => e.Value).DefaultIfEmpty(0).Sum();
                                 }
                                 else if (firstParameter.Type == FieldType.Rate)
                                 {
@@ -151,7 +151,7 @@ namespace LoowooTech.Land.Zhoushan.Managers
                                     parameter.RateType = RateType.YearOnYear;
 
                                     values = Core.FormManager.GetNodeValues(parameter);
-                                    var sumVal = values.Select(e => e.RawValue).DefaultIfEmpty(0).Sum();
+                                    var sumVal = values.Select(e => e.Value).DefaultIfEmpty(0).Sum();
                                     var comVal = values.Select(e => e.CompareValue).DefaultIfEmpty(0).Sum();
 
                                     value = MathHelper.GetRateValue(sumVal, comVal);
@@ -297,7 +297,7 @@ namespace LoowooTech.Land.Zhoushan.Managers
 
                 }
             }
-            entity.RawValue = val * ratio;
+            entity.Value = val * ratio;
         }
 
     }

@@ -13,7 +13,7 @@
         <div class="col-md-6 @(rowIndex>1?"col-md-offset-6":null)"></div>
         continue;
     }
-    var sumValue = g.Sum(e => e.RawValue);
+    var sumValue = g.Sum(e => e.Value);
     var comValue = g.Sum(e => e.CompareValue);
     var sumRate = MathHelper.GetRateValue(sumValue, comValue);
     <div class="col-md-3 @(rowIndex>1?"col-md-offset-6":null)">

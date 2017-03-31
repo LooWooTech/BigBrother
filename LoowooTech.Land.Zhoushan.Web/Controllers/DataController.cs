@@ -144,7 +144,7 @@ namespace LoowooTech.Land.Zhoushan.Web.Controllers
             if (templateIds == null || templateIds.Length == 0)
             {
                 throw new ArgumentException("请选择导出模板");
-                templateIds = Core.TrendTemplateManager.GetList().Select(e => e.ID).ToArray();
+                //templateIds = Core.TrendTemplateManager.GetList().Select(e => e.ID).ToArray();
             }
 
             //导出word

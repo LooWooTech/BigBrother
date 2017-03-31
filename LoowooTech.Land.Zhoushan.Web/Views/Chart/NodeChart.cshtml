@@ -53,7 +53,7 @@
                             var data = new List<string>();
                             foreach (var nodeId in nodeIds)
                             {
-                                var val = values.Where(e => e.NodeID == nodeId && e.TypeID == typeIds[i]).Select(e => e.RawValue).DefaultIfEmpty(0).Sum().ToString("f2").TrimEnd('0').TrimEnd('.');
+                                var val = values.Where(e => e.NodeID == nodeId && e.TypeID == typeIds[i]).Select(e => e.Value).DefaultIfEmpty(0).Sum().ToString("f2").TrimEnd('0').TrimEnd('.');
                                 data.Add(val);
                             }
                         <text>

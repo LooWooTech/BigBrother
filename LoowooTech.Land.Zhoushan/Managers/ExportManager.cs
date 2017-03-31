@@ -108,7 +108,7 @@ namespace LoowooTech.Land.Zhoushan.Managers
             foreach (var kv in vals.GroupBy(v => v.Type).ToDictionary(g => g.Key, g => g.ToList()))
             {
                 var type = kv.Key;
-                var sumVal = kv.Value.Select(e => e.RawValue).DefaultIfEmpty(0).Sum();
+                var sumVal = kv.Value.Select(e => e.Value).DefaultIfEmpty(0).Sum();
                 var sumComVal = kv.Value.Select(e => e.CompareValue).DefaultIfEmpty(0).Sum();
                 var rateSumVal = MathHelper.GetRateValue(sumVal, sumComVal);
                 if (sumVal == 0)

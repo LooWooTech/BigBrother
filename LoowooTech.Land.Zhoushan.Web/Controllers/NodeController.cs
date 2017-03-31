@@ -186,7 +186,7 @@ namespace LoowooTech.Land.Zhoushan.Web.Controllers
         [HttpPost]
         public ActionResult SaveValue(NodeValue data)
         {
-            Core.FormManager.SaveNodeValue(data, false);
+            Core.FormManager.SaveNodeValue(data);
 
             return JsonSuccessResult();
         }

@@ -24,6 +24,7 @@ namespace LoowooTech.Land.Zhoushan.Models
             Year = parameter.Year;
             Quarter = parameter.Quarter;
             TypeID = parameter.TypeID;
+            Period = parameter.Period ?? Period.Default;
         }
 
         [Key]
@@ -32,16 +33,7 @@ namespace LoowooTech.Land.Zhoushan.Models
 
         public int NodeID { get; set; }
 
-        /// <summary>
-        /// 手工录入的值，该值会影响到子区域的自动计算
-        /// </summary>
         public double Value { get; set; }
-
-        /// <summary>
-        /// 导入和参与报表计算的真实的值
-        /// </summary>
-        [Column("raw_value")]
-        public double RawValue { get; set; }
 
         /// <summary>
         /// 值类型（面积、金额、件数）
@@ -83,7 +75,7 @@ namespace LoowooTech.Land.Zhoushan.Models
         {
             get
             {
-                return MathHelper.GetRateValue(RawValue, CompareValue);
+                return MathHelper.GetRateValue(Value, CompareValue);
             }
         }
 

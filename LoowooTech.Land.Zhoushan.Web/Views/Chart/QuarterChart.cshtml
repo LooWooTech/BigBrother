@@ -71,7 +71,7 @@
                         {
                             if (compareYear)
                             {
-                                var val = vals.Where(e => e.Year == year).Select(e => e.RawValue).DefaultIfEmpty(0).Sum().ToString("F2").TrimEnd('0').TrimEnd('.');
+                                var val = vals.Where(e => e.Year == year).Select(e => e.Value).DefaultIfEmpty(0).Sum().ToString("F2").TrimEnd('0').TrimEnd('.');
                                 data.Add(val);
                             }
                             else
@@ -84,7 +84,7 @@
                                         break;
                                     }
 
-                                    var val = vals.Where(e => e.Year == year && e.Quarter == quarter).Select(e => e.RawValue).DefaultIfEmpty(0).Sum().ToString("F2").TrimEnd('0').TrimEnd('.');
+                                    var val = vals.Where(e => e.Year == year && e.Quarter == quarter).Select(e => e.Value).DefaultIfEmpty(0).Sum().ToString("F2").TrimEnd('0').TrimEnd('.');
                                     data.Add(val);
                                 }
                             }

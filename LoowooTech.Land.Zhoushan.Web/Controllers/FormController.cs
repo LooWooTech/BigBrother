@@ -19,7 +19,7 @@ namespace LoowooTech.Land.Zhoushan.Web.Controllers
         [UserRoleFilter(UserRole.Branch)]
         public ActionResult GetYears(int formId)
         {
-            var list = Core.FormManager.GetFormYears(formId);
+            var list = Core.FormManager.GetFormYears(formId).OrderByDescending(year => year);
             return JsonSuccessResult(list);
         }
 
@@ -27,7 +27,7 @@ namespace LoowooTech.Land.Zhoushan.Web.Controllers
         public ActionResult Charts()
         {
             var data = new Dictionary<Form, int[]>();
-            var forms  = Core.FormManager.GetForms(CurrentIdentity.FormIds);
+            var forms = Core.FormManager.GetForms(CurrentIdentity.FormIds);
             foreach (var form in forms)
             {
                 var years = Core.FormManager.GetFormYears(form.ID);

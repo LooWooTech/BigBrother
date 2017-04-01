@@ -49,6 +49,12 @@
                 <option value="1,2,3" @(string.Join(",", parameter.Quarters) == "1,2,3" ? "selected" : null)>前三季度</option>
                 <option value="1,2,3,4" @(string.Join(",", parameter.Quarters) == "1,2,3,4" ? "selected" : null)>全年</option>
             </select>
+            <select id="ddl-period" name="Period" class="form-control">
+                @foreach (Period val in Enum.GetValues(typeof(Period)))
+                {
+                    <option value="@((int)val)" @(val == parameter.Period ? "selected" : null)>@(val.GetDescription())</option>
+                }
+            </select>
             @Html.Action("Dropdown", "Area", new { AreaID = parameter.AreaID })
             @Html.Partial("_RateTypeDropdown", parameter.RateType)
             <button type="submit" class="btn btn-primary"><i class="fa fa-bar-chart-o"></i> 统计</button>

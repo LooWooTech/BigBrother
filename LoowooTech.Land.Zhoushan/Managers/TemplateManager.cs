@@ -145,7 +145,7 @@ namespace LoowooTech.Land.Zhoushan.Managers
                                     values = Core.FormManager.GetNodeValues(parameter);
                                     value = values.Select(e => e.Value).DefaultIfEmpty(0).Sum();
                                 }
-                                else if (firstParameter.Type == FieldType.Rate)
+                                else if (firstParameter.Type == FieldType.RateValue)
                                 {
                                     //这里写死了是同比
                                     parameter.RateType = RateType.YearOnYear;
@@ -164,7 +164,15 @@ namespace LoowooTech.Land.Zhoushan.Managers
                                     var valueType = Core.FormManager.GetNodeValueType(typeId);
                                     ratio = 1.0 / (index == 0 ? 1 : (int)Math.Pow(valueType.Ratio, index));
                                 }
-                                field.Value = value * ratio;
+                                if (firstParameter.Type == FieldType.Value)
+                                {
+                                    field.Value = double.Parse((value * ratio).ToString("f4"));
+                                }
+                                else
+                                {
+                                    field.Value = double.Parse((value * ratio).ToString("f2"));
+                                }
+
                                 break;
                         }
                     }

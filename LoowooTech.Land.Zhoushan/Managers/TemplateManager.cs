@@ -149,7 +149,6 @@ namespace LoowooTech.Land.Zhoushan.Managers
                                 {
                                     //这里写死了是同比
                                     parameter.RateType = RateType.YearOnYear;
-
                                     values = Core.FormManager.GetNodeValues(parameter);
                                     var sumVal = values.Select(e => e.Value).DefaultIfEmpty(0).Sum();
                                     var comVal = values.Select(e => e.CompareValue).DefaultIfEmpty(0).Sum();
@@ -254,6 +253,10 @@ namespace LoowooTech.Land.Zhoushan.Managers
             if (result.AreaID == 0 && areaIds != null)
             {
                 result.AreaIds = areaIds;
+            }
+            if (result.Quarter == 0 && ((result.Quarters != null && result.Quarters.Length == 0) || result.Quarters == null))
+            {
+                result.Quarters = quarters;
             }
             return result;
         }

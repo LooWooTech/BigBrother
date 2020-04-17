@@ -21,7 +21,7 @@ namespace LoowooTech.Land.Zhoushan.Models
         /// <summary>
         /// 该表单的node的值是否不包含子区域的合计
         /// </summary>
-        public bool ExcludeSubArea { get; set; }
+        public bool ExcludeSubArea { get; set; } = true;
 
         public string ImportTemplate { get; set; }
 

@@ -27,89 +27,70 @@
     <![endif]-->
 </head>
 <body class="layout-content">
-    <div class="navbar navbar-inverse navbar-fixed-top">
-        <div class="navbar-header">
-            <a class="navbar-brand" data-target="#page"><i class="fa fa-line-chart"></i> 舟山市国土资源统计与分析系统</a>
-            <button class="navbar-toggle" type="button" data-toggle="collapse" data-target="#navbar-main">
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-            </button>
-        </div>
-        <div class="navbar-collapse collapse" id="navbar-main">
-            <ul class="nav navbar-nav">
-                <li><a href="/"><i class="fa fa-home"></i> 首页</a></li>
-                <li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-pencil-square-o"></i> 数据录入 <span class="caret"></span></a>
-                    <ul class="dropdown-menu" role="menu">
-                        <li><a href="/form/write" data-toggle="modal" data-target="#modal">录入数据</a></li>
-                        <li><a href="/data/import" data-toggle="modal" data-target="#modal">导入数据</a></li>
-                    </ul>
-                </li>
-                <li><a href="/chart/"><i class="fa fa-pie-chart"></i> 统计图表</a></li>
-                @if (role > UserRole.Branch)
-                {
-                <li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-share"></i> 数据导出 <span class="caret"></span></a> 
-                    <ul class="dropdown-menu" role="menu">
-                        <li><a href="/data/exportstatistic" data-toggle="modal" data-target="#modal">统计报表</a></li>
-                        <li><a href="/data/exporttrend" data-toggle="modal" data-target="#modal">国土资源形势</a></li>
-                        @if (role > UserRole.Advanced)
-                        {
-                            <li class="divider"></li>
-                            <li><a href="/trendtemplate/">资源形势Excel模板</a></li>
-                        }
-                    </ul>
-                </li>
-                }
-                @if (role >= UserRole.Advanced)
-                {
-                    <li class="dropdown">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-archive"></i> 调控档案<span class="caret"></span></a>
-                        <ul class="dropdown-menu" role="menu">
-                            <li><a href="/Archive/Import" data-toggle="modal" data-target="#modal">档案上传</a></li>
-                            <li><a href="/Archive/">档案管理</a></li>
-                            <li><a href="/Archive/Search">档案查询</a></li>
-                        </ul>
-                    </li>
-                }
-                else
-                {
-                    <li><a href="/Archive/Search"><i class="fa fa-archive"></i> 档案查询</a></li>
-                }
-                @if (role > UserRole.Advanced)
-                { 
-                    <li class="dropdown">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-gear"></i> 系统维护 <span class="caret"></span></a>
-                        <ul class="dropdown-menu" role="menu">
-                            <li><a href="/form">表单列表</a></li>
-                            <li><a href="/form/edit" data-toggle="modal" data-target="#modal">添加表单</a></li>
-                            <li class="divider"></li>
-                            <li><a href="/area/">地区管理</a></li>
-                            <li class="divider"></li>
-                            <li><a href="/valuetype/">单位类型管理</a></li>
-                            <li><a href="/Season/">季度填报时间管理</a></li>
-                            <li><a href="/Season/Statistic">填报统计情况</a></li>
-                            <li class="divider"></li>
-                            <li><a href="/user">用户列表</a></li>
-                            <li><a href="/user/edit" data-toggle="modal" data-target="#modal">添加用户</a></li>
-                        </ul>
-                    </li>
-                }
+    <ul class="navbar-default sidebar" role="navigation">
+        <li>
+            <span><i class="fa fa-pie-chart"></i> 统计分析</span>
+            <ul>
+                <a href="/chart/">统计报表</a>
             </ul>
-            <ul class="nav navbar-nav navbar-right">
-                <li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">@(role.GetDescription())-@(identity.Name)  <span class="caret"></span></a>
-                    <ul class="dropdown-menu" role="menu">
-                        <li><a href="/user/editpassword" data-toggle="modal" data-target="#modal">修改密码</a></li>
-                        <li><a href="/user/logout" data-target="#page">退出</a></li>
-                    </ul>
-                </li>
+        </li>
+        <li>
+            <span>
+                <i class="fa fa-pencil-square-o"></i> 数据录入
+            </span>
+            <ul>
+                <li><a href="/form/write" data-toggle="modal" data-target="#modal">录入数据</a></li>
+                <li><a href="/data/import" data-toggle="modal" data-target="#modal">导入数据</a></li>
             </ul>
-
-        </div>
-    </div>
-
+        </li>
+        @if (role > UserRole.Branch)
+        {
+            <li>
+                <span><i class="fa fa-share"></i> 数据导出 </span>
+                <ul>
+                    <li><a href="/data/exportstatistic" data-toggle="modal" data-target="#modal">统计报表</a></li>
+                    <li><a href="/data/exporttrend" data-toggle="modal" data-target="#modal">国土资源形势</a></li>
+                    @if (role > UserRole.Advanced)
+                    {
+                        <li class="divider"></li>
+                        <li><a href="/trendtemplate/">资源形势Excel模板</a></li>
+                    }
+                </ul>
+            </li>
+        }
+        @if (role >= UserRole.Advanced)
+        {
+            <li>
+                <span><i class="fa fa-archive"></i> 调控档案</span>
+                <ul>
+                    <li><a href="/Archive/Import" data-toggle="modal" data-target="#modal">档案上传</a></li>
+                    <li><a href="/Archive/">档案管理</a></li>
+                    <li><a href="/Archive/Search">档案查询</a></li>
+                </ul>
+            </li>
+        }
+        else
+        {
+            <li><a href="/Archive/Search"><i class="fa fa-archive"></i> 档案查询</a></li>
+        }
+        @if (role > UserRole.Advanced)
+        {
+            <li>
+                <span><i class="fa fa-gear"></i> 系统维护</span>
+                <ul>
+                    <li><a href="/form">表单管理</a></li>
+                    <li class="divider"></li>
+                    <li><a href="/area/">地区管理</a></li>
+                    <li class="divider"></li>
+                    <li><a href="/valuetype/">单位类型管理</a></li>
+                    <li><a href="/Season/">季度填报时间管理</a></li>
+                    <li><a href="/Season/Statistic">填报统计情况</a></li>
+                    <li class="divider"></li>
+                    <li><a href="/user">用户管理</a></li>
+                </ul>
+            </li>
+        }
+    </ul>
     <div id="main">
         @RenderBody()
     </div>

@@ -1,4 +1,5 @@
-﻿using LoowooTech.Land.Zhoushan.Models;
+﻿using LoowooTech.Land.Zhoushan.Common;
+using LoowooTech.Land.Zhoushan.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,32 +10,32 @@ namespace LoowooTech.Land.Zhoushan.Web.Controllers
 {
     public class UserController : ControllerBase
     {
-        [UserAuthorize(Enabled = false)]
-        [HttpGet]
-        public ActionResult Login()
+        [AllowAnonymous]
+        public ActionResult Login(string code)
         {
-            return View();
-        }
-
-        [UserAuthorize(Enabled = false)]
-        [HttpPost]
-        public ActionResult Login(string username, string password)
-        {
-            if (string.IsNullOrEmpty(username) || string.IsNullOrEmpty(password))
+            if (!string.IsNullOrWhiteSpace(code))
             {
-                throw new ArgumentException("参数错误");
-            }
-            var user = Core.UserManager.GetUser(username, password);
-            if (user != null)
-            {
-                AuthorizeHelper.Login(HttpContext, user);
-                Core.UserManager.UpdateLogin(user);
+                var username = code.AESDecrypt();
+                var user = Core.UserManager.GetUser(username);
+                HttpContext.Login(user);
+                return RedirectToAction("Index", "Home");
             }
             else
             {
-                throw new HttpException(401, "登录失败");
+                return View();
             }
-            return JsonSuccessResult();
+        }
+
+        [AllowAnonymous]
+        public ActionResult GetUsers()
+        {
+            var data = Core.UserManager.GetUsers(new UserParameter()).Select(e => new
+            {
+                e.Username,
+                e.Name,
+                e.Password,
+            });
+            return Json(data, JsonRequestBehavior.AllowGet);
         }
 
         [HttpGet]
@@ -69,7 +70,6 @@ namespace LoowooTech.Land.Zhoushan.Web.Controllers
             AuthorizeHelper.Logout(HttpContext);
             return RedirectToAction("Login");
         }
-
 
         [UserRoleFilter(UserRole.Administrator)]
         public ActionResult Index(string searchKey, int page = 1, int rows = 20)

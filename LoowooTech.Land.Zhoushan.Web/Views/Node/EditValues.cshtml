@@ -191,7 +191,7 @@
                 var unitIndex = parseInt(control.attr("unit-index") || 0);
 
                 if (unitIndex > 0) {
-                    var ratio = parseInt($(".node-value-type").attr("data-type-ratio"));
+                    var ratio = parseInt(control.parent().find(".node-value-type").attr("data-type-ratio"));
                     val = val * Math.pow(ratio, unitIndex);
                 }
 

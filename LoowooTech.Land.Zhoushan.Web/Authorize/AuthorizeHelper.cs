@@ -1,5 +1,7 @@
-﻿using LoowooTech.Land.Zhoushan.Models;
+﻿using LoowooTech.Land.Zhoushan.Common;
+using LoowooTech.Land.Zhoushan.Models;
 using LoowooTech.Land.Zhoushan.Web.Security;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,53 +10,40 @@ using System.Web.Security;
 
 namespace LoowooTech.Land.Zhoushan.Web
 {
-    public class AuthorizeHelper
+    public static class AuthorizeHelper
     {
-        private static string _tokenKey = ".zsauth";
-
-        public static UserIdentity GetIdentity(HttpContextBase context)
+        private static readonly string TokenKey = ".zstoken";
+        public static UserIdentity GetIdentity(this HttpContextBase context)
         {
-            var token = context.Request.Headers[_tokenKey] ?? context.Request[_tokenKey];
-            if (!string.IsNullOrEmpty(token))
+            var token = context.Request[TokenKey] ?? context.Request.Headers[TokenKey];
+            if (!string.IsNullOrWhiteSpace(token))
             {
-                var ticket = FormsAuthentication.Decrypt(token);
-                if (ticket != null && !string.IsNullOrEmpty(ticket.Name))
+                try
                 {
-                    var values = ticket.Name.Split('|');
-                    if (values.Length >= 5)
+                    var ticket = FormsAuthentication.Decrypt(token);
+                    if (ticket != null && !string.IsNullOrEmpty(ticket.UserData))
                     {
-                        var userId = int.Parse(values[0]);
-                        var name = values[1];
-                        var role = Enum.Parse(typeof(UserRole), values[2]);
-                        return new UserIdentity
-                        {
-                            ID = userId,
-                            Name = name,
-                            Role = (UserRole)role,
-                            AreaIds = values[3].Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries).Select(e => int.Parse(e)).ToArray(),
-                            FormIds = values[4].Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries).Select(e => int.Parse(e)).ToArray()
-                        };
+                        return JsonConvert.DeserializeObject<UserIdentity>(ticket.UserData);
                     }
                 }
+                catch { }
             }
             return UserIdentity.Anonymouse;
         }
-
-        public static void Login(HttpContextBase context, User user)
+        public static void Login(this HttpContextBase context, User user)
         {
-            var tokenValue = user.ID + "|" + user.Name + "|" + user.Role + "|" + user.AreaIdsValue + "|" + user.FormIdsValue;
-            var ticket = new FormsAuthenticationTicket(tokenValue, false, int.MaxValue);
-            var cookie = new HttpCookie(_tokenKey, FormsAuthentication.Encrypt(ticket));
-            cookie.Expires = DateTime.Now.AddDays(1);
+            var tokenValue = user.ToJson();
+            var ticket = new FormsAuthenticationTicket(0, TokenKey, DateTime.Now, DateTime.Now.AddYears(1), false, tokenValue);
+            var cookie = new HttpCookie(TokenKey, FormsAuthentication.Encrypt(ticket));
             context.Response.SetCookie(cookie);
         }
 
-        public static void Logout(HttpContextBase context)
+        public static void Logout(this HttpContextBase context)
         {
-            var cookie = context.Request.Cookies.Get(_tokenKey);
+            var cookie = context.Request.Cookies.Get(TokenKey);
             if (cookie == null) return;
             cookie.Expires = DateTime.Now.AddYears(-1);
-            cookie.Values.Remove(_tokenKey);
+            cookie.Values.Remove(TokenKey);
             context.Response.SetCookie(cookie);
         }
     }

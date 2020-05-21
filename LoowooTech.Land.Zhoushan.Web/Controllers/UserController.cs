@@ -11,6 +11,7 @@ namespace LoowooTech.Land.Zhoushan.Web.Controllers
     public class UserController : ControllerBase
     {
         [AllowAnonymous]
+        [HttpGet]
         public ActionResult Login(string code)
         {
             if (!string.IsNullOrWhiteSpace(code))
@@ -24,6 +25,27 @@ namespace LoowooTech.Land.Zhoushan.Web.Controllers
             {
                 return View();
             }
+        }
+
+        [AllowAnonymous]
+        [HttpPost]
+        public ActionResult Login(string username, string password)
+        {
+            if (string.IsNullOrEmpty(username) || string.IsNullOrEmpty(password))
+            {
+                throw new ArgumentException("参数错误");
+            }
+            var user = Core.UserManager.GetUser(username, password);
+            if (user != null)
+            {
+                AuthorizeHelper.Login(HttpContext, user);
+                Core.UserManager.UpdateLogin(user);
+            }
+            else
+            {
+                throw new HttpException(401, "登录失败");
+            }
+            return JsonSuccessResult();
         }
 
         [AllowAnonymous]

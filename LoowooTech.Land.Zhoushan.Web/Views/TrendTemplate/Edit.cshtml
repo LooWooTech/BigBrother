@@ -60,7 +60,7 @@
             var action = $(this).attr("action");
             var data = $(this).serialize();
             $.request(action, data, function () {
-                $.closeWindow();
+                $.closeModal();
                 alert("操作成功");
                 $("#main").loadUrl('@(Url.Action("Index"))');
             });

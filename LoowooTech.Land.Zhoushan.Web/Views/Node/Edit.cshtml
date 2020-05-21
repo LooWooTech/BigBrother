@@ -56,8 +56,8 @@
 <script>
     $(function () {
         $("#form-node").setForm(function () {
-            $.closeWindow();
-            $.loadMain();
+            $.closeModal();
+            $.reloadPage();
         });
         $("#parentId").val("@(model.ParentID)")
     });

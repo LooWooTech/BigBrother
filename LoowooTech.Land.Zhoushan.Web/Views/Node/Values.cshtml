@@ -44,7 +44,7 @@
             <td>@(item.Value)</td>
             <td>
                 <a href="/node/editvalue?valueId=@(item.ID)" class="btn btn-default btn-xs" data-toggle="modal" data-target="#modal" title="编辑"><i class="fa fa-edit"></i> 编辑</a>
-                <a href="/node/deletevalue?valueId=@(item.ID)" class="btn btn-danger btn-xs" title="删除" data-target="#delete"><i class="fa fa-trash-o"></i> 删除</a>
+                <a href="/node/deletevalue?valueId=@(item.ID)" class="btn btn-danger btn-xs btn-confirm"><i class="fa fa-trash-o"></i> 删除</a>
             </td>
         </tr>
     }
@@ -58,7 +58,7 @@
             if (action.indexOf('?') == -1) {
                 action = action + "?";
             }
-            $.loadMain(action + "&" + data);
+            $.reloadPage(action + "&" + data);
             return false;
         });
     });

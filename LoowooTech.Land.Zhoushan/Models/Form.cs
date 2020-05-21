@@ -18,6 +18,8 @@ namespace LoowooTech.Land.Zhoushan.Models
 
         public string Name { get; set; }
 
+        public bool Disabled { get; set; }
+
         /// <summary>
         /// 该表单的node的值是否不包含子区域的合计
         /// </summary>

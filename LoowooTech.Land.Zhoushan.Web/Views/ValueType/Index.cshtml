@@ -28,7 +28,7 @@
             <td>@(item.Ratio)</td>
             <td>
                 <a href="/valuetype/edit?id=@(item.ID)" class="btn btn-primary btn-xs" data-toggle="modal" data-target="#modal" title="编辑"><i class="fa fa-edit"></i></a>
-                <a href="/valuetype/delete?id=@(item.ID)" class="btn btn-danger btn-xs" title="删除" data-target="#delete"><i class="fa fa-trash-o"></i></a>
+                <a href="/valuetype/delete?id=@(item.ID)" class="btn btn-danger btn-xs btn-confirm"><i class="fa fa-trash-o"></i></a>
             </td>
         </tr>
     }

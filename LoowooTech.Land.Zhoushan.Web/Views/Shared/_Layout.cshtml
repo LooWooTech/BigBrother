@@ -117,70 +117,132 @@
             parent.addClass("active");
         });
 
-        window.location.history = {};
+        $.loadPage = function (href, target, cb) {
+            if (!target || target === "#main") {
+                $.closeModal();
+            }
+            if (target && target !== "#main") {
+                href = href + " " + target;
+            }
+            $(target || "#main").loadUrl(href, cb);
+        };
+
+        $.reloadPage = function (href) {
+            $("#main").reload();
+        };
+
+        //侧边栏或顶部导航 点击后，ajax加载 #main
         $(window).on('hashchange', function () {
             //程序需要记录上一次的loadUrl使用的targetId
             var href = window.location.hash.substring(1);
-            if (href) {
-                var targetId = window.location.history[href];
-                if (targetId) {
-                    $(targetId).loadUrl(href);
-                }
-            } else {
-                $("#body").loadUrl("/");
-            }
+            $("#main").loadPage(href);
         });
 
-        $.loadMain(window.location.hash);
+        var href = window.location.hash.substring(1);
+        if (href) {
+            $("#main").loadPage(href);
+        }
+
+        $.hideModal = function (id) {
+            id = id || "modal";
+            $("#" + id).modal('hide');
+
+        };
+
+        $(document).on('click', 'a.btn-confirm', function () {
+            var self = $(this);
+            if (confirm(self.attr("title") || "你确定要执行此操作吗？")) {
+                var href = self.attr("href");
+                $.get(href, function () {
+                    $.reloadPage();
+                    toastr.success("已删除");
+                    self.parent().parent().remove();
+                });
+            }
+            return false;
+        });
 
         $(document).on("click", "a", function () {
             var self = $(this);
-            var targetId = self.attr("data-target") || "#main";
+            var target = self.attr("data-target");
             var href = self.attr("href");
-            //如果是空连接，不处理
-            if (!href || href == "#") {
-                return;
-            }
-            //如果是javascript连接，则不处理
-            if (href.indexOf("javascript:") == 0 || targetId == "#page") {
-                return;
-            }
 
-            //如果是bootstrap的modal弹窗，则不做处理
-            if (self.attr("data-toggle") == "modal") {
-                return;
+            if (self.attr("data-modal") === "custom") {
+                return true;
             }
-
-            if (self.hasClass("btn-delete") || targetId == "#delete") {
-                if (confirm("你确定要删除这条记录吗？")) {
-                    $.request(href, function () {
-                        $("#main").reload();
-                    });
+            if (self.attr("data-toggle") === "modal") {
+                var style = self.attr("data-style") || "";
+                var width = self.attr("data-width") || 0;
+                var height = self.attr("data-height") || 0;
+                if (width > 0) {
+                    style += " width:" + width + "px;";
                 }
-                return false;
+                if (height > 0) {
+                    style += " height:" + height + "px;";
+                }
+                $.openModal(self.attr("data-target"), self.attr("href"), style);
+                return true;
             }
 
-            var parent_parent = self.parent().parent();
-            //如果是分页链接，如果没有指定targetId 则默认为 #main
-            if (parent_parent.hasClass("sidebar-menu")) {
-                //如果是左侧菜单连接，则更换链接的背景色
-                $("#sidebar li").removeClass("active");
-                var parent = self.parent();
-                parent.addClass("active");
-            }
-            else if (parent_parent.hasClass("dropdown-menu")) {
-                //如果是下拉菜单，则隐藏菜单
-                parent_parent.parent().removeClass("open");
+            if (
+                !href || href === "#" || href.indexOf("javascript:") > -1
+                || self.hasClass("external") || self.attr("external") !== undefined
+                || self.attr("data-toggle") || self.attr("target")
+                || self.hasClass("btn-delete")
+                || self.hasClass("btn-confirm")
+            ) {
+                return true;
             }
 
-            //如果没有指定targetId，则不处理
-            if (!targetId) {
-                return;
-            }
-
-            //如果指定了targetId，则刷新targetId内容
-            $(targetId).loadUrl(href);
+            $.loadPage(href, target);
             return false;
         });
+
+        //当隐藏时 移除弹窗
+        $(document).on('hidden.bs.modal', '.modal', function () {
+            if ($(this).attr("data-modal") !== "custom") {
+                $.closeModal('#' + $(this).attr("id"));
+            }
+        });
+
+        $.fn.setForm = function (options) {
+            $(this).submit(function () {
+                switch (typeof options) {
+                    case "string":
+                        options = { url: options };
+                        break;
+                    case "function":
+                        options = { success: options };
+                        break;
+                    default:
+                        options = options || {};
+                        break;
+                }
+
+                if (options.validate && !options.validate()) {
+                    return false;
+                }
+
+                options.url = $(this).attr("action");
+                options.data = $(this).serializeObject();
+                $.request(options);
+                return false;
+            });
+        };
+        $.wait = function (canDo, callback) {
+            var waite = setInterval(function () {
+                if (canDo()) {
+                    clearInterval(waite);
+                    callback();
+                }
+            }, 10);
+        };
+
+        $.jsonToQueryString = function (json) {
+            return Object.keys(json).map(function (key) {
+                return encodeURIComponent(key) + '=' +
+                    encodeURIComponent(json[key]);
+            }).join('&');
+        };
     });
 </script>

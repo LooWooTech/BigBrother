@@ -35,7 +35,7 @@
                 alert("请选择表单");
                 return false;
             }
-            $.closeWindow();
+            $.closeModal();
             $("#main").loadUrl("/node/editvalues?formId=" + formId);
             return false;
         });

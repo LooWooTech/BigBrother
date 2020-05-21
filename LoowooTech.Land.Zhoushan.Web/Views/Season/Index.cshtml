@@ -1,4 +1,4 @@
-﻿@{ 
+﻿@{
     List<Season> list = ViewBag.List;
 }
 
@@ -18,7 +18,7 @@
         </tr>
     </thead>
     <tbody>
-        @foreach(var item in list)
+        @foreach (var item in list)
         {
             <tr>
                 <td>@(item.Year)</td>
@@ -26,8 +26,12 @@
                 <td>@(item.StartTime.ToLongDateString())</td>
                 <td>@(item.EndTime.ToLongDateString())</td>
                 <td style="width:80px;">
-                    <a href="/Season/Edit/?id=@(item.ID)" class="btn btn-primary btn-xs" data-toggle="modal" data-target="#modal" title="编辑"><i class="fa fa-edit"></i></a>
-                    <a href="/Season/Delete/?id=@(item.ID)" class="btn btn-danger btn-xs" title="删除" data-target="#delete"><i class="fa fa-trash-o"></i></a>
+                    <a href="/Season/Edit/?id=@(item.ID)" class="btn btn-primary btn-xs" data-toggle="modal" data-target="#modal" title="编辑">
+                        <i class="fa fa-edit"></i>
+                    </a>
+                    <a href="/Season/Delete/?id=@(item.ID)" class="btn btn-danger btn-xs btn-confirm">
+                        <i class="fa fa-trash-o"></i>
+                    </a>
                 </td>
             </tr>
         }

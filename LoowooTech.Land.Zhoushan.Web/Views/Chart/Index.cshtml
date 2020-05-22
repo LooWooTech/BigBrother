@@ -32,7 +32,7 @@
             <select id="ddl-form" name="formId" class="form-control">
                 @if (forms != null)
                 {
-                    foreach (var f in forms)
+                    foreach (var f in forms.OrderBy(e => e.Name))
                     {
                         if (!f.Disabled)
                         {

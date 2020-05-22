@@ -14,13 +14,7 @@
             <div class="form-group">
                 <label class="control-label col-md-3">选择表单</label>
                 <div class="col-md-8">
-                    <select class="form-control" name="formId" id="formId">
-                        <option value="0">全部表单</option>
-                        @foreach (var item in forms)
-                        {
-                            <option value="@(item.ID)">@(item.Name)</option>
-                        }
-                    </select>
+                    @Html.Partial("_FormDropdown", forms)
                 </div>
             </div>
         }

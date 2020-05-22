@@ -1,0 +1,12 @@
+﻿@model IEnumerable<Form>
+<select class="form-control" name="formId" id="ddl-forms">
+    <option value="0">全部表单</option>
+    @foreach (var item in Model.OrderBy(e => e.Name))
+    {
+        if (item.Disabled)
+        {
+            continue;
+        }
+        <option value="@(item.ID)">@(item.Name)</option>
+    }
+</select>

@@ -259,6 +259,23 @@
     <Content Include="Views\TrendTemplate\Edit.cshtml" />
     <Content Include="templates\不动产抵押登记.xls" />
     <Content Include="templates\不动产登记.xls" />
+    <Content Include="templates\土地登记.xls" />
+    <Content Include="templates\林业.xls" />
+    <Content Include="templates\测绘审批.xls" />
+    <Content Include="templates\海域使用权审批.xls" />
+    <Content Include="templates\生态修复.xls" />
+    <Content Include="templates\规划审批.xls" />
+    <Content Include="templates\违法案件查处.xls" />
+    <Content Include="templates\采矿许可证发证与采矿权出让.xls" />
+    <Content Include="TrendTemplates\信访情况.xls" />
+    <Content Include="TrendTemplates\国土资源违法案件.xls" />
+    <Content Include="TrendTemplates\土地供应.xls" />
+    <Content Include="TrendTemplates\土地储备.xls" />
+    <Content Include="TrendTemplates\土地征收.xls" />
+    <Content Include="TrendTemplates\土地登记和抵押.xls" />
+    <Content Include="TrendTemplates\建设用地预审.xls" />
+    <Content Include="TrendTemplates\矿产收费情况.xls" />
+    <Content Include="Views\Shared\_FormDropdown.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

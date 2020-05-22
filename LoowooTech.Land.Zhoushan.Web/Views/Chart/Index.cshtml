@@ -34,7 +34,10 @@
                 {
                     foreach (var f in forms)
                     {
-                        <option value="@(f.ID)">@(f.Name)</option>
+                        if (!f.Disabled)
+                        {
+                            <option value="@(f.ID)">@(f.Name)</option>
+                        }
                     }
                 }
             </select>

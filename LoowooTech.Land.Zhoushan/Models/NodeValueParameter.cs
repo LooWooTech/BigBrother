@@ -15,7 +15,7 @@ namespace LoowooTech.Land.Zhoushan.Models
             AreaID = 0;
             GetArea = true;
             GetValueType = true;
-            Quarters = new Quarter[0];
+            Quarter = 0;
             Period = Models.Period.Default;
         }
 
@@ -35,7 +35,7 @@ namespace LoowooTech.Land.Zhoushan.Models
 
         public int Year { get; set; }
 
-        public Quarter Quarter { get; set; }
+        public Quarter? Quarter { get; set; }
 
         public int? AreaID { get; set; }
 
@@ -48,8 +48,6 @@ namespace LoowooTech.Land.Zhoushan.Models
         public int[] NodeIds { get; set; }
 
         public int[] Years { get; set; }
-
-        public Quarter[] Quarters { get; set; }
 
         public int[] AreaIds { get; set; }
 
@@ -72,7 +70,6 @@ namespace LoowooTech.Land.Zhoushan.Models
                     if (val == 0)
                     {
                         Year = Year - 1;
-                        Quarter = Quarter.Fourth;
                     }
                     else
                     {

@@ -162,7 +162,7 @@ namespace LoowooTech.Land.Zhoushan.Common
             {
                 var row = sheet.GetRow(item.Row);
                 var cell = row.GetCell(item.Column);
-                cell.SetCellValue(item.Value.ToString());
+                cell.SetCellValue(item.Value?.ToString());
             }
             if (sheet.Workbook is XSSFWorkbook)
             {

@@ -43,16 +43,6 @@ namespace LoowooTech.Land.Zhoushan.Web
                     result.Quarter = (Quarter)Enum.Parse(typeof(Quarter), request["quarter"]);
                 }
 
-                if (!string.IsNullOrWhiteSpace(request["quarters"]))
-                {
-                    result.Quarters = request["quarters"].Split(',').Select(str => (Quarter)int.Parse(str)).ToArray();
-                    if (result.Quarters.Length < 2)
-                    {
-                        result.Quarter = result.Quarters[0];
-                        result.Quarters = null;
-                    }
-                }
-
                 if (!string.IsNullOrWhiteSpace(request["rateType"]))
                 {
                     result.RateType = (RateType)Enum.Parse(typeof(RateType), request["rateType"]);

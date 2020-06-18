@@ -99,17 +99,15 @@ namespace LoowooTech.Land.Zhoushan.Web.Controllers
 
         [HttpPost]
         [UserRoleFilter(UserRole.City)]
-        public void ExportStatistic(int formId, int year, string quarters, string type)
+        public void ExportStatistic(int formId, int year, Quarter quarter, string type)
         {
-            Quarter[] qs = quarters.Split(',').Select(str => (Quarter)int.Parse(str)).ToArray();
-
             string fileName = null;
             Stream stream = null;
             if (formId == 0)
             {
 
-                fileName = year + "年" + Core.TemplateManager.GetQuartersDescription(qs) + "统计报表.xls";
-                stream = Core.ExportManager.ExportStatistics(CurrentIdentity.FormIds, year, qs, CurrentIdentity.AreaIds);
+                fileName = year + "年" + quarter.GetDescription() + "统计报表.xls";
+                stream = Core.ExportManager.ExportStatistics(CurrentIdentity.FormIds, year, quarter, CurrentIdentity.AreaIds);
             }
             else
             {
@@ -119,8 +117,8 @@ namespace LoowooTech.Land.Zhoushan.Web.Controllers
                     throw new ArgumentException("请选择一个报表");
                 }
 
-                stream = Core.ExportManager.ExportFormStatistic(form, year, qs, CurrentIdentity.Role == UserRole.Branch ? CurrentIdentity.AreaIds : null);
-                fileName = form.Name + "-" + year + "-" + Core.TemplateManager.GetQuartersDescription(qs) + ".xls";
+                stream = Core.ExportManager.ExportFormStatistic(form, year, quarter, CurrentIdentity.Role == UserRole.Branch ? CurrentIdentity.AreaIds : null);
+                fileName = form.Name + "-" + year + "-" + quarter.GetDescription() + ".xls";
             }
             Response.ContentType = "application/vnd.ms-excel;charset=UTF-8";
             Response.AddHeader("Content-Disposition", string.Format("attachment;filename={0}", HttpUtility.UrlEncode(fileName)));
@@ -137,10 +135,9 @@ namespace LoowooTech.Land.Zhoushan.Web.Controllers
 
         [HttpPost]
         [UserRoleFilter(UserRole.City)]
-        public void ExportTrend(int year, string quarters, int[] templateIds)
+        public void ExportTrend(int year, Quarter quarter, int[] templateIds)
         {
-            var qs = quarters.Split(',').Select(str => (Quarter)int.Parse(str)).ToArray();
-            var name = year + "年" + Core.TemplateManager.GetQuartersDescription(qs) + "国土资源形势";
+            var name = year + "年" + quarter.GetDescription() + "国土资源形势";
             if (templateIds == null || templateIds.Length == 0)
             {
                 throw new ArgumentException("请选择导出模板");
@@ -148,7 +145,7 @@ namespace LoowooTech.Land.Zhoushan.Web.Controllers
             }
 
             //导出word
-            var docStream = Core.ExportManager.ExportTrend(year, qs, CurrentIdentity.FormIds);
+            var docStream = Core.ExportManager.ExportTrend(year, quarter, CurrentIdentity.FormIds);
 
             using (var ms = new MemoryStream())
             {
@@ -165,7 +162,7 @@ namespace LoowooTech.Land.Zhoushan.Web.Controllers
                         var trendTemplate = Core.TrendTemplateManager.GetModel(templateId);
                         //导出excel（word的配图）
                         var templatePath = Path.Combine(Request.MapPath("/TrendTemplates/"), trendTemplate.FilePath);
-                        var excelStream = Core.ExportManager.ExportTrendCharts(templatePath, year, qs, CurrentIdentity.AreaIds);
+                        var excelStream = Core.ExportManager.ExportTrendCharts(templatePath, year, quarter, CurrentIdentity.AreaIds);
                         var excelName = Path.GetFileName(trendTemplate.FilePath);
                         var excel = zip.CreateEntry(name + "-" + excelName);
                         using (var sw = excel.Open())

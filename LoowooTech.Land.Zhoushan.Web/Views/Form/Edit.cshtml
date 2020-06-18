@@ -43,9 +43,13 @@
 </form>
 <script>
     $(function () {
-        $("#form-form").setForm(function () {
-            $.closeModal();
-            $.reloadPage();
+        $("#form-form").on("submit", function () {
+            var data = $(this).serialize();
+            $.post(this.action, data, function () {
+                $.closeModal();
+                $.reloadPage();
+            });
+            return false;
         });
     });
 </script>

@@ -72,8 +72,12 @@
     </div>
     <script>
         $(function () {
-            $("#form-login").setForm(function () {
-                window.location.href = "/";
+            $("#form-login").on('submit', function () {
+                var data = $(this).serialize();
+                $.post(this.action, data, function () {
+                    window.location.href = "/";
+                });
+                return false;
             });
         });
     </script>

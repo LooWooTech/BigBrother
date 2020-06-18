@@ -14,10 +14,6 @@
     ViewBag.Title = "统计图";
     NodeValueParameter parameter = ViewBag.Parameter;
     int[] years = ViewBag.Years;
-    if (parameter.Quarter == 0 && parameter.Quarters == null)
-    {
-        parameter.Quarters = new Quarter[] { Quarter.First, Quarter.Second, Quarter.Third, Quarter.Fourth };
-    }
 }
 <h2 class="page-header">
     @(ViewBag.Title)
@@ -43,21 +39,18 @@
             </select>
             <select id="ddl-node" name="NodeID" class="form-control"></select>
             <select id="ddl-year" name="Year" class="form-control"></select>
-            <select id="ddl-quarters" name="Quarters" class="form-control">
+            <select id="ddl-quarter" name="Quarter" class="form-control">
                 @foreach (Quarter val in Enum.GetValues(typeof(Quarter)))
                 {
                     <option value="@((int)val)" @(val == parameter.Quarter ? "selected" : null)>@(val.GetDescription())</option>
                 }
-                <option value="1,2" @(string.Join(",", parameter.Quarters) == "1,2" ? "selected" : null)>上半年</option>
-                <option value="1,2,3" @(string.Join(",", parameter.Quarters) == "1,2,3" ? "selected" : null)>前三季度</option>
-                <option value="1,2,3,4" @(string.Join(",", parameter.Quarters) == "1,2,3,4" ? "selected" : null)>全年</option>
             </select>
-            <select id="ddl-period" name="Period" class="form-control">
+            @*<select id="ddl-period" name="Period" class="form-control">
                 @foreach (Period val in Enum.GetValues(typeof(Period)))
                 {
                     <option value="@((int)val)" @(val == parameter.Period ? "selected" : null)>@(val.GetDescription())</option>
                 }
-            </select>
+            </select>*@
             @Html.Action("Dropdown", "Area", new { AreaID = parameter.AreaID })
             @Html.Partial("_RateTypeDropdown", parameter.RateType)
             <button type="submit" class="btn btn-primary"><i class="fa fa-bar-chart-o"></i> 统计</button>

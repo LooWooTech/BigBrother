@@ -119,10 +119,13 @@
             }
         });
 
-
-        $("#form-user").setForm(function () {
-            $.closeModal();
-            $.reloadPage();
+        $("#form-user").on("submit", function () {
+            var data = $(this).serialize();
+            $.post(this.action, data, function () {
+                $.closeModal();
+                $.reloadPage();
+            });
+            return false;
         });
     });
 </script>

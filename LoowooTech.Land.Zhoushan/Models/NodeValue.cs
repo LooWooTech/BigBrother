@@ -22,7 +22,7 @@ namespace LoowooTech.Land.Zhoushan.Models
             AreaID = parameter.AreaID.Value;
             NodeID = parameter.NodeID;
             Year = parameter.Year;
-            Quarter = parameter.Quarter;
+            Quarter = parameter.Quarter == null ? Quarter.FullYear : Quarter.HaflYear;
             TypeID = parameter.TypeID;
             Period = parameter.Period ?? Period.Default;
         }
@@ -43,7 +43,7 @@ namespace LoowooTech.Land.Zhoushan.Models
         /// <summary>
         /// 期内
         /// </summary>
-        public Period Period { get; set; }
+        public Period Period { get; set; } = 0;
         /// <summary>
         /// 年度
         /// </summary>

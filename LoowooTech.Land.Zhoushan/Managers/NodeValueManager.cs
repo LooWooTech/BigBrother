@@ -140,11 +140,7 @@ namespace LoowooTech.Land.Zhoushan.Managers
                     query = query.Where(e => e.TypeID == parameter.TypeID);
                 }
 
-                if (parameter.Quarters != null && parameter.Quarters.Length > 0)
-                {
-                    query = query.Where(e => parameter.Quarters.Contains(e.Quarter));
-                }
-                else if (parameter.Quarter > 0)
+                if (parameter.Quarter.HasValue)
                 {
                     query = query.Where(e => e.Quarter == parameter.Quarter);
                 }

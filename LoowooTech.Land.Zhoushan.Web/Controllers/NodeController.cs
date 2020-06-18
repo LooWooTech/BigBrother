@@ -124,7 +124,7 @@ namespace LoowooTech.Land.Zhoushan.Web.Controllers
             return View();
         }
 
-        public ActionResult SaveValues(int formId, int year, Quarter quarter, int areaId, Period period, string data)
+        public ActionResult SaveValues(int formId, int year, Quarter quarter, int areaId, string data, Period period = 0)
         {
             //判断用户是否可以保存当前年份、季度的数据
             var season = Core.SeasonManager.GetSeason(year, quarter);

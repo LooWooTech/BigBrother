@@ -5,7 +5,7 @@
     List<NodeValueType> valueTypes = ViewBag.ValueTypes;
     var currentYear = DateTime.Now.Year;
     var currentQuarter = (Quarter)DateTime.Now.GetQuarter();
-    bool compareYear = parameter.Quarters != null && parameter.Quarters.Length == 4;
+    bool compareYear = parameter.Quarter == Quarter.FullYear;
     var labels = new List<string>();
     var typeId = values.GroupBy(v => v.TypeID).ToDictionary(g => g.Key, g => g.Count()).OrderByDescending(kv => kv.Value).FirstOrDefault().Key;
     foreach (var year in parameter.Years.OrderBy(e => e))

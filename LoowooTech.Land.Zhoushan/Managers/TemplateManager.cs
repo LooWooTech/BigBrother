@@ -25,7 +25,7 @@ namespace LoowooTech.Land.Zhoushan.Managers
                 foreach (var field in template.Fields)
                 {
                     if (!field.HasPrameter(FieldType.Value)) continue;
-                    var parameter = field.GetNodeValueParameter(year, new[] { quarter }, new[] { areaId });
+                    var parameter = field.GetNodeValueParameter(year, quarter, new[] { areaId });
                     if (parameter == null)
                     {
                         continue;
@@ -47,27 +47,10 @@ namespace LoowooTech.Land.Zhoushan.Managers
             }
         }
 
-        public string GetQuartersDescription(Quarter[] quarters)
-        {
-            switch (quarters.Length)
-            {
-                case 1:
-                default:
-                    return quarters[0].GetDescription();
-                case 2:
-                    return "上半年";
-                case 3:
-                    return "前三季度";
-                case 4:
-                    return "全年";
-            }
-
-        }
-
         /// <summary>
         /// 导出
         /// </summary>
-        public List<ExcelCell> WriteDbDataToExcel(Form form, int year, Quarter[] quarters, int[] areaIds, Template template)
+        public List<ExcelCell> WriteDbDataToExcel(Form form, int year, Quarter quarter, int[] areaIds, Template template)
         {
             using (var db = GetDbContext())
             {
@@ -107,11 +90,11 @@ namespace LoowooTech.Land.Zhoushan.Managers
                                 //如果模板没有指定季度，则按照传参
                                 if (firstParameter.Value == 0)
                                 {
-                                    field.Value = GetQuartersDescription(quarters);
+                                    field.Value = quarter.GetDescription();
                                 }
                                 else
                                 {
-                                    field.Value = GetQuartersDescription(new[] { (Quarter)firstParameter.Value });
+                                    field.Value = ((Quarter)firstParameter.Value).GetDescription();
                                 }
                                 break;
                             case FieldType.Type:
@@ -133,7 +116,7 @@ namespace LoowooTech.Land.Zhoushan.Managers
                             case FieldType.RateValue:
                                 double value = 0;
                                 List<NodeValue> values = null;
-                                var parameter = field.GetNodeValueParameter(year, quarters, areaIds);
+                                var parameter = field.GetNodeValueParameter(year, quarter, areaIds);
                                 if (parameter == null)
                                 {
                                     //没有权限导出该区域的数据
@@ -186,7 +169,7 @@ namespace LoowooTech.Land.Zhoushan.Managers
 
     internal static class FieldExtension
     {
-        public static NodeValueParameter GetNodeValueParameter(this Field field, int year, Quarter[] quarters, int[] areaIds)
+        public static NodeValueParameter GetNodeValueParameter(this Field field, int year, Quarter quarter, int[] areaIds)
         {
             var result = new NodeValueParameter { GetArea = false, GetNode = true, GetValueType = false };
             foreach (var parameter in field.Parameters)
@@ -215,11 +198,11 @@ namespace LoowooTech.Land.Zhoushan.Managers
                         }
                         else
                         {
-                            result.Quarter = quarters.Max();
+                            result.Quarter = quarter;
                         }
                         break;
                     case FieldType.Quarters:
-                        result.Quarters = quarters;
+                        result.Quarter = quarter;
                         break;
                     case FieldType.Type:
                     case FieldType.Value:
@@ -254,9 +237,9 @@ namespace LoowooTech.Land.Zhoushan.Managers
             {
                 result.AreaIds = areaIds;
             }
-            if (result.Quarter == 0 && ((result.Quarters != null && result.Quarters.Length == 0) || result.Quarters == null))
+            if (result.Quarter == 0)
             {
-                result.Quarters = quarters;
+                result.Quarter = quarter;
             }
             return result;
         }

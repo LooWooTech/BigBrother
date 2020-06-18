@@ -14,13 +14,13 @@ namespace LoowooTech.Land.Zhoushan.Managers
 {
     public class ExportManager : ManagerBase
     {
-        public Stream ExportStatistics(int[] formIds, int year, Quarter[] quarters, int[] areaIds)
+        public Stream ExportStatistics(int[] formIds, int year, Quarter quarter, int[] areaIds)
         {
             var book = new HSSFWorkbook();
             var forms = Core.FormManager.GetForms(formIds);
             foreach (var form in forms)
             {
-                var formExcel = (HSSFWorkbook)GetFormExcel(form, year, quarters, areaIds);
+                var formExcel = (HSSFWorkbook)GetFormExcel(form, year, quarter, areaIds);
                 var sheet = (HSSFSheet)formExcel.CloneSheet(0);
                 sheet.CopyTo(book, form.Name, true, true);
             }
@@ -34,33 +34,33 @@ namespace LoowooTech.Land.Zhoushan.Managers
             return result;
         }
 
-        public IWorkbook GetFormExcel(Form form, int year, Quarter[] quarters, int[] areaIds)
+        public IWorkbook GetFormExcel(Form form, int year, Quarter quarter, int[] areaIds)
         {
-            var templateName = form.GetExportTemplate(quarters);
+            var templateName = form.GetExportTemplate(quarter);
             var sheet = ExcelHelper.GetSheet(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "templates", templateName + ".xls"));
             var template = new Template(sheet);
-            var excelData = Core.TemplateManager.WriteDbDataToExcel(form, year, quarters, areaIds, template);
+            var excelData = Core.TemplateManager.WriteDbDataToExcel(form, year, quarter, areaIds, template);
             sheet.WriteData(excelData);
             return sheet.Workbook;
         }
 
-        public Stream ExportFormStatistic(Form form, int year, Quarter[] quarters, int[] areaIds)
+        public Stream ExportFormStatistic(Form form, int year, Quarter quarter, int[] areaIds)
         {
-            var excel = GetFormExcel(form, year, quarters, areaIds);
+            var excel = GetFormExcel(form, year, quarter, areaIds);
             return GetExcelStream(excel);
         }
 
-        public Stream ExportTrend(int year, Quarter[] quarters, int[] formIds)
+        public Stream ExportTrend(int year, Quarter quarter, int[] formIds)
         {
             var doc = WordHelper.CreateDoc("templates/资源形势模板.docx");
-            doc.WriteTitle(year + "年" + Core.TemplateManager.GetQuartersDescription(quarters) + "国土资源主要指标走势", "2");
+            doc.WriteTitle(year + "年" + quarter.GetDescription() + "国土资源主要指标走势", "2");
             foreach (var form in Core.FormManager.GetForms(formIds))
             {
                 var parameter = new NodeValueParameter
                 {
                     FormID = form.ID,
                     Year = year,
-                    Quarters = quarters,
+                    Quarter = quarter,
                     GetNode = false,
                     GetArea = false,
                     GetValueType = true,
@@ -86,11 +86,11 @@ namespace LoowooTech.Land.Zhoushan.Managers
             return doc.GetStream();
         }
 
-        public Stream ExportTrendCharts(string templatePath, int year, Quarter[] quarters, int[] areaIds)
+        public Stream ExportTrendCharts(string templatePath, int year, Quarter quarter, int[] areaIds)
         {
             var sheet = ExcelHelper.GetSheet(templatePath);
             var template = new Template(sheet);
-            var data = Core.TemplateManager.WriteDbDataToExcel(null, year, quarters, areaIds, template);
+            var data = Core.TemplateManager.WriteDbDataToExcel(null, year, quarter, areaIds, template);
             sheet.WriteData(data);
             return GetExcelStream(sheet.Workbook);
         }

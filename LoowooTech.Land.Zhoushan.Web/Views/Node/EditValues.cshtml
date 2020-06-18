@@ -32,12 +32,12 @@
                 <input type="hidden" name="Quarter" value="@(season == null ? default(Quarter?) : season.Quarter)" title="@(season==null?"": season.Quarter.GetDescription())" />
             }
             @Html.Action("Dropdown", "Area", new { editValue = true })
-            <select name="Period" class="form-control">
+            @*<select name="Period" class="form-control">
                 @foreach (var p in Enum.GetValues(typeof(Period)))
                 {
                     <option value="@((int)p)">@(((Period)p).GetDescription())</option>
                 }
-            </select>
+            </select>*@
         </div>&nbsp;
         @if (identity.Role > UserRole.Advanced || season != null)
         {
@@ -47,7 +47,7 @@
         }
         &nbsp;
         <input type="hidden" id="type-unit-index" value="0" />
-        <a id="btn-type-change" class="btn btn-success">切换单位</a>
+        <a id="btn-type-change" class="btn btn-success" style="display:none;">切换单位</a>
         &nbsp;<a id="btn-back" class="btn btn-default">
             <i class="fa fa-chevron-left"></i> 返回
         </a>

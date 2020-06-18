@@ -39,7 +39,7 @@ namespace LoowooTech.Land.Zhoushan.Models
             return tempaltes[0];
         }
 
-        public string GetExportTemplate(Quarter[] quarters)
+        public string GetExportTemplate(Quarter quarter)
         {
             if (string.IsNullOrEmpty(ExportTemplate))
             {
@@ -48,24 +48,12 @@ namespace LoowooTech.Land.Zhoushan.Models
 
             var tempaltes = ExportTemplate.Replace("\r", "").Split('\n');
 
-            if (quarters.Length > 1)
+            var templatePath = ExportTemplate.Replace("\r", "").Split('\n').FirstOrDefault(e => e.Contains("单季度"));
+            if (string.IsNullOrEmpty(templatePath))
             {
-                var templatePath = ExportTemplate.Replace("\r", "").Split('\n').FirstOrDefault(e => e.Contains("多季度"));
-                if (string.IsNullOrEmpty(templatePath))
-                {
-                    return tempaltes[0];
-                }
-                return templatePath;
+                return tempaltes[0];
             }
-            else
-            {
-                var templatePath = ExportTemplate.Replace("\r", "").Split('\n').FirstOrDefault(e => e.Contains("单季度"));
-                if (string.IsNullOrEmpty(templatePath))
-                {
-                    return tempaltes[0];
-                }
-                return templatePath;
-            }
+            return templatePath;
         }
 
     }

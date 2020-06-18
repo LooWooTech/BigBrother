@@ -55,9 +55,13 @@
 </form>
 <script>
     $(function () {
-        $("#form-node").setForm(function () {
-            $.closeModal();
-            $.reloadPage();
+        $("#form-node").on("submit", function () {
+            var data = $(this).serialize();
+            $.post(this.action, data, function () {
+                $.closeModal();
+                $.reloadPage();
+            });
+            return false;
         });
         $("#parentId").val("@(model.ParentID)")
     });

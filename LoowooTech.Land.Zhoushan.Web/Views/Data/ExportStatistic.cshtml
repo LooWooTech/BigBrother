@@ -31,14 +31,11 @@
         <div class="form-group">
             <label class="control-label col-md-3">选择季度</label>
             <div class="col-md-8">
-                <select name="Quarters" class="form-control">
-                    <option value="1">第一季度</option>
-                    <option value="2">第二季度</option>
-                    <option value="3">第三季度</option>
-                    <option value="4">第四季度</option>
-                    <option value="1,2">上半年</option>
-                    <option value="1,2,3">前三季度</option>
-                    <option value="1,2,3,4">全年</option>
+                <select name="Quarter" class="form-control">
+                    @foreach(Quarter val in Enum.GetValues(typeof(Quarter)))
+                    {
+                        <option value="@(val)">@(val.GetDescription())</option>
+                    }
                 </select>
             </div>
         </div>

@@ -8,9 +8,9 @@ using System.Threading.Tasks;
 
 namespace LoowooTech.Land.Zhoushan.Managers
 {
-    public class DossierManager:ManagerBase
+    public class DossierManager : ManagerBase
     {
-        public bool Exist(int year,Quarter quarter)
+        public bool Exist(int year, Quarter quarter)
         {
             using (var db = GetDbContext())
             {
@@ -25,7 +25,7 @@ namespace LoowooTech.Land.Zhoushan.Managers
                 if (dossier.ID == 0)
                 {
                     db.Dossiers.Add(dossier);
-                    
+
                 }
                 else
                 {
@@ -44,8 +44,8 @@ namespace LoowooTech.Land.Zhoushan.Managers
         {
             using (var db = GetDbContext())
             {
-                var list= db.Dossiers.ToList();
-                foreach(var item in list)
+                var list = db.Dossiers.ToList();
+                foreach (var item in list)
                 {
                     item.Files = db.DossierFiles.Where(e => e.DossierID == item.ID).ToList();
                 }
@@ -53,12 +53,12 @@ namespace LoowooTech.Land.Zhoushan.Managers
             }
         }
 
-        public void SaveDossierFile(int id,string[] fileName,string[] filePath)
+        public void SaveDossierFile(int id, string[] fileName, string[] filePath)
         {
             if (id == 0) return;
             var list = new List<DossierFile>();
             var count = fileName.Count();
-            for(var i = 0; i < count; i++)
+            for (var i = 0; i < count; i++)
             {
                 list.Add(new DossierFile() { FileName = fileName[i], FilePath = filePath[i], DossierID = id });
             }
@@ -127,22 +127,28 @@ namespace LoowooTech.Land.Zhoushan.Managers
                 {
                     switch (parameter.Quarter)
                     {
-                        case "第一季度":
-                            query = query.Where(e => e.Quarter == Quarter.First);
+                        case "上半年":
+                            query = query.Where(e => e.Quarter == Quarter.HaflYear);
                             break;
-                        case "第二季度":
-                            query = query.Where(e => e.Quarter == Quarter.Second);
+                        case "全年度":
+                            query = query.Where(e => e.Quarter == Quarter.FullYear);
                             break;
-                        case "第三季度":
-                            query = query.Where(e => e.Quarter == Quarter.Third);
-                            break;
-                        case "第四季度":
-                            query = query.Where(e => e.Quarter == Quarter.Fourth);
-                            break;
+                            //case "第一季度":
+                            //    query = query.Where(e => e.Quarter == Quarter.First);
+                            //    break;
+                            //case "第二季度":
+                            //    query = query.Where(e => e.Quarter == Quarter.Second);
+                            //    break;
+                            //case "第三季度":
+                            //    query = query.Where(e => e.Quarter == Quarter.Third);
+                            //    break;
+                            //case "第四季度":
+                            //    query = query.Where(e => e.Quarter == Quarter.Fourth);
+                            //    break;
                     }
                 }
                 var list = query.ToList();
-                foreach(var item in list)
+                foreach (var item in list)
                 {
                     item.Files = db.DossierFiles.Where(e => e.DossierID == item.ID).ToList();
                 }

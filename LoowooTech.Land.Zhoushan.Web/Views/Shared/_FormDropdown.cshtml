@@ -1,9 +1,16 @@
 ﻿@model IEnumerable<Form>
+@{
+    var identity = (UserIdentity)System.Threading.Thread.CurrentPrincipal.Identity;
+}
 <select class="form-control" name="formId" id="ddl-forms">
     <option value="0">全部表单</option>
     @foreach (var item in Model.OrderBy(e => e.Name))
     {
         if (item.Disabled)
+        {
+            continue;
+        }
+        if (identity.FormIds != null && !identity.FormIds.Contains(item.ID))
         {
             continue;
         }

@@ -89,7 +89,7 @@ namespace LoowooTech.Land.Zhoushan.Managers
             else
             {
                 model.AreaIds = null;
-                model.FormsIds = null;
+                model.FormIds = null;
             }
 
 

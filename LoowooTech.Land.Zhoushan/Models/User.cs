@@ -50,7 +50,7 @@ namespace LoowooTech.Land.Zhoushan.Models
         [Column("FormIds")]
         public string FormIdsValue { get; set; }
         [NotMapped]
-        public int[] FormsIds
+        public int[] FormIds
         {
             get
             {

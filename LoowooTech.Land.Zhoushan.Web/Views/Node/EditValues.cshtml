@@ -21,7 +21,7 @@
     <input type="hidden" name="formId" value="@(form.ID)" />
     <div class="input-group">
         <div class="input-group-btn">
-            @if (identity.Role > UserRole.Advanced)
+            @if (identity.Role > UserRole.Branch)
             {
                 Html.RenderPartial("_YearDropdown", season == null ? default(int?) : season.Year);
                 Html.RenderPartial("_QuarterDropdown", season == null ? default(Quarter?) : season.Quarter);
@@ -121,7 +121,7 @@
                     updateNodeValue(v);
                 });
             });
-            $.request("/node/canedit?year=" + parameter.year + "&quarter=" + parameter.quarter, function (result) {
+            $.request("/node/canedit?year=" + parameter.year + "&quarter=" + parameter.quarter + "&areaId=" + parameter.areaId, function (result) {
                 if (!result) {
                     $("#btn-submit").hide();
                     $(".node-value").attr("readonly", true);

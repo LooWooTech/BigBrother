@@ -102,9 +102,29 @@ namespace LoowooTech.Land.Zhoushan.Web.Controllers
             return View();
         }
 
-        public ActionResult CanEdit(int? year, Quarter? quarter)
+        public ActionResult CanEdit(int? year, Quarter? quarter, int? areaId)
         {
-            var result = CurrentIdentity.Role > UserRole.Advanced || (year.HasValue && quarter.HasValue && Core.SeasonManager.Exist(year.Value, quarter.Value));
+            var result = false;
+            switch (CurrentIdentity.Role)
+            {
+                case UserRole.Branch:
+                case UserRole.City:
+                    if (year.HasValue && quarter.HasValue && areaId.HasValue)
+                    {
+                        result = CurrentIdentity.AreaIds.Contains(areaId.Value) && Core.SeasonManager.Exist(year.Value, quarter.Value);
+                    }
+                    break;
+                case UserRole.Maintain:
+                case UserRole.Advanced:
+                    if (year.HasValue && quarter.HasValue)
+                    {
+                        result = CurrentIdentity.AreaIds.Contains(areaId.Value) && Core.SeasonManager.Exist(year.Value, quarter.Value);
+                    }
+                    break;
+                default:
+                    result = true;
+                    break;
+            }
             return Content(result ? "1" : "0");
         }
 

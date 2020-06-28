@@ -21,7 +21,7 @@
             <label class="control-label col-md-3">用户角色</label>
             <div class="col-md-8">
                 <select name="Role" class="form-control">
-                    @foreach(UserRole role in Enum.GetValues(typeof(UserRole)))
+                    @foreach (UserRole role in Enum.GetValues(typeof(UserRole)))
                     {
                         if (user.Role >= role)
                         {
@@ -29,9 +29,9 @@
                         }
                     }
                     @*<option value="@(UserRole.Branch)" @(model.Role == UserRole.Branch ? "selected" : null)>@(UserRole.Branch.GetDescription())</option>
-                    <option value="@(UserRole.City)" @(model.Role == UserRole.City ? "selected" : null)>@(UserRole.City.GetDescription())</option>
-                    <option value="@(UserRole.Advanced)" @(model.Role == UserRole.Advanced ? "selected" : null)>@(UserRole.Advanced.GetDescription())</option>
-                    <option value="@(UserRole.Administrator)" @(model.Role == UserRole.Administrator ? "selected" : null)>@(UserRole.Administrator.GetDescription())</option>*@
+                        <option value="@(UserRole.City)" @(model.Role == UserRole.City ? "selected" : null)>@(UserRole.City.GetDescription())</option>
+                        <option value="@(UserRole.Advanced)" @(model.Role == UserRole.Advanced ? "selected" : null)>@(UserRole.Advanced.GetDescription())</option>
+                        <option value="@(UserRole.Administrator)" @(model.Role == UserRole.Administrator ? "selected" : null)>@(UserRole.Administrator.GetDescription())</option>*@
                 </select>
             </div>
         </div>
@@ -60,16 +60,28 @@
         <div id="Data" style="display:@(model.Role>UserRole.Advanced?"none":"block")">
             <div class="form-group">
                 <label for="" class="control-label col-md-3">填报类型</label>
-                <div class="col-md-8 checkbox">
-                    @foreach(var form in Forms)
+                <div class="col-md-8">
+                    <div>
+                        <button type="button" id="btn-select">全选/反选</button>
+                    </div>
+                    @foreach (var form in Forms.Where(e => !e.Disabled))
                     {
-                        var isChecked = model.FormsIds.Contains(form.ID);
+                        var isChecked = model.FormIds.Contains(form.ID);
                         <div class="col-xs-6 col-sm-6 col-md-6">
                             <label>
-                                <input type="checkbox" name="FormIdsValue" value="@(form.ID)" @(isChecked?"checked":"") />@(form.Name)
+                                <input type="checkbox" name="FormsIds" value="@(form.ID)" @(isChecked ? "checked" : "") />@(form.Name)
                             </label>
                         </div>
                     }
+                    <script>
+                        $(function () {
+                            $("#btn-select").on('click', function () {
+                                $("input[name='FormsIds']").each(function () {
+                                    this.checked = !this.checked;
+                                });
+                            })
+                        })
+                    </script>
                 </div>
             </div>
         </div>
@@ -94,7 +106,7 @@
                 </div>
             </div>
         </div>
-       
+
     </div>
     <div class="modal-footer">
         <div class="col-md-8 col-md-offset-3">

@@ -102,12 +102,11 @@ namespace LoowooTech.Land.Zhoushan.Managers
             }
         }
 
-        public Season GetCurrentSeason()
+        public List<Season> GetCurrentSeasons()
         {
             using (var db = GetDbContext())
             {
-                var season = db.Seasons.Where(e => e.Delete==false && e.StartTime <= DateTime.Now && e.EndTime >= DateTime.Now).FirstOrDefault();
-                return season;
+                return db.Seasons.Where(e => e.Delete==false && e.StartTime <= DateTime.Now && e.EndTime >= DateTime.Now).ToList();
             }
         }
         public Season GetNearSeason()

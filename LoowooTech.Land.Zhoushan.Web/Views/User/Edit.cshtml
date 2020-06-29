@@ -64,19 +64,20 @@
                     <div>
                         <button type="button" id="btn-select">全选/反选</button>
                     </div>
-                    @foreach (var form in Forms.Where(e => !e.Disabled))
+                    @foreach (var form in Forms)
                     {
                         var isChecked = model.FormIds.Contains(form.ID);
                         <div class="col-xs-6 col-sm-6 col-md-6">
                             <label>
-                                <input type="checkbox" name="FormsIds" value="@(form.ID)" @(isChecked ? "checked" : "") />@(form.Name)
+                                <input type="checkbox" name="FormIds" value="@(form.ID)" @(isChecked ? "checked" : "") />@(form.Name)
+                                @(form.Disabled ? "(已停用)":null)
                             </label>
                         </div>
                     }
                     <script>
                         $(function () {
                             $("#btn-select").on('click', function () {
-                                $("input[name='FormsIds']").each(function () {
+                                $("input[name='FormIds']").each(function () {
                                     this.checked = !this.checked;
                                 });
                             })

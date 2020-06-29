@@ -25,7 +25,7 @@ namespace LoowooTech.Land.Zhoushan.Web.Controllers
                 ViewBag.Forms = Core.FormManager.GetForms(CurrentIdentity.FormIds);
             }
 
-            ViewBag.Season = Core.SeasonManager.GetCurrentSeason();
+            ViewBag.Seasons = Core.SeasonManager.GetCurrentSeasons();
 
             return View();
         }

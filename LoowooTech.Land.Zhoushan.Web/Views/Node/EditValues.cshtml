@@ -1,15 +1,21 @@
 ﻿@{
     Form form = ViewBag.Form;
     List<Node> root = ViewBag.Nodes;
-    Season season = ViewBag.Season;
+    List<Season> seasons = ViewBag.Seasons;
     UserIdentity identity = ViewBag.CurrentIdentity;
 }
 
-@if (identity.Role <= UserRole.Advanced && season != null)
+@if (identity.Role <= UserRole.Advanced && seasons.Count > 0)
 {
     <div class="alert alert-warning" role="alert">
-        当前系统正在填报：@(season.Year)年@(season.Quarter.GetDescription())数据。
-        填报时间段：@(season.StartTime.ToString("yyyy-MM-dd")) ~ @(season.EndTime.ToString("yyyy-MM-dd"))
+        当前系统正在填报：
+        @foreach (var season in seasons)
+        {
+            <span>
+                @(season.Year)年@(season.Quarter.GetDescription())数据。
+                填报时间段：@(season.StartTime.ToString("yyyy-MM-dd")) ~ @(season.EndTime.ToString("yyyy-MM-dd"))
+            </span>
+        }
     </div>
 }
 
@@ -23,23 +29,38 @@
         <div class="input-group-btn">
             @if (identity.Role > UserRole.Branch)
             {
-                Html.RenderPartial("_YearDropdown", season == null ? default(int?) : season.Year);
-                Html.RenderPartial("_QuarterDropdown", season == null ? default(Quarter?) : season.Quarter);
+                Html.RenderPartial("_YearDropdown");
+                Html.RenderPartial("_QuarterDropdown");
             }
             else
             {
-                <input type="hidden" name="Year" value="@(season == null ? default(int?) : season.Year)" />
-                <input type="hidden" name="Quarter" value="@(season == null ? default(Quarter?) : season.Quarter)" title="@(season==null?"": season.Quarter.GetDescription())" />
+                <input type="hidden" name="Year" value="" />
+                <input type="hidden" name="Quarter" value="" />
+                <select class="form-control" id="ddl-seasons">
+                    @foreach (var item in seasons)
+                    {
+                        <option value="@(item.ID)" data-year="@(item.Year)" data-quarter="@(item.Quarter)">@(item.Year) - @(item.Quarter.GetDescription())</option>
+                    }
+                </select>
+                <script>
+                    $("#ddl-seasons").on("change", function () {
+                        var option = $("#ddl-seasons option:selected");
+                        var year = option.attr("data-year");
+                        var quarter = option.attr("data-quarter");
+                        $("input[name='Year']").val(year);
+                        $("input[name='Quarter']").val(quarter).val()
+                    }).trigger("change");
+                </script>
             }
             @Html.Action("Dropdown", "Area", new { editValue = true })
             @*<select name="Period" class="form-control">
-                @foreach (var p in Enum.GetValues(typeof(Period)))
-                {
-                    <option value="@((int)p)">@(((Period)p).GetDescription())</option>
-                }
-            </select>*@
+            @foreach (var p in Enum.GetValues(typeof(Period)))
+            {
+                <option value="@((int)p)">@(((Period)p).GetDescription())</option>
+            }
+        </select>*@
         </div>&nbsp;
-        @if (identity.Role > UserRole.Advanced || season != null)
+        @if (identity.Role > UserRole.Advanced || seasons.Count > 0)
         {
             <button id="btn-submit" class="btn btn-primary" type="button">
                 <i class="fa fa-save"></i> 保存数据
@@ -209,6 +230,7 @@
             });
 
             var json = JSON.stringify(data);
+            console.log(json);
             $.request("/node/SaveValues?formId=@(form.ID)&year=" + parameter.year +
                 "&quarter=" + parameter.quarter +
                 "&areaId=" + parameter.areaId +

@@ -309,6 +309,7 @@ namespace LoowooTech.Land.Zhoushan.Managers
                    && e.Period == parameter.Period
                 ).Select(e => e.Value).DefaultIfEmpty(0).Sum();
                 entity.Value = entity.Value;
+                entity.UpdateTime = DateTime.Now;
                 db.SaveChanges();
 
                 return entity;

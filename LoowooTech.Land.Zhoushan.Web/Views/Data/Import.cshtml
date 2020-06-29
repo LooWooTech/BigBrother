@@ -3,8 +3,8 @@
     Form form = ViewBag.Form;
     List<Form> forms = ViewBag.Forms;
     UserIdentity user = ViewBag.CurrentIdentity;
-    Season season = ViewBag.Season;
-    if (season == null && user.Role <= UserRole.City)
+    List<Season> seasons = ViewBag.Seasons;
+    if (seasons.Count == 0 && user.Role <= UserRole.City)
     {
         <div class="alert alert-warning">
             <h3>导入关闭</h3>
@@ -47,10 +47,30 @@
                 </div>
             </div>
         }
-        else if (season != null)
+        else if (seasons != null)
         {
-            <input type="hidden" name="Year" value="@(season.Year)" />
-            <input type="hidden" name="Quarter" value="@(season.Quarter)" />
+            <div class="form-group">
+                <label class="control-label col-md-3">填报季度</label>
+            </div>
+            <div class="col-md-8">
+                <input type="hidden" name="Year" value="" />
+                <input type="hidden" name="Quarter" value="" />
+                <select class="form-control" id="ddl-seasons">
+                    @foreach (var item in seasons)
+                    {
+                        <option value="@(item.ID)" data-year="@(item.Year)" data-quarter="@(item.Quarter)">@(item.Year) - @(item.Quarter.GetDescription())</option>
+                    }
+                </select>
+                <script>
+                    $("#ddl-seasons").on("change", function () {
+                        var option = $("#ddl-seasons option:selected");
+                        var year = option.attr("data-year");
+                        var quarter = option.attr("data-quarter");
+                        $("input[name='Year']").val(year);
+                        $("input[name='Quarter']").val(quarter).val()
+                    }).trigger("change");
+                </script>
+            </div>
         }
         else
         {
